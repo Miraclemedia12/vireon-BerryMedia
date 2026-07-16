@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | VIREON</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Plus Jakarta Sans Font for High-End UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        darkBg: '#090A0F',
+                        cardBg: '#12141C',
+                        accentGreen: '#10B981',
+                        accentGreenHover: '#059669',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #090A0F;
+            background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, #090a0f 70%);
+        }
+        /* Custom smooth scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090A0F;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 antialiased text-slate-200">
+
+    <div class="w-full max-w-md bg-cardBg/90 border border-slate-800/80 rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+        
+        <!-- Premium Radial Backlight -->
+        <div class="absolute -top-16 -left-16 w-36 h-36 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-16 -right-16 w-36 h-36 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Brand Header -->
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold tracking-wider uppercase mb-3">
+                <i class="fa-solid fa-shield-halved animate-pulse"></i> Secure Payment Gateway
+            </div>
+            <h1 class="text-2xl font-extrabold tracking-tight text-white flex items-center justify-center gap-2">
+                <span>VIREON</span>
+            </h1>
+            <p class="text-slate-400 text-xs mt-1">Please complete your activation payment below</p>
+        </div>
+
+        <!-- Timer Card -->
+        <div class="bg-slate-900/60 border border-slate-800/50 rounded-2xl p-4 text-center mb-6">
+            <p class="text-slate-400 text-xs uppercase tracking-widest font-semibold mb-1">Your payment session expires in</p>
+            <div id="countdown-timer" class="text-3xl font-extrabold text-emerald-400 tracking-wider">10:00</div>
+            <div class="w-full bg-slate-800 h-1.5 rounded-full mt-3 overflow-hidden">
+                <div id="timer-progress" class="bg-emerald-500 h-full w-full transition-all duration-1000 ease-linear"></div>
+            </div>
+        </div>
+
+        <!-- Main Invoice Content -->
+        <div class="space-y-4">
+            
+            <!-- Amount Display Card -->
+            <div class="bg-slate-900/40 border border-slate-800/40 rounded-2xl p-5 text-center relative group">
+                <p class="text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">Amount to Transfer</p>
+                <div class="flex items-center justify-center gap-2">
+                    <span id="display-amount" class="text-3xl font-extrabold text-white">₦14,500</span>
+                    <button onclick="copyToClipboard('14500', 'Amount')" class="text-slate-500 hover:text-emerald-400 transition-colors p-1" title="Copy Amount">
+                        <i class="fa-regular fa-copy text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Transfer Account Details -->
+            <div class="bg-slate-900/40 border border-slate-800/40 rounded-2xl p-5 space-y-4">
+                <p class="text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-800/60 pb-2">Manual Transfer Details</p>
+                
+                <!-- Bank Name -->
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-slate-400 font-medium">Bank Name</span>
+                    <span id="display-bank" class="text-white font-bold tracking-wide">KUDA</span>
+                </div>
+
+                <!-- Account Number -->
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-slate-400 font-medium">Account Number</span>
+                    <div class="flex items-center gap-2">
+                        <span id="display-acc-num" class="text-white font-mono font-bold tracking-wider text-base">3004058590</span>
+                        <button onclick="copyToClipboard(document.getElementById('display-acc-num').innerText, 'Account Number')" class="text-slate-500 hover:text-emerald-400 transition-colors" title="Copy Account Number">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Account Name -->
+                <div class="flex flex-col gap-1 text-sm pt-1 border-t border-slate-800/30">
+                    <span class="text-slate-400 font-medium">Account Name</span>
+                    <div class="flex items-center justify-between gap-3">
+                        <span id="display-acc-name" class="text-white font-semibold text-xs break-words max-w-[90%] leading-relaxed">BERRY IBEREDEM ENTERPRISE—VIREON WEBSITE 1</span>
+                        <button onclick="copyToClipboard(document.getElementById('display-acc-name').innerText, 'Account Name')" class="text-slate-500 hover:text-emerald-400 transition-colors" title="Copy Account Name">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Security Warning -->
+        <div class="mt-5 flex items-start gap-2.5 p-3.5 bg-yellow-500/5 border border-yellow-500/10 rounded-2xl text-xs text-yellow-200/80 leading-relaxed">
+            <i class="fa-solid fa-triangle-exclamation text-yellow-500 mt-0.5"></i>
+            <span>Transfer the exact amount shown above. Ensure you make the transfer before the countdown timer hits zero to prevent activation delays.</span>
+        </div>
+
+        <!-- CTA Action Button -->
+        <div class="mt-6">
+            <button id="submit-btn" onclick="handlePaymentSubmission()" class="w-full py-4 px-6 bg-emerald-500 hover:bg-emerald-600 text-slate-900 text-sm font-bold rounded-2xl shadow-lg shadow-emerald-500/15 transition-all duration-300 transform active:scale-[0.98] flex items-center justify-center gap-2">
+                <span>I HAVE MADE THE PAYMENT</span>
+                <i class="fa-solid fa-circle-check"></i>
+            </button>
+        </div>
+
+        <!-- Security Footer -->
+        <div class="text-center mt-6 flex items-center justify-center gap-4 text-slate-500 text-[10px] tracking-wide">
+            <span class="flex items-center gap-1"><i class="fa-solid fa-lock text-emerald-500"></i> End-to-End SSL</span>
+            <span>•</span>
+            <span>Powered by Vireon Core</span>
+        </div>
+
+    </div>
+
+    <!-- Expired Overlay -->
+    <div id="expired-overlay" class="fixed inset-0 bg-darkBg/95 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="bg-cardBg border border-slate-800 p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl relative">
+            <div class="w-16 h-16 bg-red-500/10 border border-red-500/20 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-regular fa-clock animate-pulse"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Session Expired</h3>
+            <p class="text-slate-400 text-sm mb-6 leading-relaxed">Your payment window of 10 minutes has ended. Please refresh the page to obtain updated payment info.</p>
+            <button onclick="window.location.reload()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-xl transition-all">
+                REGENERATE SESSION
+            </button>
+        </div>
+    </div>
+
+    <!-- Custom Animated Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-emerald-500/20 text-emerald-400 px-4 py-3 rounded-2xl flex items-center gap-3 shadow-2xl backdrop-blur-md z-50">
+        <i class="fas fa-check-circle text-emerald-500"></i>
+        <span id="toast-text" class="text-xs font-semibold text-slate-200">Copied to clipboard!</span>
+    </div>
+
+    <!-- Firebase Compat SDKs (Safe for single files) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // --- YOUR CONFIGURATION ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyCkBBUQn-vPofsoJQEpu1K5mtJDffpAdxA",
+            authDomain: "vireon-berrymedia.firebaseapp.com",
+            projectId: "vireon-berrymedia",
+            storageBucket: "vireon-berrymedia.firebasestorage.app",
+            messagingSenderId: "433591634561",
+            appId: "1:433591634561:web:40b32bc9aaa28b59a25b80",
+            measurementId: "G-TH2W27DZSV"
+        };
+
+        // Static Offline Fallbacks (Values used if Firebase has no setup yet or fails)
+        let paymentData = {
+            bank: "KUDA",
+            accountNumber: "3004058590",
+            accountName: "BERRY IBEREDEM ENTERPRISE—VIREON WEBSITE 1",
+            amount: 14500,
+            telegramLink: "http://t.me/VIREON_OFFICIAL_1"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Listen live for changes in Firestore Settings (Collection: settings, Document: payment)
+        db.collection("settings").doc("payment").onSnapshot((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                paymentData.bank = data.bank || paymentData.bank;
+                paymentData.accountNumber = data.accountNumber || paymentData.accountNumber;
+                paymentData.accountName = data.accountName || paymentData.accountName;
+                paymentData.amount = data.amount || paymentData.amount;
+                paymentData.telegramLink = data.telegramLink || paymentData.telegramLink;
+                updateUI();
+            }
+        }, (error) => {
+            console.warn("Using local offline default configurations:", error);
+            updateUI(); // Keep offline fallbacks active safely
+        });
+
+        // Update HTML UI with fetched/default configs
+        function updateUI() {
+            document.getElementById("display-bank").innerText = paymentData.bank;
+            document.getElementById("display-acc-num").innerText = paymentData.accountNumber;
+            document.getElementById("display-acc-name").innerText = paymentData.accountName;
+            document.getElementById("display-amount").innerText = "₦" + Number(paymentData.amount).toLocaleString();
+        }
+
+        // --- COUNTDOWN TIMER MODULE ---
+        const TIMER_DURATION_SEC = 10 * 60; // 10 minutes in seconds
+        let countdownInterval;
+
+        function startTimer() {
+            let endTime = sessionStorage.getItem("vireon_payment_timer_end");
+            
+            if (!endTime) {
+                endTime = Date.now() + (TIMER_DURATION_SEC * 1000);
+                sessionStorage.setItem("vireon_payment_timer_end", endTime);
+            }
+
+            const timerElement = document.getElementById("countdown-timer");
+            const progressElement = document.getElementById("timer-progress");
+
+            function updateTimer() {
+                const remainingTime = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+                
+                const minutes = Math.floor(remainingTime / 60);
+                const seconds = remainingTime % 60;
+
+                // Update Display text
+                timerElement.innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                // Update Progress bar
+                const percentage = (remainingTime / TIMER_DURATION_SEC) * 100;
+                progressElement.style.width = `${percentage}%`;
+
+                // Handle timer colors as time gets low
+                if (remainingTime <= 120) { // Red under 2 minutes
+                    timerElement.classList.remove("text-emerald-400");
+                    timerElement.classList.add("text-red-500");
+                    progressElement.classList.remove("bg-emerald-500");
+                    progressElement.classList.add("bg-red-500");
+                } else {
+                    timerElement.classList.add("text-emerald-400");
+                    timerElement.classList.remove("text-red-500");
+                    progressElement.classList.add("bg-emerald-500");
+                    progressElement.classList.remove("bg-red-500");
+                }
+
+                // If timer expires
+                if (remainingTime <= 0) {
+                    clearInterval(countdownInterval);
+                    sessionStorage.removeItem("vireon_payment_timer_end");
+                    document.getElementById("expired-overlay").classList.replace("hidden", "flex");
+                }
+            }
+
+            updateTimer();
+            countdownInterval = setInterval(updateTimer, 1000);
+        }
+
+        // --- CLIPBOARD LOGIC ---
+        function copyToClipboard(text, fieldName) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`${fieldName} copied to clipboard!`);
+            }).catch(err => {
+                console.error("Copy failed: ", err);
+            });
+        }
+
+        // Elegant custom Toast
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            const toastText = document.getElementById("toast-text");
+            toastText.innerText = message;
+            
+            toast.classList.remove("translate-y-20", "opacity-0");
+            toast.classList.add("translate-y-0", "opacity-100");
+
+            setTimeout(() => {
+                toast.classList.remove("translate-y-0", "opacity-100");
+                toast.classList.add("translate-y-20", "opacity-0");
+            }, 3000);
+        }
+
+        // --- TELEGRAM REDIRECT & USER TRACKING ---
+        function handlePaymentSubmission() {
+            // Read registration properties saved from signup.html page in local storage
+            const fullName = localStorage.getItem('fullname') || localStorage.getItem('signup_name') || localStorage.getItem('name') || 'Valued Partner';
+            const phone = localStorage.getItem('phone') || localStorage.getItem('signup_phone') || 'Not Provided';
+            const email = localStorage.getItem('email') || localStorage.getItem('signup_email') || 'Not Provided';
+
+            // Constructing formatted Telegram notification text
+            const textMessage = 
+`⚡ *VIREON PREMIUM CORES* ⚡
+─────────────────────
+Hello Admin, I have successfully made my payment of ₦${Number(paymentData.amount).toLocaleString()}.
+
+👤 *REGISTRATION ACCOUNT:*
+• *Full Name:* ${fullName}
+• *Phone Number:* ${phone}
+• *Email Address:* ${email}
+
+🏦 *PAYMENT SENT TO:*
+• *Bank:* ${paymentData.bank}
+• *Account Name:* ${paymentData.accountName}
+• *Account Number:* ${paymentData.accountNumber}
+
+Please verify the transfer details and activate my account!`;
+
+            // Encode string safely for URI redirect
+            const encodedText = encodeURIComponent(textMessage);
+            const redirectUrl = `${paymentData.telegramLink}?text=${encodedText}`;
+
+            // Clean session space so if they return later they don't get stuck in expired screens
+            sessionStorage.removeItem("vireon_payment_timer_end");
+
+            // Open secure Telegram link in a top-level parent document environment
+            window.location.href = redirectUrl;
+        }
+
+        // Trigger on load
+        window.onload = function() {
+            updateUI();
+            startTimer();
+        };
+    </script>
+</body>
+</html>
