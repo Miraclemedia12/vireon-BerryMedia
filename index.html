@@ -1,0 +1,3784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- ============================================ -->
+    <!-- SEO & METADATA (GOOGLE ADS OPTIMIZED)        -->
+    <!-- ============================================ -->
+    <title>Vireon Digital – Earn online and get paid</title>
+
+    <meta name="description" content="Vireon Digital provides professional digital marketing, website design, branding, SEO, social media management, and business growth solutions for businesses in Nigeria and beyond.">
+
+    <meta name="keywords" content="Vireon Digital, Digital Marketing Nigeria, Website Design, Web Development, SEO Services, Branding, Social Media Management, Graphic Design, Business Growth, Online Marketing">
+
+    <meta name="author" content="Vireon Digital">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#013740">
+
+    <link rel="canonical" href="https://vireondigital.name.ng/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vireondigital.name.ng/">
+    <meta property="og:title" content="Vireon Digital – Digital Marketing & Web Solutions">
+    <meta property="og:description" content="Grow your business with professional web design, SEO, branding, social media management, and digital marketing services from Vireon Digital.">
+    <meta property="og:image" content="https://vireondigital.name.ng/assets/hero-image-desktop.png">
+    <meta property="og:site_name" content="Vireon Digital">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://vireondigital.name.ng/">
+    <meta name="twitter:title" content="Vireon Digital – Digital Marketing & Web Solutions">
+    <meta name="twitter:description" content="Professional website design, SEO, branding, and digital marketing services to help your business grow.">
+    <meta name="twitter:image" content="https://vireondigital.name.ng/assets/hero-image-desktop.png">
+
+    <!-- ============================================ -->
+    <!-- FAVICONS                                     -->
+    <!-- ============================================ -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/favicon/site.webmanifest">
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico">
+
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* ===========================
+               VIREON BRAND COLORS
+            =========================== */
+
+            --primary-color: #020617;
+            --secondary-color: #080d1a;
+            --surface-color: #0b1220;
+            --card-bg: #0f172a;
+
+            --accent-primary: #6EF7FF;
+            --accent-secondary: #22D3EE;
+            --accent-purple: #8B5CF6;
+            --accent-blue: #3078BA;
+
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+
+            --text-color-light: #F3F4F6;
+            --text-color-muted: #94A3B8;
+
+            --font-main: 'Poppins', sans-serif;
+
+            /* Glass Effects */
+            --glass-bg: rgba(15, 23, 42, 0.75);
+            --glass-border: rgba(110, 247, 255, 0.12);
+
+            /* Glow */
+            --accent-glow: #6EF7FF;
+
+            /* Progressive Section Backgrounds */
+            --bg-about: #020617;
+            --bg-features: #080D1A;
+            --bg-packages: #090D16;
+            --bg-faq: #0B1220;
+            --bg-footer: #000000;
+
+            --section-outline: 1px solid rgba(110, 247, 255, 0.08);
+        }
+
+        .page-wrapper {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: var(--font-main);
+
+            background: var(--primary-color);
+            color: var(--text-color-light);
+
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: .3s ease;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-weight: 600;
+            color: var(--text-color-light);
+        }
+
+        /* ===========================
+           HERO SECTION
+        =========================== */
+
+        #hero-section {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+
+            overflow: hidden;
+
+            background-color: var(--primary-color);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            border-bottom: var(--section-outline);
+        }
+
+        #hero-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(
+                to bottom,
+                rgba(2, 6, 23, .35),
+                rgba(2, 6, 23, .75),
+                rgba(2, 6, 23, .95)
+            );
+
+            z-index: 1;
+        }
+
+        #hero-section > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Background Images */
+
+        #hero-section {
+            background-image: url("assets/mobile-background.jpg");
+        }
+
+        @media (min-width: 992px) {
+            #hero-section {
+                background-image: url("assets/desktop-background.jpg");
+            }
+        }
+
+        /* ==========================================
+           NAVBAR
+        ========================================== */
+
+        .navbar {
+            z-index: 1030;
+            padding: 1.3rem 0;
+            transition: all .35s ease;
+        }
+
+        .navbar-scrolled {
+            padding: .9rem 0;
+
+            background: rgba(15, 23, 42, .75) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+
+            border-bottom: 1px solid rgba(110, 247, 255, .08);
+
+            box-shadow:
+                0 10px 35px rgba(0,0,0,.35),
+                0 0 20px rgba(110,247,255,.03);
+        }
+
+        .navbar-brand img{
+            height:42px;
+            width:auto;
+        }
+
+        /* ==========================================
+           NAVIGATION LINKS
+        ========================================== */
+
+        .nav-link{
+            position:relative;
+
+            color:var(--text-color-light) !important;
+
+            font-weight:500;
+
+            margin:0 1rem;
+
+            opacity:.85;
+
+            transition:.3s ease;
+        }
+
+        .nav-link::after{
+            content:"";
+
+            position:absolute;
+
+            left:0;
+            bottom:-6px;
+
+            width:0;
+            height:2px;
+
+            background:var(--accent-primary);
+
+            transition:.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active{
+
+            color:var(--accent-primary) !important;
+
+            opacity:1;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after{
+
+            width:100%;
+        }
+
+        /* ==========================================
+           MOBILE NAV
+        ========================================== */
+
+        @media (max-width:991px){
+
+            .navbar{
+
+                background:transparent;
+            }
+
+            .navbar-collapse{
+
+                margin-top:12px;
+
+                padding:1.2rem;
+
+                border-radius:18px;
+
+                background:rgba(15,23,42,.96);
+
+                backdrop-filter:blur(20px);
+
+                border:1px solid rgba(110,247,255,.08);
+
+                box-shadow:0 20px 50px rgba(0,0,0,.35);
+            }
+
+        }
+
+        /* ==========================================
+           BUTTONS
+        ========================================== */
+
+        .btn-custom{
+
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+
+            padding:14px 34px;
+
+            border-radius:999px;
+
+            font-size:1rem;
+            font-weight:600;
+
+            transition:.35s ease;
+
+            text-decoration:none;
+
+            white-space:nowrap;
+        }
+
+        /* Primary */
+
+        .btn-primary-custom{
+
+            color:#020617;
+
+            background:var(--accent-primary);
+
+            border:1px solid transparent;
+
+            box-shadow:
+                0 0 25px rgba(110,247,255,.28);
+        }
+
+        .btn-primary-custom:hover{
+
+            transform:translateY(-3px);
+
+            background:var(--accent-secondary);
+
+            color:#020617;
+
+            box-shadow:
+                0 10px 30px rgba(110,247,255,.35),
+                0 0 45px rgba(110,247,255,.2);
+        }
+
+        /* Secondary */
+
+        .btn-secondary-custom{
+
+            color:var(--text-color-light);
+
+            background:rgba(15, 23, 42, .55);
+
+            backdrop-filter:blur(14px);
+
+            border:1px solid rgba(110,247,255,.12);
+        }
+
+        .btn-secondary-custom:hover{
+
+            color:var(--accent-primary);
+
+            border-color:var(--accent-primary);
+
+            background:rgba(110,247,255,.06);
+
+            transform:translateY(-3px);
+
+            box-shadow:0 0 30px rgba(110,247,255,.18);
+        }
+
+        /* Register Button */
+
+        .btn-nav-register{
+
+            padding:10px 28px;
+
+            font-size:.92rem;
+        }
+
+        @media (min-width:992px){
+
+            .btn-nav-register{
+
+                margin-left:1rem;
+            }
+
+        }
+
+        @media (max-width:991px){
+
+            .btn-nav-register{
+
+                margin-top:1rem;
+
+                margin-right:0;
+            }
+
+        }
+
+        /* ==========================================
+           HERO CONTENT
+        ========================================== */
+
+        .hero-content-layer{
+
+            position:absolute;
+
+            inset:0;
+
+            z-index:5;
+
+            width:100%;
+            height:100%;
+
+            pointer-events:none;
+        }
+
+        .hero-content-layer .container,
+        .hero-content-layer .btn-custom{
+
+            pointer-events:auto;
+        }
+
+        .hero-title{
+
+            font-weight:300;
+
+            font-size:clamp(2.5rem,5vw,5rem);
+
+            line-height:1.2;
+
+            letter-spacing:-1px;
+
+            color:var(--text-color-light);
+
+            margin-bottom:3rem;
+
+            max-width:750px;
+        }
+
+        .hero-title strong{
+
+            color:var(--accent-primary);
+
+            font-weight:600;
+        }
+
+        .hero-image-wrapper{
+
+            position:absolute;
+
+            inset:0;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:flex-end;
+
+            overflow:hidden;
+
+            z-index:1;
+
+            pointer-events:auto;
+
+            line-height:0;
+        }
+        
+        /* ==========================================
+           HERO IMAGE
+        ========================================== */
+
+        .hero-image-link{
+            display:block;
+
+            width:auto;
+            max-width:100%;
+
+            height:auto;
+            max-height:85vh;
+
+            cursor:pointer;
+
+            transition:transform .4s ease;
+        }
+
+        .hero-image-link:hover{
+
+            transform:scale(1.02);
+        }
+
+        .hero-img{
+
+            display:block;
+
+            width:auto;
+            height:auto;
+
+            max-width:100%;
+
+            filter:
+                drop-shadow(0 25px 60px rgba(110,247,255,.12));
+
+            transition:.5s ease;
+        }
+
+        .hero-image-link:hover .hero-img{
+
+            transform:translateY(-6px);
+        }
+
+        /* ==========================================
+           HERO BUTTONS
+        ========================================== */
+
+        .hero-buttons-container{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:1rem;
+
+            flex-wrap:wrap;
+        }
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width:991px){
+
+            #hero-section{
+
+                display:flex;
+
+                flex-direction:column;
+
+                min-height:100vh;
+
+                height:auto;
+            }
+
+            .navbar{
+
+                order:1;
+
+                position:fixed;
+
+                top:0;
+
+                left:0;
+
+                width:100%;
+            }
+
+            .hero-content-layer{
+
+                position:relative;
+
+                order:2;
+
+                height:auto;
+
+                padding-top:110px;
+
+                padding-bottom:2rem;
+            }
+
+            .hero-content-layer .container,
+            .hero-content-layer .row{
+
+                height:auto !important;
+            }
+
+            .hero-image-wrapper{
+
+                position:relative;
+
+                order:3;
+
+                display:flex;
+
+                justify-content:center;
+
+                align-items:flex-end;
+
+                margin-top:auto;
+
+                padding:0 1rem;
+            }
+
+            .hero-img{
+
+                width:100%;
+
+                max-width:500px;
+
+                height:auto;
+            }
+
+            .hero-title{
+
+                font-size:clamp(2rem,8vw,3rem);
+
+                text-align:center;
+
+                max-width:95%;
+
+                margin:0 auto 2rem;
+            }
+
+            .hero-buttons-container{
+
+                justify-content:center;
+
+                gap:1rem;
+
+                margin-bottom:2rem;
+            }
+
+            .mobile-content-wrapper{
+
+                padding-top:2rem;
+
+                text-align:center;
+            }
+
+        }
+
+        /* ==========================================
+           DESKTOP
+        ========================================== */
+
+        @media (min-width:992px){
+
+            .hero-title{
+
+                font-size:clamp(3rem,4vw,5rem);
+
+                line-height:1.15;
+
+                text-align:left;
+
+                max-width:650px;
+            }
+
+            .hero-buttons-col{
+
+                display:flex;
+
+                flex-direction:column;
+
+                justify-content:flex-end;
+
+                align-items:flex-end;
+
+                padding-bottom:3rem;
+            }
+
+            .hero-text-col{
+
+                display:flex;
+
+                flex-direction:column;
+
+                justify-content:center;
+
+                min-height:100vh;
+            }
+
+        }
+
+        /* ==========================================
+           NAVBAR TOGGLER
+        ========================================== */
+
+        .navbar-toggler{
+
+            border:none;
+
+            padding:0;
+
+            color:var(--accent-primary);
+
+            font-size:1.8rem;
+
+            transition:.3s ease;
+        }
+
+        .navbar-toggler:hover{
+
+            color:var(--accent-secondary);
+
+            transform:rotate(90deg);
+        }
+
+        .navbar-toggler:focus{
+
+            box-shadow:none;
+        }
+        
+        /* 
+         * Common Section Styles
+         */
+        .section-padding {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .glow-text {
+            color: var(--text-color-light);
+            text-shadow: 0 0 12px rgba(110, 247, 255, 0.35);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+
+            color: var(--text-color-light);
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -12px;
+
+            width: 70px;
+            height: 4px;
+
+            border-radius: 20px;
+
+            background: linear-gradient(
+                90deg,
+                var(--accent-primary),
+                var(--accent-secondary)
+            );
+        }
+
+        .section-subtitle {
+            max-width: 650px;
+
+            margin: 0 auto 4rem;
+
+            font-size: 1.05rem;
+            line-height: 1.8;
+
+            color: var(--text-color-muted);
+        }
+
+        /* ==========================================
+           HERO TYPOGRAPHY REFINEMENT
+           Premium Mobile Layout
+========================================== */
+
+        /* Hero Badge */
+
+        .hero-text-col .badge{
+            font-size: .78rem;
+            font-weight: 500;
+            letter-spacing: .4px;
+            margin-bottom: 1rem;
+        }
+
+        /* Hero Title */
+
+        .hero-title{
+
+            font-size: clamp(2rem, 3.5vw, 3.8rem);
+
+            line-height: 1.2;
+
+            font-weight: 300;
+
+            max-width: 600px;
+
+            margin-bottom: 1.2rem;
+        }
+
+        .hero-title strong{
+            font-weight: 600;
+        }
+
+        /* Hero Subtitle */
+
+        .hero-subtitle{
+
+            max-width: 500px;
+
+            font-size: .96rem;
+
+            line-height: 1.8;
+
+            color: var(--text-color-muted);
+
+            margin-bottom: 2rem;
+        }
+
+        /* Stats */
+
+        .hero-stats h3{
+
+            font-size: 1.4rem;
+
+            font-weight: 700;
+
+            color: var(--accent-primary);
+
+            margin-bottom: .35rem;
+        }
+
+        .hero-stats small{
+
+            font-size: .82rem;
+
+            color: var(--text-color-muted);
+        }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width:991px){
+
+            .hero-content-layer{
+
+                padding-top:110px;
+
+                padding-bottom:3rem;
+            }
+
+            .hero-text-col{
+
+                text-align:left;
+
+                align-items:flex-start;
+
+                padding-left:10px;
+
+                padding-right:10px;
+            }
+
+            .hero-title{
+
+                font-size:1.9rem;
+
+                line-height:1.25;
+
+                text-align:left;
+
+                max-width:100%;
+
+                margin:0 0 1rem;
+            }
+
+            .hero-subtitle{
+
+                font-size:.92rem;
+
+                line-height:1.75;
+
+                text-align:left;
+
+                max-width:100%;
+
+                margin-bottom:2rem;
+            }
+
+            .hero-buttons-container{
+
+                justify-content:flex-start;
+
+                gap:.85rem;
+            }
+
+            .hero-stats{
+
+                margin-top:2rem !important;
+
+                text-align:left;
+            }
+
+            .hero-stats .row{
+
+                text-align:left !important;
+            }
+
+            .hero-stats .col-4{
+
+                padding-left:0;
+            }
+
+            .hero-stats h3{
+
+                font-size:1.2rem;
+            }
+
+            .hero-stats small{
+
+                font-size:.75rem;
+            }
+
+        }
+
+
+        /* ==========================================
+           DESKTOP
+        ========================================== */
+
+        @media (min-width:992px){
+
+            .hero-title{
+
+                font-size:3.5rem;
+
+                max-width:620px;
+            }
+
+            .hero-subtitle{
+
+                font-size:1rem;
+
+                max-width:540px;
+            }
+
+        }
+
+        /* Partners Section */
+
+        #partners-section{
+
+            background: var(--secondary-color);
+
+            overflow: hidden;
+
+            border-top: var(--section-outline);
+
+            border-bottom: var(--section-outline);
+
+            padding: 80px 0;
+        }
+
+        /* ===============================
+           Partner Cards
+        ================================ */
+
+        .partner-stat-card{
+
+            background: rgba(255,255,255,.05);
+
+            backdrop-filter: blur(18px);
+
+            border: 1px solid rgba(110,247,255,.12);
+
+            border-radius: 24px;
+
+            padding: 2.5rem;
+
+            text-align: center;
+
+            transition: all .4s ease;
+        }
+
+        .partner-stat-card:hover{
+
+            transform: translateY(-8px);
+
+            border-color: rgba(110,247,255,.35);
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.35),
+                0 0 25px rgba(110,247,255,.15);
+        }
+
+        .partner-stat-card i{
+
+            font-size: 2.4rem;
+
+            color: var(--accent-primary);
+
+            margin-bottom: 1rem;
+        }
+
+        .partner-stat-card h3{
+
+            font-size: 2.3rem;
+
+            color: #fff;
+
+            margin-bottom: .3rem;
+        }
+
+        .partner-stat-card p{
+
+            color: rgba(255,255,255,.7);
+
+            margin: 0;
+        }
+
+        /* ===============================
+           Logo Slider
+        ================================ */
+
+        .logo-slider{
+
+            width:100%;
+
+            overflow:hidden;
+
+            position:relative;
+
+            margin-top:50px;
+
+            padding:35px 0;
+        }
+
+        .logo-slider::before,
+        .logo-slider::after{
+
+            content:"";
+
+            position:absolute;
+
+            top:0;
+
+            width:180px;
+
+            height:100%;
+
+            z-index:5;
+        }
+
+        .logo-slider::before{
+
+            left:0;
+
+            background:linear-gradient(to right,var(--secondary-color),transparent);
+        }
+
+        .logo-slider::after{
+
+            right:0;
+
+            background:linear-gradient(to left,var(--secondary-color),transparent);
+        }
+
+        .logo-track{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:90px;
+
+            width:max-content;
+
+            animation:partnerScroll 28s linear infinite;
+        }
+
+        .logo-stat{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:12px;
+
+            padding:14px 26px;
+
+            border-radius:999px;
+
+            background:rgba(255,255,255,.05);
+
+            border:1px solid rgba(110,247,255,.15);
+
+            backdrop-filter:blur(12px);
+
+            white-space:nowrap;
+
+            transition:.35s ease;
+        }
+
+        .logo-stat:hover{
+
+            background:rgba(110,247,255,.08);
+
+            border-color:rgba(110,247,255,.35);
+
+            transform:translateY(-3px);
+        }
+
+        .logo-stat i{
+
+            color:var(--accent-primary);
+
+            font-size:1.2rem;
+        }
+
+        .logo-stat span{
+
+            color:#fff;
+
+            font-size:.95rem;
+
+            font-weight:600;
+
+            letter-spacing:.3px;
+        }
+
+        /* BIGGER + COLORED */
+
+        .logo-track img{
+
+            height:60px;
+
+            width:auto;
+
+            object-fit:contain;
+
+            opacity:1;
+
+            filter:none;
+
+            transition:all .35s ease;
+        }
+
+        .logo-track img:hover{
+
+            transform:scale(1.15);
+
+            filter:drop-shadow(0 0 15px rgba(110,247,255,.35));
+        }
+
+        .logo-slider:hover .logo-track{
+
+            animation-play-state:paused;
+        }
+
+        @keyframes partnerScroll{
+
+            from{
+
+                transform:translateX(0);
+            }
+
+            to{
+
+                transform:translateX(-50%);
+            }
+
+        }
+
+        /* ===============================
+           Mobile
+        ================================ */
+
+        @media (max-width:768px){
+
+            .logo-track{
+
+                gap:55px;
+
+                animation-duration:22s;
+            }
+
+            .logo-track img{
+
+                height:42px;
+            }
+
+        }
+
+
+        /*
+         * About Section
+         * Vireon Brand Theme
+         */
+        #about-section {
+            position: relative;
+            overflow: hidden;
+
+            background: var(--bg-about);
+
+            border-top: var(--section-outline);
+            border-bottom: var(--section-outline);
+        }
+
+        /* Glow Background */
+
+        #about-section::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background:
+                radial-gradient(circle at 20% 20%, rgba(110,247,255,.05), transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(139,92,246,.05), transparent 40%);
+
+            pointer-events: none;
+        }
+
+        /* Grid Pattern */
+
+        #about-section::after {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background-image:
+                linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+
+            background-size: 35px 35px;
+
+            opacity: .4;
+
+            pointer-events: none;
+        }
+
+        .about-text {
+            color: var(--text-color-muted);
+
+            font-size: 1.05rem;
+            line-height: 2;
+
+            margin-bottom: 1.5rem;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+
+            overflow: hidden;
+
+            border-radius: 20px;
+
+            background: var(--glass-bg);
+
+            border: 1px solid rgba(110,247,255,.08);
+
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 20px 40px rgba(0,0,0,.35),
+                0 0 25px rgba(110,247,255,.05);
+
+            transition: all .4s ease;
+
+            cursor: pointer;
+        }
+
+        .about-image-wrapper:hover {
+
+            transform: translateY(-8px);
+
+            border-color: rgba(110,247,255,.25);
+
+            box-shadow:
+                0 30px 60px rgba(0,0,0,.45),
+                0 0 35px rgba(110,247,255,.15);
+        }
+
+        .about-img {
+            width: 100%;
+            display: block;
+
+            transition:
+                transform .6s ease,
+                filter .6s ease;
+        }
+
+        .about-image-wrapper:hover .about-img {
+            transform: scale(1.06);
+            filter: brightness(1.08);
+        }
+
+        /* Features Section */
+
+        #features-section {
+            position: relative;
+            overflow: hidden;
+
+            background: var(--bg-features);
+
+            padding-bottom: 100px;
+
+            border-top: var(--section-outline);
+            border-bottom: var(--section-outline);
+        }
+
+        /* Background Glow */
+
+        #features-section::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background:
+                radial-gradient(circle at top right, rgba(110,247,255,.05), transparent 35%),
+                radial-gradient(circle at bottom left, rgba(139,92,246,.04), transparent 40%);
+
+            pointer-events: none;
+        }
+
+        .feature-box-link {
+            display: block;
+            height: 100%;
+            text-decoration: none;
+        }
+
+        .feature-box {
+            position: relative;
+
+            height: 100%;
+
+            padding: 2.5rem 2rem;
+
+            overflow: hidden;
+
+            border-radius: 22px;
+
+            background: var(--glass-bg);
+
+            border: 1px solid rgba(110,247,255,.08);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            transition: all .4s ease;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 15px 35px rgba(0,0,0,.25);
+        }
+
+        .feature-box::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background: linear-gradient(
+                135deg,
+                rgba(110,247,255,.05),
+                transparent 45%
+            );
+
+            opacity: 0;
+
+            transition: .4s ease;
+        }
+
+        .feature-box:hover {
+
+            transform: translateY(-10px);
+
+            border-color: rgba(110,247,255,.25);
+
+            box-shadow:
+                0 25px 50px rgba(0,0,0,.35),
+                0 0 30px rgba(110,247,255,.12);
+        }
+
+        .feature-box:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 72px;
+            height: 72px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 1.5rem;
+
+            border-radius: 50%;
+
+            background: rgba(110,247,255,.06);
+
+            border: 1px solid rgba(110,247,255,.18);
+
+            color: var(--accent-primary);
+
+            font-size: 1.8rem;
+
+            transition: all .4s ease;
+        }
+
+        .feature-box:hover .feature-icon {
+
+            background: var(--accent-primary);
+
+            color: var(--primary-color);
+
+            transform: rotate(10deg) scale(1.08);
+
+            box-shadow:
+                0 0 25px rgba(110,247,255,.35);
+        }
+
+        .feature-title {
+            margin-bottom: 1rem;
+
+            color: var(--text-color-light);
+
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .feature-desc {
+            color: var(--text-color-muted);
+
+            font-size: .97rem;
+
+            line-height: 1.8;
+        }
+
+        /* Packages Section */
+
+        #packages-section {
+            position: relative;
+            overflow: hidden;
+
+            background: var(--bg-packages);
+
+            padding-bottom: 100px;
+
+            border-top: var(--section-outline);
+            border-bottom: var(--section-outline);
+        }
+
+        /* Background Glow */
+
+        #packages-section::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background:
+                radial-gradient(circle at top left, rgba(110,247,255,.05), transparent 35%),
+                radial-gradient(circle at bottom right, rgba(139,92,246,.05), transparent 45%);
+
+            pointer-events: none;
+        }
+
+        .package-card-link {
+            display: block;
+            width: 100%;
+            height: 100%;
+
+            text-decoration: none;
+        }
+
+        .package-card {
+            position: relative;
+
+            height: 100%;
+
+            padding: 3rem 2rem;
+
+            overflow: hidden;
+
+            text-align: center;
+
+            border-radius: 24px;
+
+            background: var(--glass-bg);
+
+            border: 1px solid rgba(110,247,255,.10);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            transition: all .4s ease;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,.30);
+        }
+
+        .package-card::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(
+                135deg,
+                rgba(110,247,255,.08),
+                transparent 55%
+            );
+
+            opacity: 0;
+
+            transition: .4s ease;
+        }
+
+        .package-card:hover {
+
+            transform: translateY(-10px);
+
+            border-color: rgba(110,247,255,.30);
+
+            box-shadow:
+                0 30px 60px rgba(0,0,0,.40),
+                0 0 35px rgba(110,247,255,.12);
+        }
+
+        .package-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Featured Package */
+
+        .package-card.popular {
+
+            border: 1px solid rgba(110,247,255,.35);
+
+            box-shadow:
+                0 0 40px rgba(110,247,255,.12),
+                0 20px 50px rgba(0,0,0,.35);
+        }
+
+        .package-card.popular::after {
+            content: "";
+
+            position: absolute;
+
+            width: 350px;
+            height: 350px;
+
+            top: -150px;
+            right: -120px;
+
+            border-radius: 50%;
+
+            background: radial-gradient(
+                circle,
+                rgba(110,247,255,.15),
+                transparent 70%
+            );
+
+            animation: pulseGlow 6s linear infinite;
+        }
+
+        @keyframes pulseGlow {
+
+            0%{
+                transform: scale(1) rotate(0deg);
+                opacity:.5;
+            }
+
+            50%{
+                transform: scale(1.15) rotate(180deg);
+                opacity:1;
+            }
+
+            100%{
+                transform: scale(1) rotate(360deg);
+                opacity:.5;
+            }
+
+        }
+
+        .package-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .package-price {
+            margin: 1.8rem 0;
+
+            font-size: 3.2rem;
+            font-weight: 700;
+
+            color: var(--accent-primary);
+
+            text-shadow: 0 0 20px rgba(110,247,255,.25);
+        }
+
+        .package-currency {
+            font-size: 1.5rem;
+            vertical-align: super;
+            margin-right: 4px;
+        }
+
+        .benefits-list {
+            list-style: none;
+
+            padding: 0;
+
+            margin: 2.5rem 0;
+
+            text-align: left;
+        }
+
+        .benefits-list li {
+
+            display: flex;
+            align-items: center;
+
+            margin-bottom: 1rem;
+
+            color: var(--text-color-light);
+
+            font-size: .96rem;
+        }
+
+        .benefits-list li i {
+
+            width: 28px;
+            height: 28px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-right: 15px;
+
+            border-radius: 50%;
+
+            background: rgba(110,247,255,.08);
+
+            color: var(--accent-primary);
+
+            font-size: .95rem;
+        }
+
+        .most-popular-badge {
+
+            position: absolute;
+
+            top: 24px;
+            right: -42px;
+
+            padding: 8px 50px;
+
+            background: linear-gradient(
+                90deg,
+                var(--accent-primary),
+                var(--accent-secondary)
+            );
+
+            color: var(--primary-color);
+
+            font-size: .8rem;
+            font-weight: 700;
+            letter-spacing: .5px;
+
+            transform: rotate(45deg);
+
+            box-shadow:
+                0 10px 25px rgba(110,247,255,.25);
+
+            z-index: 3;
+        }
+
+        /* FAQ SECTION */
+
+        #faq-cta-wrapper {
+            position: relative;
+            overflow: hidden;
+
+            background: var(--bg-faq);
+
+            border-top: var(--section-outline);
+            border-bottom: var(--section-outline);
+        }
+
+        /* Background Glow */
+
+        #faq-cta-wrapper::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background:
+                radial-gradient(circle at top left, rgba(110,247,255,.05), transparent 40%),
+                radial-gradient(circle at bottom right, rgba(139,92,246,.04), transparent 45%);
+
+            pointer-events: none;
+        }
+
+
+        /* ==========================================
+           FAQ ACCORDION
+        ========================================== */
+
+        .accordion-item {
+
+            background: var(--glass-bg);
+
+            border: 1px solid rgba(110,247,255,.08);
+
+            border-radius: 16px !important;
+
+            overflow: hidden;
+
+            margin-bottom: 16px;
+
+            backdrop-filter: blur(16px);
+
+            -webkit-backdrop-filter: blur(16px);
+
+            transition: all .35s ease;
+        }
+
+        .accordion-item:hover {
+
+            border-color: rgba(110,247,255,.20);
+
+            box-shadow:
+                0 15px 35px rgba(0,0,0,.25),
+                0 0 20px rgba(110,247,255,.08);
+        }
+
+        .accordion-button {
+
+            background: transparent;
+
+            color: var(--text-color-light);
+
+            font-weight: 600;
+
+            padding: 1.25rem 1.5rem;
+        }
+
+        .accordion-button:not(.collapsed) {
+
+            background: rgba(110,247,255,.08);
+
+            color: var(--accent-primary);
+
+            box-shadow: none;
+        }
+
+        .accordion-button:hover {
+
+            color: var(--accent-primary);
+        }
+
+        .accordion-button:focus {
+
+            box-shadow: none;
+        }
+
+        .accordion-button::after {
+
+            filter: brightness(0) invert(1);
+
+            transition: .3s ease;
+        }
+
+        .accordion-body {
+
+            color: var(--text-color-muted);
+
+            line-height: 1.8;
+
+            background: transparent;
+        }
+
+
+        /* ==========================================
+           CTA BOX
+        ========================================== */
+
+        .cta-box {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 4rem 2rem;
+
+            text-align: center;
+
+            border-radius: 28px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #020617,
+                    #080d1a,
+                    #0b1220
+                );
+
+            border: 1px solid rgba(110,247,255,.12);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 25px 60px rgba(0,0,0,.35);
+        }
+
+        .cta-box::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 400px;
+            height: 400px;
+
+            top: -220px;
+            right: -180px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(circle,
+                rgba(110,247,255,.15),
+                transparent 70%);
+        }
+
+        .cta-box::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+            height: 300px;
+
+            bottom: -170px;
+            left: -120px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(circle,
+                rgba(139,92,246,.10),
+                transparent 70%);
+        }
+
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+
+        footer {
+
+            position: relative;
+
+            background: var(--bg-footer);
+
+            padding: 5rem 0 2rem;
+
+            border-top: var(--section-outline);
+        }
+
+        .footer-brand {
+
+            display: inline-block;
+
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-brand img {
+
+            height: 42px;
+        }
+
+        .footer-desc {
+
+            color: var(--text-color-muted);
+
+            font-size: .95rem;
+
+            line-height: 1.8;
+
+            margin-bottom: 1.8rem;
+        }
+
+        .footer-heading {
+
+            margin-bottom: 1.5rem;
+
+            color: var(--text-color-light);
+
+            font-size: 1.1rem;
+
+            font-weight: 600;
+        }
+
+        .footer-links {
+
+            list-style: none;
+
+            padding: 0;
+
+            margin: 0;
+        }
+
+        .footer-links li {
+
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+
+            color: var(--text-color-muted);
+
+            text-decoration: none;
+
+            transition: all .3s ease;
+        }
+
+        .footer-links a:hover {
+
+            color: var(--accent-primary);
+
+            padding-left: 6px;
+        }
+
+
+        /* ==========================================
+           SOCIAL ICONS
+        ========================================== */
+
+        .social-links a {
+
+            display: inline-flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            width: 45px;
+            height: 45px;
+
+            margin-right: 12px;
+
+            border-radius: 50%;
+
+            background: rgba(110,247,255,.06);
+
+            border: 1px solid rgba(110,247,255,.10);
+
+            color: var(--text-color-light);
+
+            text-decoration: none;
+
+            transition: all .35s ease;
+        }
+
+        .social-links a:hover {
+
+            background: var(--accent-primary);
+
+            color: var(--primary-color);
+
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 0 25px rgba(110,247,255,.30);
+        }
+
+
+        /* ==========================================
+           COPYRIGHT
+        ========================================== */
+
+        .copyright {
+
+            margin-top: 4rem;
+
+            padding-top: 2rem;
+
+            text-align: center;
+
+            border-top: 1px solid rgba(110,247,255,.08);
+
+            color: var(--text-color-muted);
+
+            font-size: .9rem;
+        }
+
+        /* 
+         * Mobile Sticky Signup Button 
+         */
+        #mobile-sticky-signup {
+            position: fixed;
+
+            left: 5%;
+            bottom: 30px;
+
+            width: 90%;
+
+            padding: 16px 24px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 999px;
+
+            font-size: 1rem;
+            font-weight: 600;
+
+            text-decoration: none;
+
+            color: var(--text-color-light);
+
+            z-index: 1040;
+
+            /* Hidden State */
+            transform: translateY(150%);
+            opacity: 0;
+
+            transition:
+                transform .4s ease,
+                opacity .4s ease,
+                bottom .15s linear,
+                box-shadow .3s ease;
+        }
+
+        #mobile-sticky-signup.show-sticky {
+
+            transform: translateY(0);
+            opacity: 1;
+
+            background: rgba(15, 23, 42, .82);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border: 1px solid rgba(110, 247, 255, .18);
+
+            box-shadow:
+                0 18px 45px rgba(0,0,0,.35),
+                0 0 25px rgba(110,247,255,.15),
+                inset 0 1px 0 rgba(255,255,255,.05);
+        }
+
+        #mobile-sticky-signup.show-sticky:hover {
+
+            transform: translateY(-4px);
+
+            background: rgba(110,247,255,.12);
+
+            border-color: rgba(110,247,255,.35);
+
+            color: var(--accent-primary);
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.4);
+        }
+
+        #mobile-sticky-signup i,
+        #mobile-sticky-signup svg {
+
+            margin-right: 10px;
+
+            font-size: 1.1rem;
+
+            color: var(--accent-primary);
+        }
+
+        @media (min-width: 992px) {
+
+            #mobile-sticky-signup {
+                display: none;
+            }
+
+        }
+
+        body{
+            user-select:none;
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+        }
+
+        /* ================================================================= */
+        /* PREMIUM LIVE STATS & TESTIMONIALS SLIDER (CUSTOM PROFESSIONAL CSS) */
+        /* ================================================================= */
+
+        #vireon-stats-section {
+            padding: 60px 0;
+            background: transparent;
+            position: relative;
+            z-index: 10;
+        }
+
+        #vireon-stats-section .max-w-6xl {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        #vireon-stats-section h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            text-align: center;
+        }
+
+        #vireon-stats-section .w-16 {
+            width: 60px;
+            height: 4px;
+            background-color: #22d3ee;
+            margin: 15px auto 0;
+            border-radius: 999px;
+            box-shadow: 0 0 12px #22d3ee;
+        }
+
+        #vireon-stats-section .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            padding: 40px 0;
+            border-top: 1px solid rgba(110, 247, 255, 0.12);
+            border-bottom: 1px solid rgba(110, 247, 255, 0.12);
+            margin-top: 40px;
+        }
+
+        @media (min-width: 992px) {
+            #vireon-stats-section .grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 40px;
+            }
+        }
+
+        #vireon-stats-section .text-center {
+            text-align: center;
+        }
+
+        #vireon-stats-section .stat-counter {
+            font-size: clamp(2.2rem, 5vw, 4.2rem);
+            font-weight: 800;
+            font-family: monospace;
+            letter-spacing: -2px;
+            margin-bottom: 0;
+            line-height: 1;
+        }
+
+        #vireon-stats-section .text-white {
+            color: #ffffff !important;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+        }
+
+        #vireon-stats-section .text-\[\#22d3ee\] {
+            color: #22d3ee !important;
+            text-shadow: 0 0 25px rgba(34, 211, 238, 0.35);
+        }
+
+        #vireon-stats-section .text-slate-400 {
+            color: #94a3b8 !important;
+        }
+
+        #vireon-stats-section .text-cyan-400\/80 {
+            color: rgba(34, 211, 238, 0.8) !important;
+        }
+
+        #vireon-stats-section p.uppercase {
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        /* Testimonials Styles */
+        #vireon-testimonials {
+            padding: 60px 0;
+            background: transparent;
+            position: relative;
+            z-index: 10;
+        }
+
+        #vireon-testimonials .max-w-4xl {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        #vireon-testimonials .relative.bg-\[\#051124\]\/40 {
+            background-color: rgba(5, 17, 36, 0.5);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(110, 247, 255, 0.12);
+            border-radius: 30px;
+            padding: 40px 30px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            min-height: 380px;
+        }
+
+        @media (min-width: 768px) {
+            #vireon-testimonials .relative.bg-\[\#051124\]\/40 {
+                padding: 50px 60px;
+                min-height: 280px;
+            }
+        }
+
+        #vireon-testimonials .bg-\[\#22d3ee\]\/10 {
+            background-color: rgba(34, 211, 238, 0.1);
+            filter: blur(40px);
+        }
+        #vireon-testimonials .bg-cyan-500\/5 {
+            background-color: rgba(6, 182, 212, 0.05);
+            filter: blur(40px);
+        }
+
+        .testimonial-slide {
+            position: absolute;
+            inset: 40px 30px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease-in-out;
+            display: flex;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-slide {
+                inset: 50px 60px;
+            }
+        }
+
+        .testimonial-slide.opacity-100 {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .testimonial-slide .flex {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-slide .flex {
+                flex-direction: row !important;
+                align-items: center;
+                gap: 40px;
+                text-align: left !important;
+            }
+        }
+
+        .testimonial-slide .shrink-0 {
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .testimonial-slide img {
+            width: 90px;
+            height: 90px;
+            border-radius: 20px;
+            object-fit: cover;
+            border: 2px solid rgba(34, 211, 238, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .testimonial-slide .bg-\[\#22d3ee\] {
+            background-color: #22d3ee !important;
+            color: #020617;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .testimonial-slide .text-amber-400 {
+            color: #fbbf24 !important;
+            display: flex;
+            gap: 4px;
+            margin-bottom: 12px;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-slide .text-amber-400 {
+                justify-content: flex-start;
+            }
+        }
+
+        .testimonial-slide p.text-slate-300 {
+            color: #cbd5e1 !important;
+            font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-slide p.text-slate-300 {
+                text-align: left;
+            }
+        }
+
+        .testimonial-slide h4 {
+            color: #ffffff !important;
+            font-size: 15px;
+            font-weight: 900;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-slide h4 {
+                text-align: left;
+            }
+        }
+
+        .testimonial-slide .text-cyan-400\/80 {
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-slide .text-cyan-400\/80 {
+                text-align: left;
+            }
+        }
+
+        .slider-dot {
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+
+    <!-- Hero Section -->
+    <section id="hero-section">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+
+                <a class='navbar-brand' href='/'>
+                    <img src="assets/images/logo.png" alt="Vireon Logo">
+                </a>
+
+                <div class="d-flex align-items-center d-lg-none ms-auto">
+
+                    <a class='btn-custom btn-secondary-custom me-2' href='/register'>
+                       Join Now
+                    </a>
+
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav">
+
+                        <i class="fa-solid fa-bars"></i>
+
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav mx-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#hero-section">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about-section">About</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features-section">Features</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#packages-section">Packages</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#faq-cta-wrapper">FAQs</a>
+                        </li>
+
+                    </ul>
+
+                    <div class="d-none d-lg-flex align-items-center">
+
+                        <a class='btn-custom btn-primary-custom btn-nav-register' href='/register'>
+                            Get Started
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </nav>
+
+        <!-- Hero Image -->
+
+        <div class="hero-image-wrapper">
+
+            <a class='hero-image-link' href='/register'>
+
+                <img src="assets/images/1.jpg"
+                     alt="Vireon Platform"
+                     class="hero-img"
+                     data-aos="fade-up"
+                     data-aos-duration="1200">
+
+            </a>
+
+        </div>
+
+        <!-- Hero Content -->
+
+        <div class="hero-content-layer">
+
+            <div class="container h-100">
+
+                <div class="row h-100 align-items-center mobile-content-wrapper">
+
+                    <!-- Left Content -->
+
+                    <div class="col-lg-6 hero-text-col">
+
+                        <div data-aos="fade-up">
+
+                           <span class="badge bg-dark border border-info text-info px-3 py-2 rounded-pill">
+                                 <i class="fa-solid fa-sparkles me-2"></i>
+                                             Welcome to Vireon
+                            </span>
+
+                            <h1 class="hero-title">
+
+                                Earn Smarter with
+                                <strong>Surveys, Remote Jobs, Social Rewards & Digital Opportunities</strong>
+
+                            </h1>
+
+                            <p class="hero-subtitle">
+
+                                Join thousands of Vireonites earning through Surveys,
+                                Converse, CallCash, Google Monetization, Snap Pro,
+                                Pin-to-Profit, Vireon IQ, X Revenue, and many more
+                                opportunities—all from one powerful platform.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Right CTA -->
+
+                    <div class="col-lg-6 hero-buttons-col">
+
+                        <div class="hero-buttons-container"
+                             data-aos="fade-up"
+                             data-aos-delay="200">
+
+                            <a class='btn-custom btn-primary-custom' href='/register'>
+
+                                Get Started
+
+                            </a>
+
+                            <a href="#features-section"
+                               class="btn-custom btn-secondary-custom">
+
+                                Explore Features
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>      
+
+</div>
+
+
+<!--PARTNERS SECTION-->
+
+<section id="partners-section" class="section-padding">
+
+    <div class="container">
+
+       <div class="row mb-5">
+
+    <div class="col-lg-8">
+
+        <span class="badge bg-dark border border-info text-info px-3 py-2 rounded-pill mb-3">
+            <i class="fa-solid fa-globe me-2"></i>
+            Trusted Opportunities
+        </span>
+
+        <h2 class="section-title glow-text mt-3">
+            Connect With Global Opportunities
+        </h2>
+
+        <p class="section-subtitle text-start ms-0">
+            Vireon connects members with earning opportunities inspired by global brands,
+            digital platforms, and international work programs—all within one unified ecosystem.
+        </p>
+
+    </div>
+
+</div>
+
+    <div class="logo-slider">
+
+        <div class="logo-track">
+
+            <!-- First Set -->
+
+            <img src="https://cdn.simpleicons.org/googleplay" alt="Google Play">
+            <img src="https://cdn.simpleicons.org/dhl" alt="DHL">
+            <img src="https://cdn.simpleicons.org/cocacola" alt="Coca-Cola">
+            <img src="https://cdn.simpleicons.org/google" alt="Google">
+            <img src="https://cdn.simpleicons.org/meta" alt="Meta">
+            <div class="logo-stat">
+            <i class="fa-solid fa-earth-americas"></i>
+            <span>10+ Years Global Experience</span>
+            </div>
+            <img src="https://cdn.simpleicons.org/netflix" alt="Netflix">
+            <img src="https://cdn.simpleicons.org/spotify" alt="Spotify">
+            <img src="https://cdn.simpleicons.org/pinterest" alt="Pinterest">
+            <img src="https://cdn.simpleicons.org/x" alt="X">
+            <img src="https://cdn.simpleicons.org/snapchat" alt="Snapchat">
+            <img src="https://cdn.simpleicons.org/paypal" alt="PayPal">
+             <img src="https://cdn.simpleicons.org/amazon" alt="Amazon">
+            <div class="logo-stat">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>50+ Available Jobs</span>
+            </div>
+            <img src="https://cdn.simpleicons.org/samsung" alt="Samsung">
+            <img src="https://cdn.simpleicons.org/uber" alt="Uber">
+
+            <!-- Duplicate Set -->
+
+           <img src="https://cdn.simpleicons.org/googleplay" alt="Google Play">
+            <img src="https://cdn.simpleicons.org/dhl" alt="DHL">
+            <img src="https://cdn.simpleicons.org/cocacola" alt="Coca-Cola">
+            <img src="https://cdn.simpleicons.org/google" alt="Google">
+            <img src="https://cdn.simpleicons.org/meta" alt="Meta">
+            <div class="logo-stat">
+            <i class="fa-solid fa-earth-americas"></i>
+            <span>10+ Years Global Experience</span>
+            </div>
+            <img src="https://cdn.simpleicons.org/netflix" alt="Netflix">
+            <img src="https://cdn.simpleicons.org/spotify" alt="Spotify">
+            <img src="https://cdn.simpleicons.org/pinterest" alt="Pinterest">
+            <img src="https://cdn.simpleicons.org/x" alt="X">
+            <img src="https://cdn.simpleicons.org/snapchat" alt="Snapchat">
+            <img src="https://cdn.simpleicons.org/paypal" alt="PayPal">
+            <div class="logo-stat">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>50+ Available Jobs</span>
+            </div>
+            <img src="https://cdn.simpleicons.org/samsung" alt="Samsung">
+            <img src="https://cdn.simpleicons.org/uber" alt="Uber">
+
+        </div>
+
+    </div>
+
+</section>
+        
+<!-- Why Choose Vireon -->
+<section id="about-section" class="section-padding">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <!-- Image -->
+
+            <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+
+                <a class='d-block' href='/register'>
+
+                    <div class="about-image-wrapper">
+
+                        <img src="assets/images/2.jpg"
+                             alt="Why Choose Vireon"
+                             class="about-img">
+
+                    </div>
+
+                </a>
+
+            </div>
+
+            <!-- Content -->
+
+            <div class="col-lg-6" data-aos="fade-left">
+
+                <div class="ps-lg-5">
+
+                    <span class="badge bg-dark border border-info text-info px-3 py-2 rounded-pill mb-3">
+
+                        <i class="fa-solid fa-bolt me-2"></i>
+
+                        Why Choose Vireon
+
+                    </span>
+
+                    <h2 class="section-title glow-text">
+
+                        One Platform. Multiple Ways to Earn.
+
+                    </h2>
+
+                    <p class="about-text mt-4">
+
+                        Vireon brings together rewarding digital opportunities into one secure platform. Instead of relying on a single source of income, members can explore multiple earning features designed to fit different skills, interests, and schedules.
+
+                    </p>
+
+                    <p class="about-text">
+
+                        From paid surveys and remote assistance to content reviews, social engagement programs, Google-based activities, and daily rewards, Vireon gives you the flexibility to earn whenever and wherever it suits you.
+
+                    </p>
+
+                    <p class="about-text">
+
+                        Whether you're a student, freelancer, creator, entrepreneur, or simply looking for an extra stream of income, Vireon provides a simple, modern experience that helps you stay productive while unlocking new earning opportunities.
+
+                    </p>
+
+                    <div class="row mt-5 g-4">
+
+                        <div class="col-6">
+
+                            <h4 class="glow-text mb-1">10+</h4>
+
+                            <small class="text-white-50">
+                                Earning methods available
+                            </small>
+
+                        </div>
+
+                        <div class="col-6">
+
+                            <h4 class="glow-text mb-1">£5</h4>
+                            <small class="text-white-50">Per Survey</small>
+
+                        </div>
+
+
+                        <div class="col-6">
+
+                            <h4 class="glow-text mb-1">24/7</h4>
+
+                            <small class="text-white-50">
+                                Earn Anytime
+                            </small>
+
+                        </div>
+
+                        <div class="col-6">
+
+                            <h4 class="glow-text mb-1">Remote</h4>
+
+                            <small class="text-white-50">
+                                Work Anywhere
+                            </small>
+
+                        </div>
+
+                        <div class="col-6">
+
+                            <h4 class="glow-text mb-1">Secure</h4>
+
+                            <small class="text-white-50">
+                                Simple & Reliable
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-5">
+
+                        <a class='btn-custom btn-primary-custom' href='/register'>
+
+                            Get Started Today
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section id="features-section" class="section-padding">
+    <div class="container">
+
+        <!-- Section Heading -->
+        <div class="mb-5" data-aos="fade-up">
+
+            <span class="badge bg-dark border border-info text-info px-3 py-2 rounded-pill mb-3">
+                <i class="fa-solid fa-layer-group me-2"></i>
+                Vireon Features
+            </span>
+
+            <h2 class="section-title glow-text">
+                Multiple Ways to Earn on Vireon
+            </h2>
+
+            <p class="section-subtitle text-start ms-0">
+                Vireon brings together multiple digital earning opportunities into one platform, allowing you to earn through surveys, remote work, content reviews, social engagement, and other rewarding online activities.
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Surveys -->
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <a class='feature-box-link' href='/register'>
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-square-poll-horizontal"></i>
+                        </div>
+                        <h4 class="feature-title">Vireon Surveys</h4>
+                        <p class="feature-desc">
+                            Complete simple surveys from global brands and earn rewards for every approved submission. Most surveys take only a few minutes to finish.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Converse -->
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <a class='feature-box-link' href='/register'>
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <h4 class="feature-title">Vireon Converse</h4>
+                        <p class="feature-desc">
+                            Work remotely by assisting international clients with communication, customer support, scheduling, and virtual business tasks.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- CallCash -->
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <a class='feature-box-link' href='/register'>
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-phone-volume"></i>
+                        </div>
+                        <h4 class="feature-title">CallCash</h4>
+                        <p class="feature-desc">
+                            Turn qualifying international calls into earnings. The longer your approved conversations last, the greater your potential rewards.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- IQ -->
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                <a class='feature-box-link' href='/register'>
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h4 class="feature-title">Vireon IQ</h4>
+                        <p class="feature-desc">
+                            Watch assigned videos, identify errors or improvements, and earn rewards for every approved content review submitted.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Google -->
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
+                <a class='feature-box-link' href='/register'>
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fa-brands fa-google"></i>
+                        </div>
+                        <h4 class="feature-title">Google Monetization</h4>
+                        <p class="feature-desc">
+                            Complete eligible Google-based online activities and generate consistent daily rewards from simple internet tasks.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Pin to Profit -->
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="600">
+                <a class='feature-box-link' href='/register'>
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fa-brands fa-pinterest-p"></i>
+                        </div>
+                        <h4 class="feature-title">Pin-to-Profit</h4>
+                        <p class="feature-desc">
+                            Connect your Pinterest account or upload your pictures to participate in rewarding Pin-to-Profit campaigns.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<section id="packages-section" class="section-padding">
+    <div class="container">
+
+        <!-- ================================================================= -->
+        <!-- 1. HIGH-IMPACT GLOWING STATS SECTION                             -->
+        <!-- ================================================================= -->
+        <div id="vireon-stats-section">
+            <div class="max-w-6xl">
+                
+                <!-- Minimalist Section Header -->
+                <div class="text-center mb-14" data-aos="fade-up">
+                    <h2>Live Platform Performance</h2>
+                    <div class="w-16"></div>
+                </div>
+
+                <!-- Huge Bold Row -->
+                <div class="grid">
+                    
+                    <!-- Stat 1: Registered Members -->
+                    <div class="text-center">
+                        <p class="text-white stat-counter" data-target="142500" data-suffix="+">0</p>
+                        <p class="text-slate-400 uppercase">Registered Members</p>
+                    </div>
+
+                    <!-- Stat 2: Total Paid Out -->
+                    <div class="text-center">
+                        <p class="text-[#22d3ee] stat-counter" data-target="850000" data-prefix="£" data-suffix="+">0</p>
+                        <p class="text-cyan-400/80 uppercase">Total Rewards Paid</p>
+                    </div>
+
+                    <!-- Stat 3: Tasks Completed -->
+                    <div class="text-center">
+                        <p class="text-white stat-counter" data-target="2400000" data-suffix="+">0</p>
+                        <p class="text-slate-400 uppercase">Tasks Completed</p>
+                    </div>
+
+                    <!-- Stat 4: Global Support -->
+                    <div class="text-center">
+                        <p class="text-[#22d3ee] stat-counter" data-target="15" data-suffix="+">0</p>
+                        <p class="text-cyan-400/80 uppercase">Countries Supported</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- 2. PREMIUM TESTIMONIALS SLIDER CARD                              -->
+        <!-- ================================================================= -->
+        <div id="vireon-testimonials">
+            <div class="max-w-4xl">
+                
+                <!-- Premium Glassmorphic Swiping Container -->
+                <div class="relative bg-[#051124]/40">
+                    
+                    <!-- Glow Accents inside the card -->
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-[#22d3ee]/10 rounded-full pointer-events-none"></div>
+                    <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-cyan-500/5 rounded-full pointer-events-none"></div>
+
+                    <!-- Slide 1 (Active) -->
+                    <div class="testimonial-slide opacity-100">
+                        <div class="flex">
+                            <!-- User Image -->
+                            <div class="shrink-0">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" alt="Chinedu E.">
+                                <span class="bg-[#22d3ee]">
+                                    <i class="fa-solid fa-quote-right"></i>
+                                </span>
+                            </div>
+                            <!-- User Review Context -->
+                            <div>
+                                <div class="text-amber-400">
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                </div>
+                                <p class="text-slate-300">
+                                    "I was skeptical about earning online initially, but Vireon changed everything. The Survey module and CallCash program are so smooth. I already hit my withdrawal targets effortlessly this month!"
+                                </p>
+                                <div>
+                                    <h4>Chinedu E.</h4>
+                                    <p class="text-[10px] text-[#22d3ee] font-black uppercase tracking-widest mt-0.5">Lagos, Nigeria</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2 (Hidden) -->
+                    <div class="testimonial-slide opacity-0 pointer-events-none">
+                        <div class="flex">
+                            <!-- User Image -->
+                            <div class="shrink-0">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" alt="Amara O.">
+                                <span class="bg-[#22d3ee]">
+                                    <i class="fa-solid fa-quote-right"></i>
+                                </span>
+                            </div>
+                            <!-- User Review Context -->
+                            <div>
+                                <div class="text-amber-400">
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                </div>
+                                <p class="text-slate-300">
+                                    "The guidance here is on another level. Thanks to the proper strategies on the team forum, my dashboard balance looks amazing. Highly recommend this network!"
+                                </p>
+                                <div>
+                                    <h4>Amara O.</h4>
+                                    <p class="text-[10px] text-[#22d3ee] font-black uppercase tracking-widest mt-0.5">Port Harcourt</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3 (Hidden) -->
+                    <div class="testimonial-slide opacity-0 pointer-events-none">
+                        <div class="flex">
+                            <!-- User Image -->
+                            <div class="shrink-0">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" alt="Kelechi T.">
+                                <span class="bg-[#22d3ee]">
+                                    <i class="fa-solid fa-quote-right"></i>
+                                </span>
+                            </div>
+                            <!-- User Review Context -->
+                            <div>
+                                <div class="text-amber-400">
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                </div>
+                                <p class="text-slate-300">
+                                    "Receiving payments directly and exchanging them has given me complete financial peace of mind. The system is fast, secure, and matches top global standards."
+                                </p>
+                                <div>
+                                    <h4>Kelechi T.</h4>
+                                    <p class="text-[10px] text-[#22d3ee] font-black uppercase tracking-widest mt-0.5">Abuja, FCT</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Sleek Indicator Dots -->
+                <div class="flex justify-center gap-2.5 mt-8">
+                    <button onclick="changeSlide(0)" class="slider-dot w-2 h-2 rounded-full bg-[#22d3ee] transition-all duration-300" aria-label="Slide 1"></button>
+                    <button onclick="changeSlide(1)" class="slider-dot w-1.5 h-1.5 rounded-full bg-slate-700 transition-all duration-300" aria-label="Slide 2"></button>
+                    <button onclick="changeSlide(2)" class="slider-dot w-1.5 h-1.5 rounded-full bg-slate-700 transition-all duration-300" aria-label="Slide 3"></button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- FAQ & CTA Wrapper -->
+<div id="faq-cta-wrapper">
+
+    <!-- FAQ Section -->
+    <section class="section-padding">
+
+        <div class="container">
+
+            <div class="mb-5" data-aos="fade-up">
+
+                <span class="badge bg-dark border border-info text-info px-3 py-2 rounded-pill mb-3">
+                    <i class="fa-solid fa-circle-question me-2"></i>
+                    Frequently Asked Questions
+                </span>
+
+                <h2 class="section-title glow-text">
+                    Everything You Need to Know
+                </h2>
+
+                <p class="section-subtitle text-start ms-0">
+                    Here are answers to the most common questions about joining Vireon and how the platform works.
+                </p>
+
+            </div>
+
+            <div class="row justify-content-center">
+
+                <div class="col-lg-9" data-aos="fade-up">
+
+                    <div class="accordion" id="faqAccordion">
+
+                        <!-- FAQ 1 -->
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq1">
+
+                                    How do I start earning on Vireon?
+
+                                </button>
+
+                            </h2>
+
+                            <div id="faq1"
+                                 class="accordion-collapse collapse show"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    After registering and activating your preferred package, you gain access to earning features such as Surveys, CallCash, Converse, Google Monetization, Snap Pro, Pin-to-Profit, Vireon IQ, X Revenue and many more.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- FAQ 2 -->
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq2">
+
+                                    Is Vireon available worldwide?
+
+                                </button>
+
+                            </h2>
+
+                            <div id="faq2"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    Yes. Vireon is designed for users across different countries. Available opportunities may vary depending on campaigns and eligibility.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- FAQ 3 -->
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq3">
+
+                                    How do I withdraw my earnings?
+
+                                </button>
+
+                            </h2>
+
+                            <div id="faq3"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    Eligible earnings can be withdrawn through supported withdrawal options including Bank Transfer, Vireon Wallet/Credit and VTU services, subject to platform requirements.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- FAQ 4 -->
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq4">
+
+                                    What are the onboarding packages?
+
+                                </button>
+
+                            </h2>
+
+                            <div id="faq4"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    Vireon currently offers three onboarding packages: Premier (₦14,500). Each package unlocks different earning opportunities and platform benefits.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- FAQ 5 -->
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq5">
+
+                                    Do I need any experience before joining?
+
+                                </button>
+
+                            </h2>
+
+                            <div id="faq5"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    No. Most Vireon opportunities require little or no previous experience. New members can begin with simple tasks and gradually explore more advanced earning features.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- FAQ 6 -->
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq6">
+
+                                    Can I earn every day?
+
+                                </button>
+
+                            </h2>
+
+                            <div id="faq6"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    Yes. Many Vireon features such as Daily Surveys, Google Monetization, CallCash, Streak Rewards and other campaigns provide opportunities to earn consistently by remaining active.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- WHY JOIN STRIP -->
+
+    <section class="pb-5">
+
+        <div class="container">
+
+            <div class="row g-4 justify-content-center text-center">
+
+                <div class="col-6 col-lg-3" data-aos="fade-up">
+
+                    <i class="fa-solid fa-shield-halved fa-2x text-info mb-3"></i>
+
+                    <h6 class="fw-bold">Secure Platform</h6>
+
+                    <small class="text-white-50">
+                        Built for trusted digital opportunities.
+                    </small>
+
+                </div>
+
+                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+
+                    <i class="fa-solid fa-bolt fa-2x text-info mb-3"></i>
+
+                    <h6 class="fw-bold">Daily Opportunities</h6>
+
+                    <small class="text-white-50">
+                        Stay active and unlock new rewards.
+                    </small>
+
+                </div>
+
+                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+
+                    <i class="fa-solid fa-globe fa-2x text-info mb-3"></i>
+
+                    <h6 class="fw-bold">Global Access</h6>
+
+                    <small class="text-white-50">
+                        Participate from virtually anywhere.
+                    </small>
+
+                </div>
+
+                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+
+                    <i class="fa-solid fa-wallet fa-2x text-info mb-3"></i>
+
+                    <h6 class="fw-bold">Multiple Income Streams</h6>
+
+                    <small class="text-white-50">
+                        More than 10 ways to earn.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="py-5 mb-5">
+
+        <div class="container">
+
+            <div class="cta-box" data-aos="zoom-in">
+
+                <span class="badge bg-dark border border-info text-info px-3 py-2 rounded-pill mb-3">
+
+                    <i class="fa-solid fa-rocket me-2"></i>
+
+                    Start Today
+
+                </span>
+
+                <h2 class="glow-text mb-3">
+
+                    Your Next Opportunity Starts With One Click
+
+                </h2>
+
+                <p class="lead text-white-50 mb-4">
+
+                    Join the growing community of Vireonites and unlock Surveys, Remote Jobs, Google Monetization, CallCash, Pin-to-Profit, Snap Pro, Vireon IQ, X Revenue, and many more earning opportunities.
+
+                </p>
+
+                <a class='btn-custom btn-primary-custom' href='/register'>
+
+                    Create Your Account
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+        
+
+<!-- Footer -->
+<footer>
+
+    <div class="container">
+
+        <div class="row">
+
+            <!-- Brand -->
+
+            <div class="col-lg-4 col-md-6 mb-5">
+
+                <a class='footer-brand' href='/'>
+
+                    <img src="assets/images/logo.png" alt="Vireon Logo">
+
+                </a>
+
+                <p class="footer-desc">
+
+                    Vireon is a modern digital earning ecosystem connecting people with surveys,
+                    remote work, social rewards, creator opportunities and everyday online income
+                    streams—all from one secure platform.
+
+                </p>
+
+                <div class="social-links mt-4">
+
+                    <a href='/register'>
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+
+                    <a href='/register'>
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+
+                    <a href='/register'>
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <a href='/register'>
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- Platform -->
+
+            <div class="col-lg-4 col-md-6 mb-5">
+
+                <h5 class="footer-heading">
+
+                    Explore Vireon
+
+                </h5>
+
+                <ul class="footer-links">
+
+                    <li>
+                        <a href="#about-section">About Vireon</a>
+                    </li>
+
+                    <li>
+                        <a href="#features-section">Earning Features</a>
+                    </li>
+
+                    <li>
+                        <a href="#packages-section">Onboarding Packages</a>
+                    </li>
+
+                    <li>
+                        <a href="#faq-cta-wrapper">FAQs</a>
+                    </li>
+
+                </ul>
+
+                <a class='btn-custom btn-primary-custom mt-3' href='/register'>
+
+                    Create Account
+
+                </a>
+
+            </div>
+
+            <!-- Contact -->
+
+            <div class="col-lg-4 col-md-6 mb-5">
+
+                <h5 class="footer-heading">
+
+                    Get In Touch
+
+                </h5>
+
+                <ul class="footer-links">
+
+                    <li>
+
+                        <a href="#">
+
+                            <i class="fa-solid fa-envelope me-2 text-info"></i>
+
+                            support@vireon.com
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#">
+
+                            <i class="fa-solid fa-globe me-2 text-info"></i>
+
+                            Worldwide Digital Platform
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#">
+
+                            <i class="fa-solid fa-clock me-2 text-info"></i>
+
+                            Available 24/7
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+        <!-- Mini Trust Strip -->
+
+        <div class="row py-4 border-top border-secondary border-opacity-25">
+
+            <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+
+                <small class="text-white-50">
+
+                    <i class="fa-solid fa-shield-halved text-info me-2"></i>
+
+                    Secure Digital Platform
+
+                </small>
+
+            </div>
+
+            <div class="col-md-4 text-center mb-3 mb-md-0">
+
+                <small class="text-white-50">
+
+                    <i class="fa-solid fa-wallet text-info me-2"></i>
+
+                    Multiple Earning Opportunities
+
+                </small>
+
+            </div>
+
+            <div class="col-md-4 text-center text-md-end">
+
+                <small class="text-white-50">
+
+                    <i class="fa-solid fa-earth-africa text-info me-2"></i>
+
+                    Serving Members Worldwide
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <!-- Copyright -->
+
+        <div class="row">
+
+            <div class="col-12 text-center">
+
+                <p class="copyright mb-0">
+
+                    © 2026 Vireon. All Rights Reserved.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+</div>
+
+<!-- Mobile Sticky Signup Button -->
+
+<a class='d-lg-none' href='/register' id='mobile-sticky-signup'>
+
+    <i class="fa-solid fa-user-plus me-2"></i>
+
+    Join Vireon
+
+</a>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize AOS Animation
+            AOS.init({
+                once: true,
+                offset: 50,
+                duration: 1000
+            });
+
+            // Navbar & Sticky Button Scroll Logic
+            $(window).scroll(function() {
+                var scrollTop = $(this).scrollTop();
+                var windowHeight = $(window).height();
+                var heroHeight = $('#hero-section').outerHeight();
+                var footerOffset = $('footer').offset().top;
+
+                // 1. Header Glassmorphism
+                if (scrollTop > 50) {
+                    $('.navbar').addClass('navbar-scrolled');
+                } else {
+                    $('.navbar').removeClass('navbar-scrolled');
+                }
+                
+                // 2. Mobile Sticky Signup Button Visibility
+                var $btn = $('#mobile-sticky-signup');
+                
+                if (scrollTop > heroHeight - 100) { 
+                    $btn.addClass('show-sticky');
+                } else {
+                    $btn.removeClass('show-sticky');
+                }
+
+                // 3. Footer Docking Logic
+                // If scroll bottom hits the footer top, push the button up so it sticks to the footer area
+                if (scrollTop + windowHeight > footerOffset) {
+                    var overlap = (scrollTop + windowHeight) - footerOffset;
+                    $btn.css('bottom', (30 + overlap) + 'px');
+                } else {
+                    $btn.css('bottom', '30px');
+                }
+            });
+        });
+
+         document.addEventListener("contextmenu", function(e){
+    e.preventDefault();
+});
+
+document.addEventListener("keydown", function(e){
+
+    if (
+        e.key === "F12" ||
+
+        (e.ctrlKey && e.shiftKey && e.key === "I") ||
+
+        (e.ctrlKey && e.shiftKey && e.key === "J") ||
+
+        (e.ctrlKey && e.shiftKey && e.key === "C") ||
+
+        (e.ctrlKey && e.key === "U") ||
+
+        (e.ctrlKey && e.key === "S")
+
+    ){
+
+        e.preventDefault();
+        return false;
+
+    }
+
+});
+
+document.querySelectorAll("img").forEach(img=>{
+
+    img.setAttribute("draggable","false");
+
+});
+
+document.addEventListener("copy",function(e){
+
+    e.preventDefault();
+
+});
+
+document.addEventListener("cut",function(e){
+
+    e.preventDefault();
+
+});
+
+document.addEventListener("paste",function(e){
+
+    e.preventDefault();
+
+});
+
+setInterval(function(){
+
+    if(window.outerWidth-window.innerWidth>160 ||
+
+       window.outerHeight-window.innerHeight>160){
+
+        document.body.style.filter="(20px)";
+
+    }else{
+
+        document.body.style.filter="none";
+
+    }
+
+},500);
+
+// =================================================================
+// VIREON LIVE PERFORMANCE & TESTIMONIAL SLIDER MODULE
+// =================================================================
+document.addEventListener("DOMContentLoaded", () => {
+    
+    // --- PART A: SCROLL-TRIGGERED STATS COUNTING ---
+    const statsSection = document.getElementById('vireon-stats-section');
+    const counters = document.querySelectorAll('.stat-counter');
+
+    const formatNumber = (val, prefix, suffix) => {
+        let roundedNum = Math.floor(val).toLocaleString();
+        if (prefix) roundedNum = prefix + roundedNum;
+        if (suffix) roundedNum = roundedNum + suffix;
+        return roundedNum;
+    };
+
+    const triggerCountAnimation = (counter) => {
+        const target = +counter.getAttribute('data-target');
+        const suffix = counter.getAttribute('data-suffix') || '';
+        const prefix = counter.getAttribute('data-prefix') || '';
+        let current = 0;
+
+        // Custom organic dynamic easing speed
+        const animate = () => {
+            const remaining = target - current;
+            const step = Math.ceil(remaining / 15); // Dynamic progress steps
+            
+            if (current < target) {
+                current += step;
+                if (current > target) current = target;
+                counter.innerText = formatNumber(current, prefix, suffix);
+                requestAnimationFrame(animate);
+            } else {
+                counter.innerText = formatNumber(target, prefix, suffix);
+            }
+        };
+        animate();
+    };
+
+    // Observer activates all stats counter synchronously when section reaches viewport
+    if (statsSection) {
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    counters.forEach(counter => triggerCountAnimation(counter));
+                    statsObserver.unobserve(entry.target); // Prevents re-triggering
+                }
+            });
+        }, { threshold: 0.15 });
+
+        statsObserver.observe(statsSection);
+    } else {
+        // Fallback execution
+        counters.forEach(counter => triggerCountAnimation(counter));
+    }
+
+
+    // --- PART B: AUTO-PLAY SWIPING TESTIMONIAL CARD SYSTEM ---
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    let activeSlideIndex = 0;
+    let autoplayTimer;
+
+    window.changeSlide = (targetIndex) => {
+        slides.forEach((slide, idx) => {
+            if (idx === targetIndex) {
+                slide.classList.remove('opacity-0', 'pointer-events-none');
+                slide.classList.add('opacity-100');
+            } else {
+                slide.classList.remove('opacity-100');
+                slide.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+
+        // Sync indicator pagination dots
+        dots.forEach((dot, idx) => {
+            if (idx === targetIndex) {
+                dot.classList.remove('w-1.5', 'h-1.5', 'bg-slate-700');
+                dot.classList.add('w-2', 'h-2', 'bg-[#22d3ee]');
+            } else {
+                dot.classList.remove('w-2', 'h-2', 'bg-[#22d3ee]');
+                dot.classList.add('w-1.5', 'h-1.5', 'bg-slate-700');
+            }
+        });
+
+        activeSlideIndex = targetIndex;
+        startAutoplayLoop();
+    };
+
+    const triggerNextSlide = () => {
+        let nextIndex = (activeSlideIndex + 1) % slides.length;
+        changeSlide(nextIndex);
+    };
+
+    const startAutoplayLoop = () => {
+        clearInterval(autoplayTimer);
+        autoplayTimer = setInterval(triggerNextSlide, 5000); // Swipes to next testimonial card every 5 seconds
+    };
+
+    // Fire autoplay on page render
+    startAutoplayLoop();
+});
+    </script>
+</body>
+</html>
