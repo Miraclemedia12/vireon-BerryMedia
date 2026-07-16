@@ -314,7 +314,7 @@
   <h2>Create Your Account</h2>
 
   <p class="subtitle">
-    Activate your account and unlock access to Surveys, CallCash, Verion IQ,
+    Activate your account and unlock access to Surveys, CallCash, Vireon IQ,
     Google Monetization, Converse, Pin-to-Profit and many more earning opportunities.
   </p>
 
@@ -352,7 +352,7 @@
     <div class="input-group">
       <select id="plan">
         <option value="14500">
-          Verion Onboarding Package — ₦14,500
+          Vireon Onboarding Package — ₦14,500
         </option>
       </select>
     </div>
@@ -502,11 +502,11 @@ document.getElementById("registrationForm").onsubmit = function(e) {
                 localStorage.setItem("password", passwordVal);
                 localStorage.setItem("plan", planVal);
 
-                showToast("Account initialized! Redirecting to setup secure payment...", "success");
+                showToast("Account initialized! Redirecting to Dashboard...", "success");
                 
                 // Seamless handoff straight to payment.html for core account verification
                 setTimeout(() => {
-                    window.location.href = "payment.html";
+                    window.location.href = "dashboard.html";
                 }, 1500);
             })
             .catch((error) => {
