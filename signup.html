@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verion | Create Account</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- DESIGN CORE VARIABLES --- */
+        :root {
+            --bg-body: #080d1a;
+            --bg-card: #020617;
+            --accent: #38bdf8;
+            --accent-dark: #0ea5e9;
+            --accent-light: #60a5fa;
+            --text: #F8FBFF;
+            --muted: #94a3b8;
+            --input-bg: #0f172a;
+            --border: rgba(56, 189, 248, 0.15);
+            --glass: rgba(15, 23, 42, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: 
+                radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 50%),
+                radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.1), transparent 40%),
+                var(--bg-body);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text);
+            padding: 30px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 460px;
+            padding: 2.5rem 2rem;
+            border-radius: 22px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.5),
+                0 0 35px rgba(56, 189, 248, 0.05);
+        }
+
+        .logo-placeholder {
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            margin: 0 0 8px;
+            text-align: center;
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--muted);
+            margin-bottom: 30px;
+            font-size: .9rem;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-size: .9rem;
+            font-weight: 600;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input, select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: #fff;
+            transition: all 0.3s ease;
+            font-size: .95rem;
+        }
+
+        input::placeholder {
+            color: rgba(148, 163, 184, 0.5);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
+        }
+
+        /* Styling for the native select option elements */
+        select option {
+            background-color: var(--bg-card);
+            color: #fff;
+        }
+
+        .toggle-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .toggle-icon:hover {
+            color: var(--accent);
+        }
+
+        button.primary {
+            width: 100%;
+            border: none;
+            padding: 16px;
+            margin-top: 10px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+
+        button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.4);
+        }
+        
+        button.primary:active {
+            transform: translateY(0);
+        }
+
+        .plan-card {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 16px;
+            background: var(--glass);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+        }
+
+        .plan-card h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .plan-price {
+            margin-top: 10px;
+            font-size: 1rem;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .new-price {
+            color: var(--accent);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .note {
+            margin-top: 22px;
+            text-align: center;
+            color: var(--muted);
+            font-size: .85rem;
+            line-height: 1.6;
+        }
+
+        .note a {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .note a:hover {
+            color: var(--accent-light);
+        }
+
+        @media(max-width: 576px) {
+            body {
+                padding: 16px;
+            }
+            .container {
+                padding: 1.8rem 1.4rem;
+            }
+            h2 {
+                font-size: 1.45rem;
+            }
+        }
+
+        body {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- Branded Modern Typography Logo Container -->
+  <div class="logo-placeholder">VERION</div>
+
+  <h2>Create Your Account</h2>
+
+  <p class="subtitle">
+    Activate your account and unlock access to Surveys, CallCash, Verion IQ,
+    Google Monetization, Converse, Pin-to-Profit and many more earning opportunities.
+  </p>
+
+  <form id="registrationForm">
+
+    <label for="name">Full Name</label>
+    <div class="input-group">
+      <input type="text" id="name" placeholder="Enter your full name" required>
+    </div>
+
+    <label for="username">Username</label>
+    <div class="input-group">
+      <input type="text" id="username" placeholder="Choose a username" required>
+    </div>
+
+    <label for="phone">Phone Number</label>
+    <div class="input-group">
+      <input type="tel" id="phone" placeholder="08012345678" required>
+    </div>
+
+    <label for="email">Email Address</label>
+    <div class="input-group">
+      <input type="email" id="email" placeholder="you@example.com" required>
+    </div>
+
+    <label for="password">Password</label>
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Create a secure password" required>
+      <div class="toggle-icon" id="togglePass">
+        <i class="fa-solid fa-eye-slash"></i>
+      </div>
+    </div>
+
+    <label for="plan">Activation Package</label>
+    <div class="input-group">
+      <select id="plan">
+        <option value="12000">
+          Verion Onboarding Package — ₦14,500
+        </option>
+      </select>
+    </div>
+
+    <!-- VERION ACCENTUATED PACKAGE INFO CARD -->
+    <div class="plan-card">
+      <h3>Verion Onboarding Package</h3>
+      <div class="plan-price">
+        <span class="old-price">₦14,500</span>
+        <span class="new-price">₦12,500 Cashback</span>
+      </div>
+      <p style="margin-top:12px; color:var(--muted); font-size:.88rem; line-height:1.6;">
+        One-time activation fee that unlocks access to all Verion earning
+        opportunities including Surveys, CallCash, Verion IQ, Google
+        Monetization, Converse, Snap Pro, Pin-to-Profit, X Revenue and more.
+      </p>
+    </div>
+
+    <button type="submit" class="primary">
+      Register Account
+    </button>
+
+  </form>
+
+  <div class="note">
+    Secure Registration • Secure Payment • Instant Activation
+  </div>
+
+  <div class="note" style="margin-top: 1.2rem;">
+    Already have an account? 
+    <a href="#">Login</a>
+  </div>
+
+</div>
+
+<script>
+// --- Input Password Masking Toggle ---
+document.getElementById("togglePass").onclick = function() {
+    const input = document.getElementById("password");
+    const icon = this.querySelector("i");
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+    } else {
+        input.type = "password";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+    }
+};
+
+// --- Form Validation Interceptor & Router ---
+document.getElementById("registrationForm").onsubmit = function(e) {
+    e.preventDefault();
+
+    // Cache parameters safely into active browser storage instances
+    localStorage.setItem("userFullName", document.getElementById("name").value.trim());
+    localStorage.setItem("username", document.getElementById("username").value.trim());
+    localStorage.setItem("phone", document.getElementById("phone").value.trim());
+    localStorage.setItem("email", document.getElementById("email").value.trim());
+    localStorage.setItem("password", document.getElementById("password").value.trim());
+    localStorage.setItem("plan", "12000");
+
+    // Seamless execution straight onto your ecosystem dashboard architecture
+    window.location.href = "dashboard.html";
+};
+
+// --- Anti-Tampering Shield Layers ---
+document.addEventListener("contextmenu", function(e) {
+    e.preventDefault();
+});
+
+document.addEventListener("keydown", function(e) {
+    if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && e.key === "I") ||
+        (e.ctrlKey && e.shiftKey && e.key === "J") ||
+        (e.ctrlKey && e.shiftKey && e.key === "C") ||
+        (e.ctrlKey && e.key === "U") ||
+        (e.ctrlKey && e.key === "S")
+    ) {
+        e.preventDefault();
+        return false;
+    }
+});
+
+document.addEventListener("copy", function(e) { e.preventDefault(); });
+document.addEventListener("cut", function(e) { e.preventDefault(); });
+document.addEventListener("paste", function(e) { e.preventDefault(); });
+
+// Active dev-tools inspection blur interceptor
+setInterval(function() {
+    if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+        document.body.style.filter = "blur(20px)";
+    } else {
+        document.body.style.filter = "none";
+    }
+}, 500);
+</script>
+
+</body>
+</html>
