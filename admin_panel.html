@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIREON | Administrative Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Plus Jakarta Sans Font for High-End UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        darkBg: '#090A0F',
+                        cardBg: '#12141C',
+                        accentGreen: '#10B981',
+                        accentGreenHover: '#059669',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #090A0F;
+            background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, #090a0f 70%);
+            user-select: none; /* Disables text selection across the UI for extra security */
+        }
+        /* Custom scrollbar for tables and panels */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090A0F;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased text-slate-200">
+
+    <!-- ========================================================================= -->
+    <!-- 1. LOGIN GATE VIEW -->
+    <!-- ========================================================================= -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-darkBg">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="w-full max-w-md bg-cardBg/90 border border-slate-800/80 rounded-3xl p-8 shadow-2xl backdrop-blur-xl text-center relative">
+            <img src="logo.png" alt="VIREON" class="h-14 mx-auto mb-4 object-contain">
+            <h2 class="text-xl font-bold text-white tracking-tight">Core Administrator Gate</h2>
+            <p class="text-slate-400 text-xs mt-1 mb-6">Authorized access environment only</p>
+            
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4 text-left">
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Username</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-xs"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" id="admin-user" required class="w-full pl-9 pr-4 py-3 bg-slate-900/60 border border-slate-800 focus:border-emerald-500 rounded-xl text-sm text-white placeholder-slate-600 focus:outline-none transition-all">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Security Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-xs"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="admin-pass" required class="w-full pl-9 pr-4 py-3 bg-slate-900/60 border border-slate-800 focus:border-emerald-500 rounded-xl text-sm text-white placeholder-slate-600 focus:outline-none transition-all">
+                    </div>
+                </div>
+                <button type="submit" class="w-full mt-2 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-emerald-500/15">
+                    Verify & Authenticate
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ========================================================================= -->
+    <!-- 2. MAIN ADMIN DASHBOARD VIEW -->
+    <!-- ========================================================================= -->
+    <div id="dashboard-screen" class="hidden min-h-screen flex flex-col">
+        
+        <!-- Navigation Header -->
+        <header class="bg-cardBg/80 border-b border-slate-800/80 sticky top-0 backdrop-blur-md z-40 px-4 lg:px-8 py-4">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="vireon_logo.png" alt="VIREON" class="h-8 object-contain">
+                    <div class="h-5 w-[1px] bg-slate-800"></div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">Admin Panel</span>
+                </div>
+                <button onclick="handleLogout()" class="px-4 py-2 bg-slate-900 hover:bg-red-950/40 border border-slate-800 hover:border-red-500/30 text-slate-400 hover:text-red-400 text-xs font-semibold rounded-xl transition-all flex items-center gap-2">
+                    <span>Secure Sign Out</span>
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Application Body wrapper -->
+        <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Left Grid Column: Gateway Settings Modifier Form -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-cardBg border border-slate-800/80 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
+                    
+                    <h3 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-emerald-400 text-sm"></i> Payment Parameters
+                    </h3>
+                    <p class="text-xs text-slate-400 mb-5">Modifying these fields instantly shifts active data on checkout screens globally.</p>
+                    
+                    <form id="settings-form" onsubmit="updatePaymentSettings(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Set Target Amount (₦)</label>
+                            <input type="number" id="set-amount" required class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-800 focus:border-emerald-500 rounded-xl text-sm text-white focus:outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Bank Name</label>
+                            <input type="text" id="set-bank" required class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-800 focus:border-emerald-500 rounded-xl text-sm text-white focus:outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Account Number</label>
+                            <input type="text" id="set-acc-num" required class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-800 focus:border-emerald-500 rounded-xl text-sm text-white focus:outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Account Name Target</label>
+                            <textarea id="set-acc-name" rows="2" required class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-800 focus:border-emerald-500 rounded-xl text-sm text-white focus:outline-none transition-all resize-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Telegram Callback Link</label>
+                            <input type="url" id="set-telegram" required class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-800 focus:border-emerald-500 rounded-xl text-sm text-white focus:outline-none transition-all">
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md">
+                            Commit Changes Live
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Grid Column: Dynamic Registrations Monitoring Feed -->
+            <div class="lg:col-span-2 flex flex-col">
+                <div class="bg-cardBg border border-slate-800/80 rounded-3xl shadow-xl flex-1 flex flex-col overflow-hidden">
+                    
+                    <!-- Title Bar -->
+                    <div class="p-6 border-b border-slate-800/60 flex items-center justify-between bg-slate-900/20">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-users text-emerald-400 text-sm"></i> Registration Pipeline
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-0.5">Real-time synchronization with registration databases</p>
+                        </div>
+                        <span id="user-count-badge" class="px-2.5 py-1 text-xs bg-slate-800 text-slate-300 font-bold rounded-lg border border-slate-700/50">0 entries</span>
+                    </div>
+
+                    <!-- Table Segment wrapper -->
+                    <div class="flex-1 overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800/50 bg-slate-900/40 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                    <th class="py-4 px-6">User Metadata / Identity</th>
+                                    <th class="py-4 px-6">Contact Vector</th>
+                                    <th class="py-4 px-6">Created On</th>
+                                </tr>
+                            </thead>
+                            <tbody id="registrations-table-body" class="divide-y divide-slate-800/40 text-sm text-slate-300">
+                                <!-- Dynamic standard loading injection space -->
+                                <tr>
+                                    <td colspan="3" class="text-center py-12 text-slate-500 text-xs">
+                                        <i class="fa-solid fa-circle-notch animate-spin text-emerald-400 text-lg mb-2 block"></i>
+                                        Awaiting connection parameters...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Custom System Status Notification Box (Toast) -->
+    <div id="toast" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-emerald-500/20 text-emerald-400 px-5 py-3.5 rounded-2xl flex items-center gap-3 shadow-2xl backdrop-blur-md z-50">
+        <i id="toast-icon" class="fas fa-check-circle text-emerald-500 text-sm"></i>
+        <span id="toast-text" class="text-xs font-semibold text-slate-200">Processing...</span>
+    </div>
+
+
+    <!-- ========================================================================= -->
+    <!-- 3. FUNCTIONALITY SCRIPTS ENGINE -->
+    <!-- ========================================================================= -->
+    
+    <!-- Firebase Compat Modules Core Hooks -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // --- SECURE SECURITY PERIPHERAL SHIELDS ---
+        // Block mouse standard context menu commands
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Block structural exploration hotkeys
+        document.addEventListener('keydown', e => {
+            // Block F12 DevTools structural hooks
+            if (e.keyCode === 123) e.preventDefault();
+            // Block Ctrl+Shift+I / Ctrl+Shift+J diagnostic arrays
+            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) e.preventDefault();
+            // Block Ctrl+U viewing of current layout blueprint source paths
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+        });
+
+
+        // --- APPLICATION FIREBASE ENVIRONMENT CREDENTIALS ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyCkBBUQn-vPofsoJQEpu1K5mtJDffpAdxA",
+            authDomain: "vireon-berrymedia.firebaseapp.com",
+            projectId: "vireon-berrymedia",
+            storageBucket: "vireon-berrymedia.firebasestorage.app",
+            messagingSenderId: "433591634561",
+            appId: "1:433591634561:web:40b32bc9aaa28b59a25b80",
+            measurementId: "G-TH2W27DZSV"
+        };
+
+        // Initialize Firebase Framework Instance
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+
+        // --- ADMIN LOGIN GATEWAY STRATEGY ---
+        // Hardcoded Administrative parameters (Modify these exact values for dashboard access control)
+        const ADMIN_USER = "admin";
+        const ADMIN_PASS = "vireon2026";
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const userInput = document.getElementById("admin-user").value;
+            const passInput = document.getElementById("admin-pass").value;
+
+            if(userInput === ADMIN_USER && passInput === ADMIN_PASS) {
+                sessionStorage.setItem("vireon_admin_session", "active");
+                showToast("Access Authorized. Initializing interface...", "success");
+                initDashboard();
+            } else {
+                showToast("Invalid credentials. Entry denied.", "error");
+            }
+        }
+
+        function verifySessionStatus() {
+            if(sessionStorage.getItem("vireon_admin_session") === "active") {
+                initDashboard();
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem("vireon_admin_session");
+            document.getElementById("dashboard-screen").classList.add("hidden");
+            document.getElementById("login-screen").classList.remove("hidden");
+            showToast("Session terminated safely.", "success");
+        }
+
+        function initDashboard() {
+            document.getElementById("login-screen").classList.add("hidden");
+            document.getElementById("dashboard-screen").classList.remove("hidden");
+            
+            // Connect dynamic pipeline modules
+            fetchPaymentSettings();
+            streamIncomingRegistrations();
+        }
+
+
+        // --- CUSTOM GLOBAL STATUS TOAST LOGIC ---
+        function showToast(message, type = "success") {
+            const toast = document.getElementById("toast");
+            const toastText = document.getElementById("toast-text");
+            const toastIcon = document.getElementById("toast-icon");
+            
+            toastText.innerText = message;
+            
+            if(type === "success") {
+                toast.classList.replace("border-red-500/20", "border-emerald-500/20");
+                toastIcon.className = "fas fa-check-circle text-emerald-500 text-sm";
+            } else {
+                toast.classList.replace("border-emerald-500/20", "border-red-500/20");
+                toastIcon.className = "fas fa-exclamation-triangle text-red-500 text-sm";
+            }
+            
+            toast.classList.remove("translate-y-20", "opacity-0");
+            toast.classList.add("translate-y-0", "opacity-100");
+
+            setTimeout(() => {
+                toast.classList.remove("translate-y-0", "opacity-100");
+                toast.classList.add("translate-y-20", "opacity-0");
+            }, 3500);
+        }
+
+
+        // --- FIRESTORE DATA INTERACTIONS CONTROLLER ---
+
+        // Pull active checkout setup details from database document settings/payment
+        function fetchPaymentSettings() {
+            db.collection("settings").doc("payment").get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById("set-amount").value = data.amount || "";
+                    document.getElementById("set-bank").value = data.bank || "";
+                    document.getElementById("set-acc-num").value = data.accountNumber || "";
+                    document.getElementById("set-acc-name").value = data.accountName || "";
+                    document.getElementById("set-telegram").value = data.telegramLink || "";
+                }
+            }).catch((err) => {
+                showToast("Error linking parameter setups: " + err.message, "error");
+            });
+        }
+
+        // Commit updated forms out to Firestore instantly updating payment page users
+        function updatePaymentSettings(e) {
+            e.preventDefault();
+            
+            const updatedPayload = {
+                amount: Number(document.getElementById("set-amount").value),
+                bank: document.getElementById("set-bank").value,
+                accountNumber: document.getElementById("set-acc-num").value,
+                accountName: document.getElementById("set-acc-name").value,
+                telegramLink: document.getElementById("set-telegram").value
+            };
+
+            db.collection("settings").doc("payment").set(updatedPayload, { merge: true })
+            .then(() => {
+                showToast("System configurations committed live successfully!", "success");
+            })
+            .catch((err) => {
+                showToast("Failed to compile cloud upload: " + err.message, "error");
+            });
+        }
+
+        // Stream raw real-time user metrics down from collection 'users'
+        function streamIncomingRegistrations() {
+            // Note: Replace "users" with whatever collection name matches your signup.html pipeline setup.
+            // Sorting by timestamp requires an index configuration inside your Firestore console.
+            db.collection("users").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                const tableBody = document.getElementById("registrations-table-body");
+                document.getElementById("user-count-badge").innerText = `${snapshot.size} entries`;
+                
+                if(snapshot.empty) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="3" class="text-center py-12 text-slate-500 text-xs">
+                                <i class="fa-solid fa-folder-open text-xl mb-2 block text-slate-600"></i>
+                                No user registration documents discovered yet.
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                let htmlContent = "";
+                snapshot.forEach((doc) => {
+                    const user = doc.data();
+                    
+                    // Fallbacks for data structures that might vary during signup collection setup
+                    const fullName = user.fullname || user.signup_name || user.name || "Unknown Identity";
+                    const email = user.email || user.signup_email || "N/A";
+                    const phone = user.phone || user.signup_phone || "N/A";
+                    
+                    // Parse visual timestamp formatting neatly
+                    let registrationDate = "Legacy Account";
+                    if (user.timestamp) {
+                        const dateObj = user.timestamp.toDate ? user.timestamp.toDate() : new Date(user.timestamp);
+                        registrationDate = dateObj.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    }
+
+                    htmlContent += `
+                        <tr class="hover:bg-slate-900/30 transition-colors">
+                            <td class="py-4 px-6">
+                                <div class="font-bold text-white">${fullName}</div>
+                                <div class="text-[11px] text-slate-500 font-mono tracking-tight">${doc.id}</div>
+                            </td>
+                            <td class="py-4 px-6 space-y-0.5">
+                                <div class="flex items-center gap-1.5 text-xs text-slate-300">
+                                    <i class="fa-regular fa-envelope text-slate-500 w-3.5"></i> ${email}
+                                </div>
+                                <div class="flex items-center gap-1.5 text-xs text-slate-300">
+                                    <i class="fa-solid fa-phone text-slate-500 w-3.5"></i> ${phone}
+                                </div>
+                            </td>
+                            <td class="py-4 px-6 whitespace-nowrap text-xs font-medium text-slate-400">
+                                <i class="fa-regular fa-calendar text-emerald-500/70 mr-1"></i> ${registrationDate}
+                            </td>
+                        </tr>`;
+                });
+
+                tableBody.innerHTML = htmlContent;
+            }, (error) => {
+                console.error("Pipeline breakdown: ", error);
+                // Fail quietly if indexing configurations aren't deployed in the developer's Firebase dashboard yet
+                showToast("Stream failed. Review index criteria parameters.", "error");
+            });
+        }
+
+        // On document processing trigger entry assessments
+        window.onload = function() {
+            verifySessionStatus();
+        };
+    </script>
+</body>
+</html>
