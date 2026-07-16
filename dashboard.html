@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vireon Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        body {
+            background: #020710;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        /* SYSTEM WRAPPER */
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: #030a16;
+            border-left: 1px solid rgba(0, 242, 254, 0.15);
+            border-right: 1px solid rgba(0, 242, 254, 0.15);
+            padding-bottom: 90px;
+            position: relative;
+        }
+
+        /* HEADER SECTION */
+        header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .user-profile-block {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .profile-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #00f2fe;
+            color: #020710;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: 800;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            text-transform: uppercase;
+        }
+
+        .greeting-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .greeting-text {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            margin: 0;
+        }
+
+        .username-display {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn:hover {
+            border-color: #00f2fe;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        }
+
+        /* DASHBOARD SECTIONS MANAGER */
+        .viewport-section {
+            display: none;
+            padding: 1.5rem;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .viewport-section.active-view {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PRIMARY SWIPE BALANCE CAROUSEL MODULE */
+        .balance-carousel-wrapper {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+            width: 100%;
+            border-radius: 20px;
+        }
+
+        .carousel-track {
+            display: flex;
+            width: 200%; /* Two cards container width */
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: grab;
+        }
+
+        .carousel-track:active {
+            cursor: grabbing;
+        }
+
+        .balance-card {
+            width: 50%; /* Individual full width dynamic slots */
+            background: linear-gradient(135deg, #07152d 0%, #030e1f 100%);
+            border: 1.5px solid rgba(0, 242, 254, 0.25);
+            border-radius: 20px;
+            padding: 1.5rem;
+            position: relative;
+            box-sizing: border-box;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid #00f2fe;
+            color: #00f2fe;
+            padding: 0.4rem 0.85rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .card-brand {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+
+        .brand-dot {
+            width: 8px;
+            height: 8px;
+            background: #00f2fe;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00f2fe;
+        }
+
+        .balance-figure {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 1.5rem 0 0.5rem 0;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
+        }
+
+        .balance-subtext {
+            color: #a0aec0;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .eye-toggle-icon {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 10;
+        }
+
+        .eye-toggle-icon:hover {
+            opacity: 1;
+        }
+
+        /* Carousel Indicator Dots */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .carousel-dots .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .carousel-dots .dot.active-dot {
+            background: #00f2fe;
+            width: 20px;
+            border-radius: 10px;
+        }
+
+        /* SECONDARY BALANCE ROW */
+        .total-balance-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .total-meta h4 {
+            margin: 0;
+            font-size: 0.75rem;
+            color: #a0aec0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .total-meta p {
+            margin: 0.25rem 0 0 0;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #00f2fe;
+        }
+
+        .currency-pill {
+            background: rgba(0, 242, 254, 0.15);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            color: #00f2fe;
+            padding: 0.4rem 0.85rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .currency-pill:hover {
+            background: rgba(0, 242, 254, 0.25);
+            box-shadow: 0 0 8px rgba(0, 242, 254, 0.3);
+        }
+
+        /* CORE ACTION CTAS */
+        .action-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-core {
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-activate {
+            background: #00f2fe;
+            color: #020710;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn-activate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.45);
+        }
+
+        .btn-withdraw {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .btn-withdraw:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* SEPARATOR OR SUB-HEADLINES */
+        .section-headline {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0 0 1.25rem 0;
+            letter-spacing: -0.01em;
+        }
+
+        /* STREAMS FUNCTIONAL MATRIX */
+        .streams-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .stream-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.15rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .stream-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(0, 242, 254, 0.15);
+        }
+
+        .badge-status {
+            position: absolute;
+            top: 1.15rem;
+            right: 1.15rem;
+            font-size: 0.62rem;
+            font-weight: 800;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-status.locked {
+            background: rgba(255, 77, 77, 0.15);
+            color: #ff4d4d;
+            border: 1px solid rgba(255, 77, 77, 0.25);
+        }
+
+        .badge-status.active {
+            background: rgba(0, 230, 118, 0.15);
+            color: #00e676;
+            border: 1px solid rgba(0, 230, 118, 0.25);
+        }
+
+        .stream-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(0, 242, 254, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00f2fe;
+            margin-bottom: 0.85rem;
+            font-size: 1rem;
+        }
+
+        .stream-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0 0 0.25rem 0;
+        }
+
+        .stream-description {
+            font-size: 0.72rem;
+            color: #a0aec0;
+            margin: 0;
+            line-height: 1.35;
+        }
+
+        /* DAILY GOAL CONTAINER */
+        .daily-goal-container {
+            background: linear-gradient(135deg, rgba(7, 21, 45, 0.6) 0%, rgba(3, 14, 31, 0.6) 100%);
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .goal-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .goal-value {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #00f2fe;
+        }
+
+        .progress-bar-rail {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #00f2fe 0%, #0072ff 100%);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+        }
+
+        /* ACTIVITY / TRANSACTION LOGS */
+        .activity-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .activity-node {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .node-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .node-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .node-timestamp {
+            font-size: 0.72rem;
+            color: #a0aec0;
+            margin: 0;
+        }
+
+        .node-value {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #00e676;
+        }
+
+        /* MODALS ARCHITECTURE */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 7, 16, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 100000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .modal-content-wrapper {
+            background: #050d1a;
+            border: 2px solid #00f2fe;
+            border-radius: 24px;
+            padding: 2.25rem 1.75rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 242, 254, 0.25);
+            animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalScaleUp {
+            from { transform: scale(0.85); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-modal-trigger {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .close-modal-trigger:hover {
+            opacity: 1;
+            color: #ff4d4d;
+        }
+
+        .modal-graphic {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(0, 242, 254, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1.5rem auto;
+            color: #00f2fe;
+            font-size: 2rem;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);
+        }
+
+        .modal-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0 0 0.85rem 0;
+            letter-spacing: -0.02em;
+        }
+
+        .modal-body-text {
+            font-size: 0.9rem;
+            color: #a0aec0;
+            line-height: 1.5;
+            margin: 0 0 1.75rem 0;
+        }
+
+        .support-cta-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .tg-btn {
+            background: #0088cc;
+            color: #ffffff;
+        }
+
+        .gm-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .gm-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* SIDEBAR DRAWER PANEL */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 7, 16, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+        }
+
+        .sidebar-drawer {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 280px;
+            height: 100%;
+            background: #050d1a;
+            border-left: 1.5px solid rgba(0, 242, 254, 0.2);
+            box-shadow: -10px 0 35px rgba(0, 0, 0, 0.8);
+            z-index: 10011;
+            transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-drawer.drawer-open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-logo {
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: #ffffff;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar-logo span {
+            color: #00f2fe;
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .sidebar-nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.85rem 1rem;
+            border-radius: 10px;
+            color: #a0aec0;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .sidebar-link:hover {
+            color: #ffffff;
+            background: rgba(0, 242, 254, 0.05);
+        }
+
+        .sidebar-link.active-link {
+            background: rgba(0, 242, 254, 0.1);
+            color: #00f2fe;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+        }
+
+        /* BOTTOM NAVIGATION ARCHITECTURE */
+        .bottom-nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: rgba(5, 13, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.75rem 0.5rem;
+            z-index: 999;
+        }
+
+        .nav-tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 22%;
+        }
+
+        .nav-tab-item.active-tab {
+            color: #00f2fe;
+        }
+
+        .tab-icon {
+            font-size: 1.25rem;
+        }
+
+        .tab-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- GLOBAL APP HEADER -->
+        <header>
+            <div class="user-profile-block">
+                <div class="profile-avatar" id="avatar-container">M</div>
+                <div class="greeting-meta">
+                    <p class="greeting-text">Good morning,</p>
+                    <h3 class="username-display" id="user-display-node">MiracleMedia</h3>
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="control-btn" id="bell-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                </div>
+                <div class="control-btn" id="support-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div class="control-btn" id="hamburger-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </div>
+            </div>
+        </header>
+
+        <!-- VIEWPORT: HOME SECTION -->
+        <div id="view-home" class="viewport-section active-view">
+            
+            <!-- SWIPE CAROUSEL CONTAINER -->
+            <div class="balance-carousel-wrapper" id="carousel-node">
+                <div class="carousel-track" id="carousel-track">
+                    <!-- Slide 1: Activity Balance Card -->
+                    <div class="balance-card">
+                        <span class="card-type-badge">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                            <span>Activity Balance</span>
+                        </span>
+                        <div class="card-brand">
+                            <div class="brand-dot"></div>
+                            Vireon
+                        </div>
+                        <div class="balance-figure" id="activity-balance-val">₦25,000.00</div>
+                        <p class="balance-subtext">Available to Withdraw</p>
+                        <div class="eye-toggle-icon">
+                            <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </div>
+                    </div>
+                    <!-- Slide 2: Work Balance Card -->
+                    <div class="balance-card">
+                        <span class="card-type-badge" style="border-color: #e67e22; color: #e67e22; background: rgba(230,126,34,0.1)">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                            <span>Work Balance</span>
+                        </span>
+                        <div class="card-brand">
+                            <div class="brand-dot" style="background: #e67e22; box-shadow: 0 0 8px #e67e22;"></div>
+                            Vireon
+                        </div>
+                        <div class="balance-figure" id="work-balance-val">₦0.00</div>
+                        <p class="balance-subtext">Available to Withdraw</p>
+                        <div class="eye-toggle-icon">
+                            <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAROUSEL PAGINATION INDICATORS -->
+            <div class="carousel-dots">
+                <span class="dot active-dot" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+            </div>
+
+            <!-- TOTAL LEDGER CARD -->
+            <div class="total-balance-card">
+                <div class="total-meta">
+                    <h4>Total Balance</h4>
+                    <p id="total-balance-val">₦25,000.00</p>
+                </div>
+                <span class="currency-pill" id="currency-toggle-pill">NGN ⇄</span>
+            </div>
+
+            <!-- ACTION PANEL SYSTEM -->
+            <div class="action-row">
+                <button class="btn-core btn-activate" id="main-activate-trigger">
+                    <span>Activate Account</span>
+                </button>
+                <button class="btn-core btn-withdraw" id="main-withdraw-trigger">
+                    <span>Withdraw</span>
+                </button>
+            </div>
+
+            <!-- DYNAMIC STREAMS VIEWPORT MATRIX -->
+            <h3 class="section-headline">Global Functional Streams</h3>
+            <div class="streams-grid">
+                <!-- Stream 1 -->
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </div>
+                    <h4 class="stream-title">Vireon Survey</h4>
+                    <p class="stream-description">Complete various high-paying surveys.</p>
+                </div>
+                <!-- Stream 2 -->
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    </div>
+                    <h4 class="stream-title">Vireon Call Cash</h4>
+                    <p class="stream-description">Make calls and get paid instantly.</p>
+                </div>
+                <!-- Stream 3 -->
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    </div>
+                    <h4 class="stream-title">Vireon Converse</h4>
+                    <p class="stream-description">Peer-to-peer social earnings module.</p>
+                </div>
+                <!-- Stream 4 -->
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    </div>
+                    <h4 class="stream-title">Vireon IQ</h4>
+                    <p class="stream-description">Paid opinion and review tasks.</p>
+                </div>
+                <!-- Stream 5 (Active) -->
+                <div class="stream-card">
+                    <span class="badge-status active">ACTIVE</span>
+                    <div class="stream-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </div>
+                    <h4 class="stream-title">Vireon Daily Login</h4>
+                    <p class="stream-description">Steady daily check-in rewards.</p>
+                </div>
+                <!-- Stream 6 -->
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line><path d="M8 21h8"></path><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    </div>
+                    <h4 class="stream-title">Vireon Google Ads</h4>
+                    <p class="stream-description">Ad-revenue sharing matrix stream.</p>
+                </div>
+                <!-- Stream 7 -->
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </div>
+                    <h4 class="stream-title">Pin to Profit</h4>
+                    <p class="stream-description">Share and earn via Pinterest.</p>
+                </div>
+                <!-- Stream 8 -->
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    </div>
+                    <h4 class="stream-title">Vireon Quick Loan</h4>
+                    <p class="stream-description">Access emergency fluid capital.</p>
+                </div>
+                <!-- Stream 9 -->
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    </div>
+                    <h4 class="stream-title">Vireon EasyOwn</h4>
+                    <p class="stream-description">Flexible buy now, pay later plans.</p>
+                </div>
+                <!-- Stream 10 -->
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                    </div>
+                    <h4 class="stream-title">Vireon Snap-Pro</h4>
+                    <p class="stream-description">Capture, post and monetize frames.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEWPORT: EARN SECTION -->
+        <div id="view-earn" class="viewport-section">
+            <h3 class="section-headline">Available Streams</h3>
+            <div class="daily-goal-container">
+                <div class="goal-header">
+                    <span class="goal-label">Today's Progress</span>
+                    <span class="goal-value" style="color:#00e676">100% Completed</span>
+                </div>
+                <div class="progress-bar-rail">
+                    <div class="progress-bar-fill"></div>
+                </div>
+                <p style="font-size:0.75rem; color:#a0aec0; margin: 0.5rem 0 0 0;">Daily Target: 100% reached.</p>
+            </div>
+            
+            <div class="streams-grid">
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line></svg></div>
+                    <h4 class="stream-title">Vireon Survey</h4>
+                    <p class="stream-description">Locked. Activate your profile workspace to unlock.</p>
+                </div>
+                <div class="stream-card locked-trigger">
+                    <span class="badge-status locked">LOCKED</span>
+                    <div class="stream-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line></svg></div>
+                    <h4 class="stream-title">Vireon Call Cash</h4>
+                    <p class="stream-description">Locked. Activate your profile workspace to unlock.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEWPORT: HISTORY SECTION -->
+        <div id="view-history" class="viewport-section">
+            <h3 class="section-headline">Recent Activity</h3>
+            
+            <div class="daily-goal-container">
+                <div class="goal-header">
+                    <span class="goal-label">Daily Goal Track</span>
+                    <span class="goal-value">Daily Progress Status</span>
+                </div>
+                <div class="progress-bar-rail">
+                    <div class="progress-bar-fill"></div>
+                </div>
+            </div>
+
+            <!-- DYNAMIC POPULATED TRANSACTION STACK -->
+            <div class="activity-stack" id="history-stack-node">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+
+        <!-- VIEWPORT: PROFILE SECTION -->
+        <div id="view-profile" class="viewport-section">
+            <h3 class="section-headline">Profile Management</h3>
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;">
+                <div class="profile-avatar" style="width: 80px; height: 80px; font-size: 2.2rem; margin: 0 auto 1rem auto;" id="avatar-container-large">P</div>
+                <h4 id="profile-user-display" style="margin: 0; font-size: 1.25rem;">pandadgoat</h4>
+                <p style="color: #a0aec0; font-size: 0.8rem; margin: 0.25rem 0 1rem 0;">Status: <span style="color: #ff4d4d; font-weight: 700;">Pending Activation</span></p>
+                <button class="btn-core btn-activate" style="margin: 0 auto; padding: 0.75rem 1.5rem;" id="profile-activate-trigger">Activate Workspace</button>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION GLOBAL PILL -->
+        <nav class="bottom-nav-bar">
+            <div class="nav-tab-item active-tab" data-target="view-home">
+                <div class="tab-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                </div>
+                <span class="tab-label">Home</span>
+            </div>
+            <div class="nav-tab-item" data-target="view-earn">
+                <div class="tab-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </div>
+                <span class="tab-label">Earn</span>
+            </div>
+            <div class="nav-tab-item" data-target="view-history">
+                <div class="tab-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <span class="tab-label">History</span>
+            </div>
+            <div class="nav-tab-item" data-target="view-profile">
+                <div class="tab-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <span class="tab-label">Profile</span>
+            </div>
+        </nav>
+    </div>
+
+    <!-- SIDEBAR LAYER (DRAWER + OVERLAY) -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <div class="sidebar-drawer" id="sidebar-drawer">
+        <div class="sidebar-header">
+            <h2 class="sidebar-logo"><span>VIREON</span></h2>
+            <button class="close-modal-trigger" style="position: static; font-size: 1.8rem;" id="close-drawer">×</button>
+        </div>
+        <div class="sidebar-nav-list">
+            <a href="#" class="sidebar-link active-link" id="drawer-dash-opt">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                Dashboard
+            </a>
+            <a href="#" class="sidebar-link locked-trigger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                Withdrawal
+            </a>
+            <a href="#" class="sidebar-link locked-trigger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                Transfer
+            </a>
+            <a href="#" class="sidebar-link locked-trigger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                Tasks
+            </a>
+            <a href="#" class="sidebar-link locked-trigger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                Leaderboard
+            </a>
+            <a href="#" class="sidebar-link locked-trigger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                Vireon Job Offer
+            </a>
+            <a href="#" class="sidebar-link locked-trigger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Rewards
+            </a>
+            <a href="#" class="sidebar-link locked-trigger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                Cashback
+            </a>
+            <a href="#" class="sidebar-link locked-trigger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                VIREON Link
+            </a>
+            <a href="#" class="sidebar-link locked-trigger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                Transactions
+            </a>
+            <a href="#" class="sidebar-link" id="drawer-profile-opt">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Profile
+            </a>
+            <a href="#" class="sidebar-link locked-trigger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                Settings
+            </a>
+            <a href="#" class="sidebar-link" id="drawer-support-opt">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                Support
+            </a>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP: ACCESS RESTRICTED -->
+    <div class="modal-overlay" id="access-modal">
+        <div class="modal-content-wrapper">
+            <button class="close-modal-trigger" id="close-access-modal">×</button>
+            <div class="modal-graphic" style="color: #ff4d4d; box-shadow: 0 0 20px rgba(255, 77, 77, 0.15); background: rgba(255, 77, 77, 0.1);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <h3 class="modal-title" style="color: #ff4d4d;">Access Restricted</h3>
+            <p class="modal-body-text">Sorry, this feature is locked because your account is still on pending activation. Kindly activate your account to unlock your dashboard streams and access your rewards.</p>
+            <button class="btn-core btn-activate" id="modal-activate-trigger">Activate Account</button>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP: NOTIFICATIONS -->
+    <div class="modal-overlay" id="notify-modal">
+        <div class="modal-content-wrapper">
+            <button class="close-modal-trigger" id="close-notify-modal">×</button>
+            <div class="modal-graphic">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </div>
+            <h3 class="modal-title">Notifications</h3>
+            <p class="modal-body-text" style="text-align: left; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; font-size: 0.85rem; color: #ffffff;">
+                <strong>Welcome to Vireon!</strong><br>
+                System fully operational. Complete verification to release all available funds.
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP: CUSTOMER SUPPORT -->
+    <div class="modal-overlay" id="help-modal">
+        <div class="modal-content-wrapper">
+            <button class="close-modal-trigger" id="close-help-modal">×</button>
+            <div class="modal-graphic">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+            </div>
+            <h3 class="modal-title">Customer Support</h3>
+            <p class="modal-body-text">Our 24/7 support assistant is here to help you. Select a channel below to reach out.</p>
+            <a href="https://t.me/VireonHelp" target="_blank" class="support-cta-btn tg-btn">Message on Telegram</a>
+            <a href="mailto:support@vireon.co" class="support-cta-btn gm-btn">Message via Gmail</a>
+        </div>
+    </div>
+
+
+    <!-- APPLICATION INTERACTION CONTROLLER -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================
+            // SECURITY SUITE
+            // ==========================================
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('copy', e => e.preventDefault());
+            document.addEventListener('cut', e => e.preventDefault());
+            document.addEventListener('selectstart', e => e.preventDefault());
+            document.addEventListener('keydown', e => {
+                if (e.keyCode === 123 || 
+                    (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 67 || e.keyCode === 74)) || 
+                    (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 67 || e.keyCode === 65))
+                ) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+
+            // ==========================================
+            // ACCOUNT INFORMATION / USERNAME TRACKING
+            // ==========================================
+            const cachedUser = localStorage.getItem('vireon_username') || 'MiracleMedia';
+            const userDisplays = [
+                document.getElementById('user-display-node'),
+                document.getElementById('profile-user-display')
+            ];
+            const avatarDisplays = [
+                document.getElementById('avatar-container'),
+                document.getElementById('avatar-container-large')
+            ];
+
+            userDisplays.forEach(el => {
+                if (el) el.textContent = cachedUser;
+            });
+
+            avatarDisplays.forEach(el => {
+                if (el && cachedUser.length > 0) {
+                    el.textContent = cachedUser.charAt(0).toUpperCase();
+                }
+            });
+
+
+            // ==========================================
+            // DYNAMIC CALCULATION & ACCOUNT LEDGER SYSTEM
+            // ==========================================
+            const NGN_TO_GBP_RATE = 2000; // £1 = ₦2,000
+
+            function initAccountState() {
+                const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+                const lastLogin = localStorage.getItem('vireon_last_login_date');
+                
+                let activityBal = localStorage.getItem('vireon_activity_balance');
+                let workBal = localStorage.getItem('vireon_work_balance');
+                let currency = localStorage.getItem('vireon_currency') || 'NGN';
+                let history = [];
+
+                try {
+                    history = JSON.parse(localStorage.getItem('vireon_history')) || [];
+                } catch (e) {
+                    history = [];
+                }
+
+                // If completely new user register state:
+                if (activityBal === null) {
+                    activityBal = 25000; // Updated Welcome Bonus to exactly ₦25,000
+                    workBal = 0; 
+                    
+                    localStorage.setItem('vireon_activity_balance', activityBal);
+                    localStorage.setItem('vireon_work_balance', workBal);
+                    localStorage.setItem('vireon_last_login_date', today);
+                    localStorage.setItem('vireon_currency', currency);
+                    
+                    // Generate exact current dynamic timestamp for registration history tracker
+                    const now = new Date();
+                    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
+                    const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+                    const dynamicRegTime = `${dateStr}, ${timeStr}`;
+
+                    history = [
+                        { title: "Welcome Reward Bonus", timestamp: dynamicRegTime, amountNaira: 25000, type: "credit" },
+                        { title: "Account Created Successfully", timestamp: dynamicRegTime, amountNaira: 0, type: "status" }
+                    ];
+                    localStorage.setItem('vireon_history', JSON.stringify(history));
+                } else {
+                    // Existing user checking daily login bonus logic
+                    activityBal = parseFloat(activityBal);
+                    workBal = parseFloat(workBal);
+
+                    if (lastLogin !== today) {
+                        // Reward dynamic daily login bonus (+£1 = ₦2,000)
+                        activityBal += 2000;
+                        localStorage.setItem('vireon_activity_balance', activityBal);
+                        localStorage.setItem('vireon_last_login_date', today);
+
+                        const now = new Date();
+                        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
+                        const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+
+                        history.unshift({
+                            title: "Login Reward Bonus",
+                            timestamp: `${dateStr}, ${timeStr}`,
+                            amountNaira: 2000,
+                            type: "credit"
+                        });
+                        localStorage.setItem('vireon_history', JSON.stringify(history));
+                    }
+                }
+            }
+
+            function formatCurrency(val, targetCurrency) {
+                if (targetCurrency === 'GBP') {
+                    const converted = val / NGN_TO_GBP_RATE;
+                    return '£' + converted.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                } else {
+                    return '₦' + val.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+            }
+
+            function renderDynamicInterface() {
+                const currency = localStorage.getItem('vireon_currency') || 'NGN';
+                const activityBal = parseFloat(localStorage.getItem('vireon_activity_balance')) || 25000;
+                const workBal = parseFloat(localStorage.getItem('vireon_work_balance')) || 0;
+                const totalBal = activityBal + workBal;
+                
+                const balancesHidden = localStorage.getItem('vireon_balances_hidden') === 'true';
+
+                // Update Balances with complete eye toggle protection visibility
+                if (balancesHidden) {
+                    document.getElementById('activity-balance-val').textContent = '••••••';
+                    document.getElementById('work-balance-val').textContent = '••••••';
+                    document.getElementById('total-balance-val').textContent = '••••••';
+                } else {
+                    document.getElementById('activity-balance-val').textContent = formatCurrency(activityBal, currency);
+                    document.getElementById('work-balance-val').textContent = formatCurrency(workBal, currency);
+                    document.getElementById('total-balance-val').textContent = formatCurrency(totalBal, currency);
+                }
+
+                // Update Currency Switcher Labels
+                const currencyPill = document.getElementById('currency-toggle-pill');
+                if (currencyPill) {
+                    currencyPill.textContent = `${currency} ⇄`;
+                }
+
+                // Update Eye toggle icons layout states
+                document.querySelectorAll('.eye-toggle-icon').forEach(icon => {
+                    if (balancesHidden) {
+                        icon.innerHTML = `<svg class="eye-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+                    } else {
+                        icon.innerHTML = `<svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+                    }
+                });
+
+                // Populate and dynamic render Transactions List
+                const historyContainer = document.getElementById('history-stack-node');
+                if (historyContainer) {
+                    let history = [];
+                    try {
+                        history = JSON.parse(localStorage.getItem('vireon_history')) || [];
+                    } catch (e) {
+                        history = [];
+                    }
+
+                    historyContainer.innerHTML = '';
+                    history.forEach(item => {
+                        const node = document.createElement('div');
+                        node.className = 'activity-node';
+                        
+                        let valDisplay = '';
+                        if (item.type === 'credit') {
+                            valDisplay = `+${formatCurrency(item.amountNaira, currency)}`;
+                        } else {
+                            valDisplay = `<span style="color: #00f2fe;">Success</span>`;
+                        }
+
+                        node.innerHTML = `
+                            <div class="node-details">
+                                <h4 class="node-title">${item.title}</h4>
+                                <p class="node-timestamp">${item.timestamp}</p>
+                            </div>
+                            <span class="node-value" style="${item.type !== 'credit' ? '' : 'color: #00e676;'}">${valDisplay}</span>
+                        `;
+                        historyContainer.appendChild(node);
+                    });
+                }
+            }
+
+            // Run state engine and render updates on system load
+            initAccountState();
+            renderDynamicInterface();
+
+            // Handle currency switcher click interaction
+            document.getElementById('currency-toggle-pill').addEventListener('click', () => {
+                let currentCur = localStorage.getItem('vireon_currency') || 'NGN';
+                let nextCur = currentCur === 'NGN' ? 'GBP' : 'NGN';
+                localStorage.setItem('vireon_currency', nextCur);
+                renderDynamicInterface();
+            });
+
+            // Handle working balance protection toggles via eye selectors clicks
+            document.querySelectorAll('.eye-toggle-icon').forEach(eyeNode => {
+                eyeNode.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Stop swiper container tracking movements triggers
+                    const isCurrentlyHidden = localStorage.getItem('vireon_balances_hidden') === 'true';
+                    localStorage.setItem('vireon_balances_hidden', !isCurrentlyHidden);
+                    renderDynamicInterface();
+                });
+            });
+
+
+            // ==========================================
+            // SWIPE CAROUSEL ENGINE (TOUCH + GESTURES)
+            // ==========================================
+            const track = document.getElementById('carousel-track');
+            const dots = document.querySelectorAll('.carousel-dots .dot');
+            
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            let currentIndex = 0; // 0 = Activity, 1 = Work
+            let autoSwipeInterval;
+
+            function updateCarouselPosition() {
+                track.style.transform = `translateX(-${currentIndex * 50}%)`;
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('active-dot');
+                    } else {
+                        dot.classList.remove('active-dot');
+                    }
+                });
+            }
+
+            function startAutoSwipe() {
+                autoSwipeInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % 2;
+                    updateCarouselPosition();
+                }, 5000);
+            }
+
+            function stopAutoSwipe() {
+                clearInterval(autoSwipeInterval);
+            }
+
+            // Mobile Touch Events
+            track.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                currentX = startX;
+                isDragging = true;
+                stopAutoSwipe();
+            }, { passive: true });
+
+            track.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                currentX = e.touches[0].clientX;
+            }, { passive: true });
+
+            track.addEventListener('touchend', () => {
+                if (!isDragging) return;
+                isDragging = false;
+                const diff = startX - currentX;
+                if (Math.abs(diff) > 40) {
+                    if (diff > 0) {
+                        currentIndex = 1; // Swipe left -> Next card
+                    } else {
+                        currentIndex = 0; // Swipe right -> Prev card
+                    }
+                }
+                updateCarouselPosition();
+                startAutoSwipe();
+            });
+
+            // Desktop Testing Mouse Events
+            track.addEventListener('mousedown', (e) => {
+                startX = e.clientX;
+                currentX = startX;
+                isDragging = true;
+                stopAutoSwipe();
+            });
+
+            track.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                currentX = e.clientX;
+            });
+
+            track.addEventListener('mouseup', () => {
+                if (!isDragging) return;
+                isDragging = false;
+                const diff = startX - currentX;
+                if (Math.abs(diff) > 40) {
+                    if (diff > 0) {
+                        currentIndex = 1;
+                    } else {
+                        currentIndex = 0;
+                    }
+                }
+                updateCarouselPosition();
+                startAutoSwipe();
+            });
+
+            // Dot Indicator click support
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    stopAutoSwipe();
+                    currentIndex = parseInt(dot.getAttribute('data-index'));
+                    updateCarouselPosition();
+                    startAutoSwipe();
+                });
+            });
+
+            // Fire Carousel Swiper
+            startAutoSwipe();
+
+
+            // ==========================================
+            // STREAMS NAVIGATION TAB PANEL MANAGER
+            // ==========================================
+            const tabs = document.querySelectorAll('.nav-tab-item');
+            const views = document.querySelectorAll('.viewport-section');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active-tab'));
+                    views.forEach(v => v.classList.remove('active-view'));
+
+                    tab.classList.add('active-tab');
+                    const targetId = tab.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('active-view');
+                });
+            });
+
+
+            // ==========================================
+            // MODAL AND DRAWER CONTROL LOGIC
+            // ==========================================
+            const accessModal = document.getElementById('access-modal');
+            const notifyModal = document.getElementById('notify-modal');
+            const helpModal = document.getElementById('help-modal');
+
+            const sidebarDrawer = document.getElementById('sidebar-drawer');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            function openModal(modal) {
+                modal.style.display = 'flex';
+            }
+
+            function closeModal(modal) {
+                modal.style.display = 'none';
+            }
+
+            document.getElementById('close-access-modal').addEventListener('click', () => closeModal(accessModal));
+            document.getElementById('close-notify-modal').addEventListener('click', () => closeModal(notifyModal));
+            document.getElementById('close-help-modal').addEventListener('click', () => closeModal(helpModal));
+
+            document.querySelectorAll('.locked-trigger').forEach(trigger => {
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sidebarDrawer.classList.remove('drawer-open');
+                    sidebarOverlay.style.display = 'none';
+                    openModal(accessModal);
+                });
+            });
+
+            document.getElementById('main-withdraw-trigger').addEventListener('click', () => openModal(accessModal));
+
+            document.getElementById('bell-btn').addEventListener('click', () => openModal(notifyModal));
+            document.getElementById('support-btn').addEventListener('click', () => openModal(helpModal));
+
+            document.getElementById('hamburger-btn').addEventListener('click', () => {
+                sidebarDrawer.classList.add('drawer-open');
+                sidebarOverlay.style.display = 'block';
+            });
+
+            const closeSidebar = () => {
+                sidebarDrawer.classList.remove('drawer-open');
+                sidebarOverlay.style.display = 'none';
+            };
+
+            document.getElementById('close-drawer').addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            document.getElementById('drawer-dash-opt').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeSidebar();
+                document.querySelector('[data-target="view-home"]').click();
+            });
+
+            document.getElementById('drawer-profile-opt').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeSidebar();
+                document.querySelector('[data-target="view-profile"]').click();
+            });
+
+            document.getElementById('drawer-support-opt').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeSidebar();
+                openModal(helpModal);
+            });
+
+
+            // ==========================================
+            // REDIRECTION AND LOADER SIMULATION
+            // ==========================================
+            const triggersToRedirect = [
+                document.getElementById('main-activate-trigger'),
+                document.getElementById('modal-activate-trigger'),
+                document.getElementById('profile-activate-trigger')
+            ];
+
+            triggersToRedirect.forEach(trigger => {
+                if (trigger) {
+                    trigger.addEventListener('click', () => {
+                        trigger.style.pointerEvents = 'none';
+                        trigger.style.opacity = '0.85';
+                        trigger.innerHTML = `
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="animation: spin 1s linear infinite; margin-right: 0.5rem;"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg>
+                            Processing...
+                        `;
+
+                        const styleNode = document.createElement('style');
+                        styleNode.innerHTML = "@keyframes spin { 100% { transform: rotate(360deg); } }";
+                        document.head.appendChild(styleNode);
+
+                        setTimeout(() => {
+                            window.location.href = 'payment.html';
+                        }, 1200);
+                    });
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
