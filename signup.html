@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verion | Create Account</title>
+    <title>Vireon | Create Account</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,6 +48,11 @@
             min-height: 100vh;
             color: var(--text);
             padding: 30px 20px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            transition: filter 0.3s ease;
         }
 
         .container {
@@ -65,15 +69,16 @@
                 0 0 35px rgba(56, 189, 248, 0.05);
         }
 
-        .logo-placeholder {
-            font-size: 2rem;
-            font-weight: 800;
+        .logo-container {
             text-align: center;
-            letter-spacing: -1px;
-            margin-bottom: 12px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .logo-img {
+            height: 48px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
         }
 
         h2 {
@@ -127,7 +132,6 @@
             box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
         }
 
-        /* Styling for the native select option elements */
         select option {
             background-color: var(--bg-card);
             color: #fff;
@@ -141,6 +145,7 @@
             color: var(--muted);
             cursor: pointer;
             transition: color 0.2s;
+            z-index: 10;
         }
         
         .toggle-icon:hover {
@@ -160,6 +165,10 @@
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
         button.primary:hover {
@@ -167,8 +176,16 @@
             box-shadow: 0 12px 30px rgba(56, 189, 248, 0.4);
         }
         
-        button.primary:active {
+        button.primary:all {
             transform: translateY(0);
+        }
+
+        button.primary:disabled {
+            background: #1e293b;
+            color: #64748b;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .plan-card {
@@ -225,6 +242,47 @@
             color: var(--accent-light);
         }
 
+        /* --- CUSTOM PREMIUM TOAST NOTIFICATION --- */
+        #custom-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            transform: translateY(150px);
+            opacity: 0;
+            visibility: hidden;
+            background: #0f172a;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 14px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 9999;
+        }
+
+        #custom-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #custom-toast.success {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        #custom-toast.success i {
+            color: #10b981;
+        }
+
+        #custom-toast.error i {
+            color: #ef4444;
+        }
+
         @media(max-width: 576px) {
             body {
                 padding: 16px;
@@ -235,13 +293,11 @@
             h2 {
                 font-size: 1.45rem;
             }
-        }
-
-        body {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+            #custom-toast {
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+            }
         }
     </style>
 </head>
@@ -250,8 +306,10 @@
 
 <div class="container">
 
-  <!-- Branded Modern Typography Logo Container -->
-  <div class="logo-placeholder">VERION</div>
+  <!-- Branded Premium Logo Asset -->
+  <div class="logo-container">
+      <img src="logo.png" alt="VIREON" class="logo-img">
+  </div>
 
   <h2>Create Your Account</h2>
 
@@ -293,7 +351,7 @@
     <label for="plan">Activation Package</label>
     <div class="input-group">
       <select id="plan">
-        <option value="12000">
+        <option value="14500">
           Verion Onboarding Package — ₦14,500
         </option>
       </select>
@@ -309,12 +367,12 @@
       <p style="margin-top:12px; color:var(--muted); font-size:.88rem; line-height:1.6;">
         One-time activation fee that unlocks access to all Verion earning
         opportunities including Surveys, CallCash, Verion IQ, Google
-        Monetization, Converse, Snap Pro, Pin-to-Profit, X Revenue and more.
+        Monization, Converse, Snap Pro, Pin-to-Profit, X Revenue and more.
       </p>
     </div>
 
-    <button type="submit" class="primary">
-      Register Account
+    <button type="submit" id="submitBtn" class="primary">
+      <span>Register Account</span>
     </button>
 
   </form>
@@ -325,12 +383,56 @@
 
   <div class="note" style="margin-top: 1.2rem;">
     Already have an account? 
-    <a href="#">Login</a>
+    <a href="login.html">Login</a>
   </div>
 
 </div>
 
+<!-- Luxury Custom App Toast Notification Framework -->
+<div id="custom-toast">
+    <i id="toast-icon" class="fa-solid"></i>
+    <span id="toast-message"></span>
+</div>
+
+<!-- Firebase Framework Compat SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
 <script>
+// --- Firebase Initialisation Credentials ---
+const firebaseConfig = {
+    apiKey: "AIzaSyCkBBUQn-vPofsoJQEpu1K5mtJDffpAdxA",
+    authDomain: "vireon-berrymedia.firebaseapp.com",
+    projectId: "vireon-berrymedia",
+    storageBucket: "vireon-berrymedia.firebasestorage.app",
+    messagingSenderId: "433591634561",
+    appId: "1:433591634561:web:40b32bc9aaa28b59a25b80",
+    measurementId: "G-TH2W27DZSV"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// --- Luxury Toast Logic Engine ---
+function showToast(message, type = "error") {
+    const toast = document.getElementById("custom-toast");
+    const icon = document.getElementById("toast-icon");
+    const msgElement = document.getElementById("toast-message");
+
+    msgElement.innerText = message;
+    toast.className = `show ${type}`;
+
+    if (type === "success") {
+        icon.className = "fa-solid fa-circle-check";
+    } else {
+        icon.className = "fa-solid fa-circle-exclamation";
+    }
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 4000);
+}
+
 // --- Input Password Masking Toggle ---
 document.getElementById("togglePass").onclick = function() {
     const input = document.getElementById("password");
@@ -345,23 +447,83 @@ document.getElementById("togglePass").onclick = function() {
     }
 };
 
-// --- Form Validation Interceptor & Router ---
+// --- Form Cloud Interaction & Routing Engine ---
 document.getElementById("registrationForm").onsubmit = function(e) {
     e.preventDefault();
 
-    // Cache parameters safely into active browser storage instances
-    localStorage.setItem("userFullName", document.getElementById("name").value.trim());
-    localStorage.setItem("username", document.getElementById("username").value.trim());
-    localStorage.setItem("phone", document.getElementById("phone").value.trim());
-    localStorage.setItem("email", document.getElementById("email").value.trim());
-    localStorage.setItem("password", document.getElementById("password").value.trim());
-    localStorage.setItem("plan", "12000");
+    const submitBtn = document.getElementById("submitBtn");
+    const btnText = submitBtn.querySelector("span");
+    
+    // Extract Form Parameters Cleanly
+    const fullNameVal = document.getElementById("name").value.trim();
+    const usernameVal = document.getElementById("username").value.trim().toLowerCase();
+    const phoneVal = document.getElementById("phone").value.trim();
+    const emailVal = document.getElementById("email").value.trim();
+    const passwordVal = document.getElementById("password").value.trim();
+    const planVal = document.getElementById("plan").value;
 
-    // Seamless execution straight onto your ecosystem dashboard architecture
-    window.location.href = "dashboard.html";
+    // Trigger UI Loading States
+    submitBtn.disabled = true;
+    btnText.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Processing...';
+
+    // Query Firestore database to verify username uniqueness
+    db.collection("users").where("username", "==", usernameVal).get()
+    .then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+            // Username conflict discovered
+            showToast("Username is already taken! Please choose another.", "error");
+            submitBtn.disabled = false;
+            btnText.innerText = "Register Account";
+        } else {
+            // Compile payload for real-time dashboard compatibility
+            const userPayload = {
+                fullname: fullNameVal,
+                name: fullNameVal,
+                signup_name: fullNameVal,
+                username: usernameVal,
+                phone: phoneVal,
+                signup_phone: phoneVal,
+                email: emailVal,
+                signup_email: emailVal,
+                password: passwordVal,
+                plan: planVal,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            // Commit record down to the cloud database
+            db.collection("users").add(userPayload)
+            .then(() => {
+                // Save configurations locally to provide persistence for checkout processes
+                localStorage.setItem("userFullName", fullNameVal);
+                localStorage.setItem("fullname", fullNameVal);
+                localStorage.setItem("username", usernameVal);
+                localStorage.setItem("phone", phoneVal);
+                localStorage.setItem("email", emailVal);
+                localStorage.setItem("password", passwordVal);
+                localStorage.setItem("plan", planVal);
+
+                showToast("Account initialized! Redirecting to setup secure payment...", "success");
+                
+                // Seamless handoff straight to payment.html for core account verification
+                setTimeout(() => {
+                    window.location.href = "payment.html";
+                }, 1500);
+            })
+            .catch((error) => {
+                showToast("Database alignment failure: " + error.message, "error");
+                submitBtn.disabled = false;
+                btnText.innerText = "Register Account";
+            });
+        }
+    })
+    .catch((error) => {
+        showToast("Network security validation failed: " + error.message, "error");
+        submitBtn.disabled = false;
+        btnText.innerText = "Register Account";
+    });
 };
 
-// --- Anti-Tampering Shield Layers ---
+// --- Strict Shield Peripheral Controls ---
 document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
 });
@@ -372,7 +534,9 @@ document.addEventListener("keydown", function(e) {
         (e.ctrlKey && e.shiftKey && e.key === "I") ||
         (e.ctrlKey && e.shiftKey && e.key === "J") ||
         (e.ctrlKey && e.shiftKey && e.key === "C") ||
+        (e.ctrlKey && e.key === "u") ||
         (e.ctrlKey && e.key === "U") ||
+        (e.ctrlKey && e.key === "s") ||
         (e.ctrlKey && e.key === "S")
     ) {
         e.preventDefault();
@@ -384,7 +548,7 @@ document.addEventListener("copy", function(e) { e.preventDefault(); });
 document.addEventListener("cut", function(e) { e.preventDefault(); });
 document.addEventListener("paste", function(e) { e.preventDefault(); });
 
-// Active dev-tools inspection blur interceptor
+// Active dev-tools hardware tracking overlay blur loop
 setInterval(function() {
     if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
         document.body.style.filter = "blur(20px)";
