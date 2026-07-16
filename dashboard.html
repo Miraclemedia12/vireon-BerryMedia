@@ -833,7 +833,7 @@
                 <div class="stream-card locked-trigger">
                     <span class="badge-status locked">LOCKED</span>
                     <div class="stream-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline>
                     </div>
                     <h4 class="stream-title">Vireon Survey</h4>
                     <p class="stream-description">Complete various high-paying surveys.</p>
@@ -1167,23 +1167,74 @@
             // ==========================================
             // ACCOUNT INFORMATION / USERNAME TRACKING
             // ==========================================
-            const cachedUser = localStorage.getItem('vireon_username') || 'MiracleMedia';
-            const userDisplays = [
-                document.getElementById('user-display-node'),
-                document.getElementById('profile-user-display')
-            ];
-            const avatarDisplays = [
-                document.getElementById('avatar-container'),
-                document.getElementById('avatar-container-large')
-            ];
+            // 1. Dynamic Greeting Engine (Morning / Afternoon / Evening)
+            function updateGreeting() {
+                const greetingEl = document.querySelector('.greeting-text');
+                if (greetingEl) {
+                    const hour = new Date().getHours();
+                    let greeting = 'Good evening,';
+                    if (hour < 12) {
+                        greeting = 'Good morning,';
+                    } else if (hour < 17) {
+                        greeting = 'Good afternoon,';
+                    }
+                    greetingEl.textContent = greeting;
+                }
+            }
+            updateGreeting();
 
-            userDisplays.forEach(el => {
-                if (el) el.textContent = cachedUser;
-            });
+            // 2. DOM Updates & Caching
+            function updateUserDisplay(username) {
+                localStorage.setItem('vireon_username', username);
+                const userDisplays = [
+                    document.getElementById('user-display-node'),
+                    document.getElementById('profile-user-display')
+                ];
+                const avatarDisplays = [
+                    document.getElementById('avatar-container'),
+                    document.getElementById('avatar-container-large')
+                ];
 
-            avatarDisplays.forEach(el => {
-                if (el && cachedUser.length > 0) {
-                    el.textContent = cachedUser.charAt(0).toUpperCase();
+                userDisplays.forEach(el => {
+                    if (el) el.textContent = username;
+                });
+
+                avatarDisplays.forEach(el => {
+                    if (el && username.length > 0) {
+                        el.textContent = username.charAt(0).toUpperCase();
+                    }
+                });
+            }
+
+            // 3. Fallback tracking logic (falls back to signup.html parameters)
+            function fallbackToLocalStorage() {
+                const cachedUser = localStorage.getItem('vireon_username') || localStorage.getItem('username') || 'MiracleMedia';
+                updateUserDisplay(cachedUser);
+            }
+
+            // 4. Live Database Tracking System (checks database vs auth vs localStorage fallback)
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    // Try fetching username node from Firebase Database
+                    const userRef = firebase.database().ref('users/' + user.uid);
+                    userRef.once('value').then((snapshot) => {
+                        const data = snapshot.val();
+                        if (data && (data.username || data.name)) {
+                            updateUserDisplay(data.username || data.name);
+                        } else if (user.displayName) {
+                            updateUserDisplay(user.displayName);
+                        } else {
+                            fallbackToLocalStorage();
+                        }
+                    }).catch(() => {
+                        if (user.displayName) {
+                            updateUserDisplay(user.displayName);
+                        } else {
+                            fallbackToLocalStorage();
+                        }
+                    });
+                } else {
+                    fallbackToLocalStorage();
                 }
             });
 
