@@ -1112,15 +1112,39 @@
             </div>
             <h3 class="modal-title">Customer Support</h3>
             <p class="modal-body-text">Our 24/7 support assistant is here to help you. Select a channel below to reach out.</p>
-            <a href="https://t.me/VireonHelp" target="_blank" class="support-cta-btn tg-btn">Message on Telegram</a>
+            <a href="https://t.me/VIREON_OFFICIAL_1" target="_blank" class="support-cta-btn tg-btn">Message on Telegram</a>
             <a href="mailto:support@vireon.co" class="support-cta-btn gm-btn">Message via Gmail</a>
         </div>
     </div>
 
 
+    <!-- GLOBAL DEPENDENCIES: FIREBASE CONSOLE COMPATIBILITY SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
     <!-- APPLICATION INTERACTION CONTROLLER -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================
+            // FIREBASE INITIALIZATION CONSOLE
+            // ==========================================
+            const firebaseConfig = {
+                apiKey: "YOUR_API_KEY",
+                authDomain: "YOUR_AUTH_DOMAIN",
+                databaseURL: "YOUR_DATABASE_URL",
+                projectId: "YOUR_PROJECT_ID",
+                storageBucket: "YOUR_STORAGE_BUCKET",
+                messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+                appId: "YOUR_APP_ID"
+            };
+
+            // Safely open communication bridge with your database architecture
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+
 
             // ==========================================
             // SECURITY SUITE
@@ -1184,25 +1208,29 @@
                     history = [];
                 }
 
+                // Preserve original registration time accurately across system sessions
+                let regTime = localStorage.getItem('vireon_registration_time');
+                if (!regTime) {
+                    const now = new Date();
+                    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
+                    const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+                    regTime = `${dateStr}, ${timeStr}`;
+                    localStorage.setItem('vireon_registration_time', regTime);
+                }
+
                 // If completely new user register state:
                 if (activityBal === null) {
-                    activityBal = 25000; // Updated Welcome Bonus to exactly ₦25,000
+                    activityBal = 25000; // Explicitly ₦25,000 baseline welcome balance setup
                     workBal = 0; 
                     
                     localStorage.setItem('vireon_activity_balance', activityBal);
                     localStorage.setItem('vireon_work_balance', workBal);
                     localStorage.setItem('vireon_last_login_date', today);
                     localStorage.setItem('vireon_currency', currency);
-                    
-                    // Generate exact current dynamic timestamp for registration history tracker
-                    const now = new Date();
-                    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
-                    const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
-                    const dynamicRegTime = `${dateStr}, ${timeStr}`;
 
                     history = [
-                        { title: "Welcome Reward Bonus", timestamp: dynamicRegTime, amountNaira: 25000, type: "credit" },
-                        { title: "Account Created Successfully", timestamp: dynamicRegTime, amountNaira: 0, type: "status" }
+                        { title: "Welcome Reward Bonus", timestamp: regTime, amountNaira: 25000, type: "credit" },
+                        { title: "Account Created Successfully", timestamp: regTime, amountNaira: 0, type: "status" }
                     ];
                     localStorage.setItem('vireon_history', JSON.stringify(history));
                 } else {
@@ -1220,6 +1248,13 @@
                         const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
                         const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
 
+                        // Ensure registration metrics persist without structural modification drops
+                        let hasReg = history.some(item => item.title === "Welcome Reward Bonus");
+                        if (!hasReg) {
+                            history.push({ title: "Welcome Reward Bonus", timestamp: regTime, amountNaira: 25000, type: "credit" });
+                            history.push({ title: "Account Created Successfully", timestamp: regTime, amountNaira: 0, type: "status" });
+                        }
+
                         history.unshift({
                             title: "Login Reward Bonus",
                             timestamp: `${dateStr}, ${timeStr}`,
@@ -1227,6 +1262,14 @@
                             type: "credit"
                         });
                         localStorage.setItem('vireon_history', JSON.stringify(history));
+                    } else {
+                        // Keep structures safe if cache anomalies occur
+                        let hasReg = history.some(item => item.title === "Welcome Reward Bonus");
+                        if (!hasReg) {
+                            history.push({ title: "Welcome Reward Bonus", timestamp: regTime, amountNaira: 25000, type: "credit" });
+                            history.push({ title: "Account Created Successfully", timestamp: regTime, amountNaira: 0, type: "status" });
+                            localStorage.setItem('vireon_history', JSON.stringify(history));
+                        }
                     }
                 }
             }
