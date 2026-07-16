@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vireon | Sign In</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- DESIGN CORE VARIABLES --- */
+        :root {
+            --bg-body: #080d1a;
+            --bg-card: #020617;
+            --accent: #38bdf8;
+            --accent-dark: #0ea5e9;
+            --accent-light: #60a5fa;
+            --text: #F8FBFF;
+            --muted: #94a3b8;
+            --input-bg: #0f172a;
+            --border: rgba(56, 189, 248, 0.15);
+            --glass: rgba(15, 23, 42, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: 
+                radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 50%),
+                radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.1), transparent 40%),
+                var(--bg-body);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text);
+            padding: 30px 20px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            transition: filter 0.3s ease;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 460px;
+            padding: 2.5rem 2rem;
+            border-radius: 22px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.5),
+                0 0 35px rgba(56, 189, 248, 0.05);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .logo-img {
+            height: 48px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        h2 {
+            margin: 0 0 8px;
+            text-align: center;
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--muted);
+            margin-bottom: 30px;
+            font-size: .9rem;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-size: .9rem;
+            font-weight: 600;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: #fff;
+            transition: all 0.3s ease;
+            font-size: .95rem;
+        }
+
+        input::placeholder {
+            color: rgba(148, 163, 184, 0.5);
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
+        }
+
+        .toggle-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            cursor: pointer;
+            transition: color 0.2s;
+            z-index: 10;
+        }
+        
+        .toggle-icon:hover {
+            color: var(--accent);
+        }
+
+        button.primary {
+            width: 100%;
+            border: none;
+            padding: 16px;
+            margin-top: 10px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.4);
+        }
+        
+        button.primary:active {
+            transform: translateY(0);
+        }
+
+        button.primary:disabled {
+            background: #1e293b;
+            color: #64748b;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .note {
+            margin-top: 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: .85rem;
+            line-height: 1.6;
+        }
+
+        .note a {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .note a:hover {
+            color: var(--accent-light);
+        }
+
+        /* --- CUSTOM PREMIUM TOAST NOTIFICATION --- */
+        #custom-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            transform: translateY(150px);
+            opacity: 0;
+            visibility: hidden;
+            background: #0f172a;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 14px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 9999;
+        }
+
+        #custom-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #custom-toast.success {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        #custom-toast.success i {
+            color: #10b981;
+        }
+
+        #custom-toast.error i {
+            color: #ef4444;
+        }
+
+        @media(max-width: 576px) {
+            body {
+                padding: 16px;
+            }
+            .container {
+                padding: 1.8rem 1.4rem;
+            }
+            h2 {
+                font-size: 1.45rem;
+            }
+            #custom-toast {
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Branded Luxury Logo Asset Element -->
+    <div class="logo-container">
+        <img src="logo.png" alt="VIREON" class="logo-img">
+    </div>
+
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Gain immediate access to your monetization core, earnings ledger, and smart network hubs.</p>
+
+    <form id="loginForm">
+
+        <label for="identifier">Username or Email</label>
+        <div class="input-group">
+            <input type="text" id="identifier" placeholder="Enter username or email address" required>
+        </div>
+
+        <label for="password">Security Password</label>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <div class="toggle-icon" id="togglePass">
+                <i class="fa-solid fa-eye-slash"></i>
+            </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="primary">
+            <span>Secure Log In</span>
+        </button>
+
+    </form>
+
+    <div class="note">
+        Protected by End-to-End Encryption Sharding Shields
+    </div>
+
+    <div class="note" style="margin-top: 1.2rem;">
+        Don't have an account yet? 
+        <a href="signup.html">Create One</a>
+    </div>
+
+</div>
+
+<!-- Luxury Custom App Toast Notification Framework -->
+<div id="custom-toast">
+    <i id="toast-icon" class="fa-solid"></i>
+    <span id="toast-message"></span>
+</div>
+
+<!-- Firebase Framework Compat SDK Components -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+// --- Firebase Database Link Infrastructure ---
+const firebaseConfig = {
+    apiKey: "AIzaSyCkBBUQn-vPofsoJQEpu1K5mtJDffpAdxA",
+    authDomain: "vireon-berrymedia.firebaseapp.com",
+    projectId: "vireon-berrymedia",
+    storageBucket: "vireon-berrymedia.firebasestorage.app",
+    messagingSenderId: "433591634561",
+    appId: "1:433591634561:web:40b32bc9aaa28b59a25b80",
+    measurementId: "G-TH2W27DZSV"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// --- Non-Blocking Custom Luxury Toast Engine ---
+function showToast(message, type = "error") {
+    const toast = document.getElementById("custom-toast");
+    const icon = document.getElementById("toast-icon");
+    const msgElement = document.getElementById("toast-message");
+
+    msgElement.innerText = message;
+    toast.className = `show ${type}`;
+
+    if (type === "success") {
+        icon.className = "fa-solid fa-circle-check";
+    } else {
+        icon.className = "fa-solid fa-circle-exclamation";
+    }
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 4000);
+}
+
+// --- Dynamic Masking Input Password Field Switcher ---
+document.getElementById("togglePass").onclick = function() {
+    const input = document.getElementById("password");
+    const icon = this.querySelector("i");
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+    } else {
+        input.type = "password";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+    }
+};
+
+// --- Cross-Field Real-Time Authentication Processing Engine ---
+document.getElementById("loginForm").onsubmit = function(e) {
+    e.preventDefault();
+
+    const submitBtn = document.getElementById("submitBtn");
+    const btnText = submitBtn.querySelector("span");
+
+    const inputVal = document.getElementById("identifier").value.trim().toLowerCase();
+    const passwordVal = document.getElementById("password").value.trim();
+
+    // Trigger loading state across primary user interaction controls
+    submitBtn.disabled = true;
+    btnText.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Authenticating...';
+
+    // Execution sequence function to match structural parameters
+    function validateUserRecord(userData) {
+        if (userData.password === passwordVal) {
+            showToast("Credentials validated! Initializing user engine dashboard...", "success");
+            
+            // Sync configurations locally across storage spaces
+            localStorage.setItem("userFullName", userData.fullname || userData.name || "User");
+            localStorage.setItem("fullname", userData.fullname || userData.name || "User");
+            localStorage.setItem("username", userData.username);
+            localStorage.setItem("phone", userData.phone || "");
+            localStorage.setItem("email", userData.email || "");
+            localStorage.setItem("plan", userData.plan || "14500");
+
+            setTimeout(() => {
+                window.location.href = "dashboard.html";
+            }, 1500);
+        } else {
+            showToast("Invalid password! Please verify security credentials and try again.", "error");
+            submitBtn.disabled = false;
+            btnText.innerText = "Secure Log In";
+        }
+    }
+
+    // Step 1: Query database collection utilizing structural username configurations
+    db.collection("users").where("username", "==", inputVal).get()
+    .then((usernameSnapshot) => {
+        if (!usernameSnapshot.empty) {
+            validateUserRecord(usernameSnapshot.docs[0].data());
+        } else {
+            // Step 2: Fall back and query utilizing electronic mail registration parameters if username is empty
+            db.collection("users").where("email", "==", inputVal).get()
+            .then((emailSnapshot) => {
+                if (!emailSnapshot.empty) {
+                    validateUserRecord(emailSnapshot.docs[0].data());
+                } else {
+                    showToast("No account associated with that username or email address.", "error");
+                    submitBtn.disabled = false;
+                    btnText.innerText = "Secure Log In";
+                }
+            })
+            .catch((err) => {
+                showToast("Network lookup matrix distortion: " + err.message, "error");
+                submitBtn.disabled = false;
+                btnText.innerText = "Secure Log In";
+            });
+        }
+    })
+    .catch((err) => {
+        showToast("Database security pipeline error: " + err.message, "error");
+        submitBtn.disabled = false;
+        btnText.innerText = "Secure Log In";
+    });
+};
+
+// --- Rigid Code Injection Security Shield Controls ---
+document.addEventListener("contextmenu", function(e) {
+    e.preventDefault();
+});
+
+document.addEventListener("keydown", function(e) {
+    if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && e.key === "I") ||
+        (e.ctrlKey && e.shiftKey && e.key === "J") ||
+        (e.ctrlKey && e.shiftKey && e.key === "C") ||
+        (e.ctrlKey && e.key === "u") ||
+        (e.ctrlKey && e.key === "U") ||
+        (e.ctrlKey && e.key === "s") ||
+        (e.ctrlKey && e.key === "S")
+    ) {
+        e.preventDefault();
+        return false;
+    }
+});
+
+document.addEventListener("copy", function(e) { e.preventDefault(); });
+document.addEventListener("cut", function(e) { e.preventDefault(); });
+document.addEventListener("paste", function(e) { e.preventDefault(); });
+
+// Active dev-tools hardware element inspection loop monitoring tracking overlay blur
+setInterval(function() {
+    if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+        document.body.style.filter = "blur(20px)";
+    } else {
+        document.body.style.filter = "none";
+    }
+}, 500);
+</script>
+
+</body>
+</html>
