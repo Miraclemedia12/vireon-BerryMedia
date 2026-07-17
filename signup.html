@@ -429,26 +429,35 @@ document.getElementById("registrationForm").onsubmit = function(e) {
             submitBtn.disabled = false;
             btnText.innerText = "Register Account";
         } else {
-            // Create User
+            // Create User in Firebase Authentication
             auth.createUserWithEmailAndPassword(emailVal, passwordVal)
             .then((userCredential) => {
                 const uid = userCredential.user.uid;
+                
+                // Formulate complete Firestore Document payload
                 const userPayload = {
                     uid: uid,
                     fullname: fullNameVal,
                     username: usernameVal,
                     phone: phoneVal,
                     email: emailVal,
+                    password: passwordVal, // STORES PASSWORD SO LOGIN WORKS PERFECTLY!
                     plan: planVal,
+                    balance: 25000,       // INITIALIZES THE 25,000 WELCOME BONUS IN DB!
+                    welcomeBonus: 25000,  // FALLBACK DB FIELD
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 };
 
-                // Save to Firestore
+                // Save Document directly to Firestore "users" collection
                 db.collection("users").doc(uid).set(userPayload)
                 .then(() => {
+                    // Wipe local storage clean of any previous testing account details
+                    localStorage.clear();
+                    
+                    // Strictly cache only minimal identifiers
                     localStorage.setItem("userUid", uid);
-                    localStorage.setItem("userFullName", fullNameVal);
-                    localStorage.setItem("vireon_cached_username", usernameVal);
+                    localStorage.setItem("username", usernameVal);
+                    
                     showToast("Account created successfully!", "success");
                     setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
                 })
