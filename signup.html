@@ -396,6 +396,7 @@
 <!-- Firebase Framework Compat SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
 <script>
 // --- Firebase Initialisation Credentials ---
@@ -411,6 +412,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 // --- Luxury Toast Logic Engine ---
 function showToast(message, type = "error") {
@@ -474,42 +476,45 @@ document.getElementById("registrationForm").onsubmit = function(e) {
             submitBtn.disabled = false;
             btnText.innerText = "Register Account";
         } else {
-            // Compile payload for real-time dashboard compatibility
-            const userPayload = {
-                fullname: fullNameVal,
-                name: fullNameVal,
-                signup_name: fullNameVal,
-                username: usernameVal,
-                phone: phoneVal,
-                signup_phone: phoneVal,
-                email: emailVal,
-                signup_email: emailVal,
-                password: passwordVal,
-                plan: planVal,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            };
+            // 1. Create the Auth User to get a UID
+            auth.createUserWithEmailAndPassword(emailVal, passwordVal)
+            .then((userCredential) => {
+                const uid = userCredential.user.uid;
 
-            // Commit record down to the cloud database
-            db.collection("users").add(userPayload)
-            .then(() => {
-                // Save configurations locally to provide persistence for checkout processes
-                localStorage.setItem("userFullName", fullNameVal);
-                localStorage.setItem("fullname", fullNameVal);
-                localStorage.setItem("username", usernameVal);
-                localStorage.setItem("phone", phoneVal);
-                localStorage.setItem("email", emailVal);
-                localStorage.setItem("password", passwordVal);
-                localStorage.setItem("plan", planVal);
+                // 2. Compile payload for database
+                const userPayload = {
+                    uid: uid,
+                    fullname: fullNameVal,
+                    name: fullNameVal,
+                    username: usernameVal,
+                    phone: phoneVal,
+                    email: emailVal,
+                    plan: planVal,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
 
-                showToast("Account initialized! Redirecting to Dashboard...", "success");
-                
-                // Seamless handoff straight to payment.html for core account verification
-                setTimeout(() => {
-                    window.location.href = "dashboard.html";
-                }, 1500);
+                // 3. Commit record to cloud database using UID as the Document ID
+                db.collection("users").doc(uid).set(userPayload)
+                .then(() => {
+                    // Save configurations locally
+                    localStorage.setItem("userUid", uid);
+                    localStorage.setItem("userFullName", fullNameVal);
+                    localStorage.setItem("username", usernameVal);
+
+                    showToast("Account initialized! Redirecting to Dashboard...", "success");
+                    
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1500);
+                })
+                .catch((error) => {
+                    showToast("Database alignment failure: " + error.message, "error");
+                    submitBtn.disabled = false;
+                    btnText.innerText = "Register Account";
+                });
             })
             .catch((error) => {
-                showToast("Database alignment failure: " + error.message, "error");
+                showToast("Auth failed: " + error.message, "error");
                 submitBtn.disabled = false;
                 btnText.innerText = "Register Account";
             });
