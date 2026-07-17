@@ -1128,7 +1128,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
-    <!-- APPLICATION INTERACTION CONTROLLER -->
+   <!-- APPLICATION INTERACTION CONTROLLER -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -1145,11 +1145,9 @@
               measurementId: "G-TH2W27DZSV"
             };
 
-            // Safely open communication bridge with your database architecture
             if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
             }
-
 
             // ==========================================
             // SECURITY SUITE
@@ -1167,7 +1165,6 @@
                     return false;
                 }
             });
-
 
             // ==========================================
             // ACCOUNT INFORMATION / USERNAME TRACKING
@@ -1212,48 +1209,44 @@
                 updateUserDisplay('User');
             }
 
-            // --- INSTANT CACHE RETRIEVAL FOR SPEED ---
+            // --- AUTHENTICATION LISTENER (SYNCED) ---
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    console.log("User logged in: " + user.uid);
+                    
+                    // Fetch directly from database username field
+                    firebase.database().ref('users/' + user.uid).once('value')
+                        .then((snapshot) => {
+                            const data = snapshot.val();
+                            // Logic: Use database username, fallback to user display name, or 'User'
+                            const fetchedName = data && data.username ? data.username : (user.displayName || "User");
+                            
+                            // Save to LocalStorage immediately
+                            localStorage.setItem('vireon_cached_username', fetchedName);
+                            
+                            // Update UI
+                            updateUserDisplay(fetchedName);
+                        })
+                        .catch((error) => {
+                            console.error("Database Fetch Error:", error);
+                        });
+                } else {
+                    console.log("No user logged in, clearing session data");
+                    
+                    // Crucial: Wipe old data so next user doesn't see it
+                    localStorage.removeItem('vireon_cached_username');
+                    // Optionally clear other session data if needed
+                    // localStorage.clear(); 
+                    
+                    clearUserDisplay();
+                }
+            });
+
+            // Load cache only if page is refreshed but user is already logged in
             const cachedName = localStorage.getItem('vireon_cached_username');
             if (cachedName) {
                 updateUserDisplay(cachedName);
             }
-
-            // Enhanced Firebase Data Retrieval with AUTH GUARD
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                    // USER IS LOGGED IN
-                    console.log("Firebase Auth detected user ID: " + user.uid);
-                    
-                    // Fetch user data once to stop infinite loading
-                    firebase.database().ref('users/' + user.uid).once('value')
-                        .then((snapshot) => {
-                            const data = snapshot.val();
-                            const fetchedName = data ? (data.username || data.name) : null;
-                            
-                            if (fetchedName) {
-                                console.log("Data retrieved successfully");
-                                // Update cache and display
-                                localStorage.setItem('vireon_cached_username', fetchedName);
-                                updateUserDisplay(fetchedName);
-                            } else {
-                                console.log("No custom username found, checking Auth Profile");
-                                if (user.displayName) {
-                                    updateUserDisplay(user.displayName);
-                                } else {
-                                    clearUserDisplay();
-                                }
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Database Error:", error);
-                        });
-                } else {
-                    // USER IS NOT LOGGED IN - REDIRECT TO LOGIN
-                    console.log("No user logged in. Redirecting to login.html");
-                    window.location.href = 'login.html';
-                }
-            });
-
 
             // ==========================================
             // DYNAMIC CALCULATION & ACCOUNT LEDGER SYSTEM
@@ -1419,7 +1412,6 @@
                     renderDynamicInterface();
                 });
             });
-
 
             // ==========================================
             // SWIPE CAROUSEL ENGINE
@@ -1591,7 +1583,6 @@
                 e.preventDefault();
                 closeSidebar();
                 firebase.auth().signOut().then(() => {
-                    localStorage.removeItem('vireon_cached_username');
                     window.location.href = 'login.html';
                 }).catch((error) => {
                     console.error("Sign-out process error: ", error);
