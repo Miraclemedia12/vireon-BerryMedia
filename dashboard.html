@@ -1261,17 +1261,24 @@
             }
 
             // --- AUTHENTICATION LISTENER (SYNCED) ---
+            let redirectTimeout = null;
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
+                    if (redirectTimeout) clearTimeout(redirectTimeout);
                     console.log("User logged in: " + user.uid);
                     
+                    // Sync display layout immediately with Auth instance fallback to kick "Loading..."
+                    const defaultName = user.displayName || (user.email ? user.email.split('@')[0] : "User");
+                    const initialUsername = localStorage.getItem('vireon_cached_username') || defaultName;
+                    updateUserDisplay(initialUsername);
+
                     const userRef = firebase.database().ref('users/' + user.uid);
                     
                     // Fetch all live secure database variables (username, balances, status)
                     userRef.on('value', (snapshot) => {
                         const data = snapshot.val();
                         if (data) {
-                            const fetchedName = data.username || (user.displayName || "User");
+                            const fetchedName = data.username || defaultName;
                             const dbActivityBal = data.activity_balance !== undefined ? parseFloat(data.activity_balance) : 25000;
                             const dbWorkBal = data.work_balance !== undefined ? parseFloat(data.work_balance) : 0;
                             const dbStatus = data.status || 'inactive';
@@ -1285,6 +1292,11 @@
                             // Live update the layout views
                             updateUserDisplay(fetchedName);
                             updateActivationUI(dbStatus);
+                            renderDynamicInterface();
+                        } else {
+                            // Fallback sync structure if DB path is empty/newly created
+                            localStorage.setItem('vireon_cached_username', defaultName);
+                            updateUserDisplay(defaultName);
                             renderDynamicInterface();
                         }
                     }, (error) => {
@@ -1327,18 +1339,37 @@
                     }
 
                 } else {
-                    console.log("No user logged in, clearing session data");
+                    console.log("No user logged in, validating layout source origins");
                     
-                    // Crucial: Wipe old data so next user doesn't see it
-                    localStorage.removeItem('vireon_cached_username');
-                    localStorage.removeItem('vireon_activity_balance');
-                    localStorage.removeItem('vireon_work_balance');
-                    localStorage.removeItem('vireon_account_status');
+                    // Check if redirect is coming from login or signup interfaces
+                    const ref = document.referrer.toLowerCase();
+                    const isFromAuth = ref.includes('login.html') || ref.includes('signup.html') || ref.includes('signup.htm');
                     
-                    clearUserDisplay();
-                    window.location.href = 'login.html';
+                    if (isFromAuth) {
+                        console.log("Auth session initializing from login/signup. Suspending immediate redirect.");
+                        if (!redirectTimeout) {
+                            // Wait up to 2.5 seconds to establish state connection
+                            redirectTimeout = setTimeout(() => {
+                                if (!firebase.auth().currentUser) {
+                                    console.log("Establishment timeout reached. Redirecting back to login gate.");
+                                    clearSessionAndRedirect();
+                                }
+                            }, 2500);
+                        }
+                    } else {
+                        clearSessionAndRedirect();
+                    }
                 }
             });
+
+            function clearSessionAndRedirect() {
+                localStorage.removeItem('vireon_cached_username');
+                localStorage.removeItem('vireon_activity_balance');
+                localStorage.removeItem('vireon_work_balance');
+                localStorage.removeItem('vireon_account_status');
+                clearUserDisplay();
+                window.location.href = 'login.html';
+            }
 
             // Load cache only if page is refreshed but user is already logged in
             const cachedName = localStorage.getItem('vireon_cached_username');
