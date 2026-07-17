@@ -973,7 +973,7 @@
         </div>
 
         <!-- VIEWPORT: PROFILE SECTION -->
-        <div id="view-history" class="viewport-section">
+        <div id="view-profile" class="viewport-section">
             <h3 class="section-headline">Profile Management</h3>
             <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;">
                 <div class="profile-avatar" style="width: 80px; height: 80px; font-size: 2.2rem; margin: 0 auto 1rem auto;" id="avatar-container-large">...</div>
@@ -1210,349 +1210,537 @@
                 updateUserDisplay('User');
             }
 
+            //
             function updateActivationUI(status) {
-                const badge = document.getElementById('profile-status-badge');
-                const triggers = [
-                    document.getElementById('main-activate-trigger'),
-                    document.getElementById('profile-activate-trigger'),
-                    document.getElementById('modal-activate-trigger')
-                ];
+                const statusBadge = document.getElementById('profile-status-badge');
+                const profileActivateBtn = document.getElementById('profile-activate-trigger');
+                const mainActivateBtn = document.getElementById('main-activate-trigger');
 
                 if (status === 'active') {
-                    if (badge) {
-                        badge.textContent = 'Activated';
-                        badge.style.color = '#00e676';
+                    if (statusBadge) {
+                        statusBadge.textContent = "Active Workspace";
+                        statusBadge.style.color = "#00e676";
                     }
-                    triggers.forEach(btn => {
-                        if (btn) {
-                            btn.textContent = 'Workspace Active';
-                            btn.style.background = 'rgba(0, 230, 118, 0.2)';
-                            btn.style.color = '#00e676';
-                            btn.style.border = '1px solid #00e676';
-                            btn.disabled = true;
+                    if (profileActivateBtn) {
+                        profileActivateBtn.textContent = "Workspace Active";
+                        profileActivateBtn.style.background = "#00e676";
+                        profileActivateBtn.style.pointerEvents = 'none';
+                    }
+                    if (mainActivateBtn) {
+                        mainActivateBtn.textContent = "Workspace Active";
+                        mainActivateBtn.style.background = "#00e676";
+                        mainActivateBtn.style.pointerEvents = 'none';
+                    }
+                    // Change locked stream badges to dynamic ACTIVE style
+                    document.querySelectorAll('.stream-card').forEach(card => {
+                        const badge = card.querySelector('.badge-status');
+                        if (badge && badge.classList.contains('locked')) {
+                            badge.classList.remove('locked');
+                            badge.classList.add('active');
+                            badge.textContent = 'ACTIVE';
+                            badge.style.background = 'rgba(0, 230, 118, 0.15)';
+                            badge.style.color = '#00e676';
+                            badge.style.border = '1px solid rgba(0, 230, 118, 0.25)';
                         }
                     });
                 } else {
-                    if (badge) {
-                        badge.textContent = 'Pending Activation';
-                        badge.style.color = '#ff4d4d';
+                    if (statusBadge) {
+                        statusBadge.textContent = "Pending Activation";
+                        statusBadge.style.color = "#ff4d4d";
+                    }
+                    if (profileActivateBtn) {
+                        profileActivateBtn.textContent = "Activate Workspace";
+                        profileActivateBtn.style.background = "#00f2fe";
+                        profileActivateBtn.style.pointerEvents = 'auto';
+                    }
+                    if (mainActivateBtn) {
+                        mainActivateBtn.textContent = "Activate Account";
+                        mainActivateBtn.style.background = "#00f2fe";
+                        mainActivateBtn.style.pointerEvents = 'auto';
                     }
                 }
             }
 
-            // ==========================================
-            // STATE CONFIGURATIONS
-            // ==========================================
-            let isBalanceHidden = false;
-            let currencyMode = 'NGN'; 
-            let activityBalance = 25000;
-            let workBalance = 0;
-            let accountStatus = 'pending';
-
-            // Load initial UI values from cache if they exist
-            const cachedName = localStorage.getItem('vireon_cached_username');
-            if (cachedName) updateUserDisplay(cachedName);
-
-            function formatCurrency(amount) {
-                if (isBalanceHidden) return '••••••';
-                if (currencyMode === 'USD') {
-                    return '$' + (amount / 1600).toFixed(2); // Mock conversion rate
-                }
-                return '₦' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            }
-
-            function renderBalances() {
-                document.getElementById('activity-balance-val').textContent = formatCurrency(activityBalance);
-                document.getElementById('work-balance-val').textContent = formatCurrency(workBalance);
-                document.getElementById('total-balance-val').textContent = formatCurrency(activityBalance + workBalance);
-            }
-
-            // ==========================================
-            // --- CRITICAL AUTH LOOP PROTECTION SYSTEM ---
-            // ==========================================
-            let executionGraceTimer = setTimeout(() => {
-                if (!firebase.auth().currentUser) {
-                    console.log("No user detected after initialization grace period. Redirecting.");
-                    clearSessionAndRedirect();
-                }
-            }, 2500); // Gives SDK 2.5 seconds to settle and retrieve the token storage matrix
-
+            // --- AUTHENTICATION LISTENER (SYNCED) ---
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
-                    if (executionGraceTimer) clearTimeout(executionGraceTimer);
-                    console.log("User verified: " + user.uid);
+                    console.log("User logged in: " + user.uid);
                     
+                    // Sync display layout immediately with Auth instance fallback to kick "Loading..."
                     const defaultName = user.displayName || (user.email ? user.email.split('@')[0] : "User");
-                    
-                    // Fetch profile settings and financials from Realtime Database
+                    const initialUsername = localStorage.getItem('vireon_cached_username') || defaultName;
+                    updateUserDisplay(initialUsername);
+
                     const userRef = firebase.database().ref('users/' + user.uid);
+                    
+                    // Fetch all live secure database variables (username, balances, status)
                     userRef.on('value', (snapshot) => {
                         const data = snapshot.val();
                         if (data) {
-                            activityBalance = data.activityBalance !== undefined ? data.activityBalance : 25000;
-                            workBalance = data.workBalance !== undefined ? data.workBalance : 0;
-                            accountStatus = data.accountStatus || 'pending';
-                            const currentUsername = data.username || defaultName;
-
-                            localStorage.setItem('vireon_cached_username', currentUsername);
-                            updateUserDisplay(currentUsername);
-                            updateActivationUI(accountStatus);
-                            renderBalances();
-                            populateHistory(data.history || []);
+                            const fetchedName = data.username || defaultName;
+                            const dbActivityBal = data.activity_balance !== undefined ? parseFloat(data.activity_balance) : 25000;
+                            const dbWorkBal = data.work_balance !== undefined ? parseFloat(data.work_balance) : 0;
+                            const dbStatus = data.status || 'inactive';
+                            
+                            // Keep LocalStorage synchronized as clean cache
+                            localStorage.setItem('vireon_cached_username', fetchedName);
+                            localStorage.setItem('vireon_activity_balance', dbActivityBal);
+                            localStorage.setItem('vireon_work_balance', dbWorkBal);
+                            localStorage.setItem('vireon_account_status', dbStatus);
+                            
+                            // Live update the layout views
+                            updateUserDisplay(fetchedName);
+                            updateActivationUI(dbStatus);
+                            renderDynamicInterface();
+                        } else {
+                            // Fallback sync structure if DB path is empty/newly created
+                            localStorage.setItem('vireon_cached_username', defaultName);
+                            updateUserDisplay(defaultName);
+                            renderDynamicInterface();
                         }
+                    }, (error) => {
+                        console.error("Database Sync Error:", error);
                     });
-                } else {
-                    // Double check fallback trace to prevent race state loop drops
-                    if (!executionGraceTimer) {
-                        console.log("Session dropped. Transitioning to portal.");
-                        clearSessionAndRedirect();
+
+                    // Secure daily login logic linked directly with Firebase DB updates
+                    const today = new Date().toISOString().split('T')[0];
+                    const lastLogin = localStorage.getItem('vireon_last_login_date');
+                    if (lastLogin !== today) {
+                        userRef.once('value').then((snapshot) => {
+                            const data = snapshot.val();
+                            if (data) {
+                                const currentActBal = parseFloat(data.activity_balance) || 25000;
+                                const newActBal = currentActBal + 2000;
+
+                                let history = [];
+                                try {
+                                    history = JSON.parse(localStorage.getItem('vireon_history')) || [];
+                                } catch (e) { history = []; }
+
+                                const now = new Date();
+                                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
+                                const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+
+                                history.unshift({
+                                    title: "Login Reward Bonus",
+                                    timestamp: `${dateStr}, ${timeStr}`,
+                                    amountNaira: 2000,
+                                    type: "credit"
+                                });
+                                localStorage.setItem('vireon_history', JSON.stringify(history));
+                                localStorage.setItem('vireon_last_login_date', today);
+
+                                userRef.update({
+                                    activity_balance: newActBal
+                                });
+                            }
+                        });
                     }
+
+                } else {
+                    console.log("No user logged in. Redirecting to login gate.");
+                    clearSessionAndRedirect();
                 }
             });
 
             function clearSessionAndRedirect() {
                 localStorage.removeItem('vireon_cached_username');
+                localStorage.removeItem('vireon_activity_balance');
+                localStorage.removeItem('vireon_work_balance');
+                localStorage.removeItem('vireon_account_status');
                 clearUserDisplay();
                 window.location.href = 'login.html';
             }
 
-            // ==========================================
-            // MODAL UI CONTROL ROUTINES
-            // ==========================================
-            function setupModal(triggerId, modalId, closeId) {
-                const trigger = document.getElementById(triggerId);
-                const modal = document.getElementById(modalId);
-                const close = document.getElementById(closeId);
+            // Load cache only if page is refreshed but user is already logged in
+            const cachedName = localStorage.getItem('vireon_cached_username');
+            if (cachedName) {
+                updateUserDisplay(cachedName);
+            }
 
-                if (trigger && modal) {
-                    trigger.addEventListener('click', () => modal.style.display = 'flex');
+            // ==========================================
+            // DYNAMIC CALCULATION & ACCOUNT LEDGER SYSTEM
+            // ==========================================
+            const NGN_TO_GBP_RATE = 2000; 
+
+            function initAccountState() {
+                const today = new Date().toISOString().split('T')[0];
+                const lastLogin = localStorage.getItem('vireon_last_login_date');
+                
+                let activityBal = localStorage.getItem('vireon_activity_balance');
+                let workBal = localStorage.getItem('vireon_work_balance');
+                let currency = localStorage.getItem('vireon_currency') || 'NGN';
+                let history = [];
+
+                try {
+                    history = JSON.parse(localStorage.getItem('vireon_history')) || [];
+                } catch (e) {
+                    history = [];
                 }
-                if (close && modal) {
-                    close.addEventListener('click', () => modal.style.display = 'none');
+
+                let regTime = localStorage.getItem('vireon_registration_time');
+                if (!regTime) {
+                    const now = new Date();
+                    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
+                    const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+                    regTime = `${dateStr}, ${timeStr}`;
+                    localStorage.setItem('vireon_registration_time', regTime);
+                }
+
+                if (activityBal === null) {
+                    activityBal = 25000; 
+                    workBal = 0; 
+                    
+                    localStorage.setItem('vireon_activity_balance', activityBal);
+                    localStorage.setItem('vireon_work_balance', workBal);
+                    localStorage.setItem('vireon_last_login_date', today);
+                    localStorage.setItem('vireon_currency', currency);
+
+                    history = [
+                        { title: "Welcome Reward Bonus", timestamp: regTime, amountNaira: 25000, type: "credit" },
+                        { title: "Account Created Successfully", timestamp: regTime, amountNaira: 0, type: "status" }
+                    ];
+                    localStorage.setItem('vireon_history', JSON.stringify(history));
+                } else {
+                    activityBal = parseFloat(activityBal);
+                    workBal = parseFloat(workBal);
+
+                    if (lastLogin !== today) {
+                        activityBal += 2000;
+                        localStorage.setItem('vireon_activity_balance', activityBal);
+                        localStorage.setItem('vireon_last_login_date', today);
+
+                        const now = new Date();
+                        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
+                        const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+
+                        let hasReg = history.some(item => item.title === "Welcome Reward Bonus");
+                        if (!hasReg) {
+                            history.push({ title: "Welcome Reward Bonus", timestamp: regTime, amountNaira: 25000, type: "credit" });
+                            history.push({ title: "Account Created Successfully", timestamp: regTime, amountNaira: 0, type: "status" });
+                        }
+
+                        history.unshift({
+                            title: "Login Reward Bonus",
+                            timestamp: `${dateStr}, ${timeStr}`,
+                            amountNaira: 2000,
+                            type: "credit"
+                        });
+                        localStorage.setItem('vireon_history', JSON.stringify(history));
+                    }
                 }
             }
 
-            setupModal('bell-btn', 'notify-modal', 'close-notify-modal');
-            setupModal('support-btn', 'help-modal', 'close-help-modal');
-            setupModal('drawer-support-opt', 'help-modal', 'close-help-modal');
-            
-            const accessModal = document.getElementById('access-modal');
-            const closeAccess = document.getElementById('close-access-modal');
-            if (closeAccess && accessModal) {
-                closeAccess.addEventListener('click', () => accessModal.style.display = 'none');
+            function formatCurrency(val, targetCurrency) {
+                if (targetCurrency === 'GBP') {
+                    const converted = val / NGN_TO_GBP_RATE;
+                    return '£' + converted.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                } else {
+                    return '₦' + val.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
             }
 
-            document.querySelectorAll('.locked-trigger').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (accountStatus !== 'active' && accessModal) {
-                        accessModal.style.display = 'flex';
+            function renderDynamicInterface() {
+                const currency = localStorage.getItem('vireon_currency') || 'NGN';
+                const activityBal = parseFloat(localStorage.getItem('vireon_activity_balance')) || 25000;
+                const workBal = parseFloat(localStorage.getItem('vireon_work_balance')) || 0;
+                const totalBal = activityBal + workBal;
+                
+                const balancesHidden = localStorage.getItem('vireon_balances_hidden') === 'true';
+
+                if (balancesHidden) {
+                    document.getElementById('activity-balance-val').textContent = '••••••';
+                    document.getElementById('work-balance-val').textContent = '••••••';
+                    document.getElementById('total-balance-val').textContent = '••••••';
+                } else {
+                    document.getElementById('activity-balance-val').textContent = formatCurrency(activityBal, currency);
+                    document.getElementById('work-balance-val').textContent = formatCurrency(workBal, currency);
+                    document.getElementById('total-balance-val').textContent = formatCurrency(totalBal, currency);
+                }
+
+                const currencyPill = document.getElementById('currency-toggle-pill');
+                if (currencyPill) {
+                    currencyPill.textContent = `${currency} ⇄`;
+                }
+
+                document.querySelectorAll('.eye-toggle-icon').forEach(icon => {
+                    if (balancesHidden) {
+                        icon.innerHTML = `<svg class="eye-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+                    } else {
+                        icon.innerHTML = `<svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
                     }
                 });
-            });
 
-            const actTriggers = ['main-activate-trigger', 'profile-activate-trigger', 'modal-activate-trigger'];
-            actTriggers.forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) {
-                    btn.addEventListener('click', () => {
-                        if (accountStatus !== 'active' && accessModal) {
-                            accessModal.style.display = 'flex';
+                const historyContainer = document.getElementById('history-stack-node');
+                if (historyContainer) {
+                    let history = [];
+                    try {
+                        history = JSON.parse(localStorage.getItem('vireon_history')) || [];
+                    } catch (e) {
+                        history = [];
+                    }
+
+                    historyContainer.innerHTML = '';
+                    history.forEach(item => {
+                        const node = document.createElement('div');
+                        node.className = 'activity-node';
+                        
+                        let valDisplay = '';
+                        if (item.type === 'credit') {
+                            valDisplay = `+${formatCurrency(item.amountNaira, currency)}`;
+                        } else {
+                            valDisplay = `<span style="color: #00f2fe;">Success</span>`;
                         }
+
+                        node.innerHTML = `
+                            <div class="node-details">
+                                <h4 class="node-title">${item.title}</h4>
+                                <p class="node-timestamp">${item.timestamp}</p>
+                            </div>
+                            <span class="node-value" style="${item.type !== 'credit' ? '' : 'color: #00e676;'}">${valDisplay}</span>
+                        `;
+                        historyContainer.appendChild(node);
                     });
                 }
+            }
+
+            initAccountState();
+            renderDynamicInterface();
+
+            document.getElementById('currency-toggle-pill').addEventListener('click', () => {
+                let currentCur = localStorage.getItem('vireon_currency') || 'NGN';
+                let nextCur = currentCur === 'NGN' ? 'GBP' : 'NGN';
+                localStorage.setItem('vireon_currency', nextCur);
+                renderDynamicInterface();
+            });
+
+            document.querySelectorAll('.eye-toggle-icon').forEach(eyeNode => {
+                eyeNode.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    const isCurrentlyHidden = localStorage.getItem('vireon_balances_hidden') === 'true';
+                    localStorage.setItem('vireon_balances_hidden', !isCurrentlyHidden);
+                    renderDynamicInterface();
+                });
             });
 
             // ==========================================
-            // SIDEBAR SLIDE OUT DRAWER CONTROL
-            // ==========================================
-            const hamburger = document.getElementById('hamburger-btn');
-            const drawer = document.getElementById('sidebar-drawer');
-            const overlay = document.getElementById('sidebar-overlay');
-            const closeDrawer = document.getElementById('close-drawer');
-
-            if (hamburger && drawer && overlay) {
-                hamburger.addEventListener('click', () => {
-                    drawer.classList.add('drawer-open');
-                    overlay.style.display = 'block';
-                });
-            }
-
-            function hideDrawer() {
-                if (drawer) drawer.classList.remove('drawer-open');
-                if (overlay) overlay.style.display = 'none';
-            }
-
-            if (closeDrawer) closeDrawer.addEventListener('click', hideDrawer);
-            if (overlay) overlay.addEventListener('click', hideDrawer);
-
-            // ==========================================
-            // VIEWPORT TABS ROUTER SYSTEM
-            // ==========================================
-            const navTabs = document.querySelectorAll('.nav-tab-item');
-            const sections = document.querySelectorAll('.viewport-section');
-
-            navTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const target = tab.getAttribute('data-target');
-                    
-                    navTabs.forEach(t => t.classList.remove('active-tab'));
-                    sections.forEach(s => s.classList.remove('active-view'));
-
-                    tab.classList.add('active-tab');
-                    const targetView = document.getElementById(target);
-                    if (targetView) targetView.classList.add('active-view');
-                });
-            });
-
-            const profileOpt = document.getElementById('drawer-profile-opt');
-            if (profileOpt) {
-                profileOpt.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    hideDrawer();
-                    const pTab = document.querySelector('[data-target="view-profile"]');
-                    if (pTab) pTab.click();
-                });
-            }
-
-            const dashOpt = document.getElementById('drawer-dash-opt');
-            if (dashOpt) {
-                dashOpt.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    hideDrawer();
-                    const hTab = document.querySelector('[data-target="view-home"]');
-                    if (hTab) hTab.click();
-                });
-            }
-
-            // ==========================================
-            // CAROUSEL SWIPER MATRIX MODULE
+            // SWIPE CAROUSEL ENGINE
             // ==========================================
             const track = document.getElementById('carousel-track');
             const dots = document.querySelectorAll('.carousel-dots .dot');
             let startX = 0;
-            let currentTranslate = 0;
-            let prevTranslate = 0;
-            let currentIndex = 0;
+            let currentX = 0;
+            let isDragging = false;
+            let currentIndex = 0; 
+            let autoSwipeInterval;
 
-            if (track) {
-                track.addEventListener('touchstart', touchStart);
-                track.addEventListener('touchend', touchEnd);
-                track.addEventListener('touchmove', touchMove);
-                track.addEventListener('mousedown', touchStart);
-                track.addEventListener('mouseup', touchEnd);
-                track.addEventListener('mouseleave', touchEnd);
-                track.addEventListener('mousemove', touchMove);
+            function updateCarouselPosition() {
+                track.style.transform = `translateX(-${currentIndex * 50}%)`;
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('active-dot');
+                    } else {
+                        dot.classList.remove('active-dot');
+                    }
+                });
             }
+
+            function startAutoSwipe() {
+                autoSwipeInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % 2;
+                    updateCarouselPosition();
+                }, 5000);
+            }
+
+            function stopAutoSwipe() {
+                clearInterval(autoSwipeInterval);
+            }
+
+            track.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                currentX = startX;
+                isDragging = true;
+                stopAutoSwipe();
+            }, { passive: true });
+
+            track.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                currentX = e.touches[0].clientX;
+            }, { passive: true });
+
+            track.addEventListener('touchend', () => {
+                if (!isDragging) return;
+                isDragging = false;
+                const diff = startX - currentX;
+                if (Math.abs(diff) > 40) {
+                    if (diff > 0) currentIndex = 1; else currentIndex = 0;
+                }
+                updateCarouselPosition();
+                startAutoSwipe();
+            });
+
+            track.addEventListener('mousedown', (e) => {
+                startX = e.clientX;
+                currentX = startX;
+                isDragging = true;
+                stopAutoSwipe();
+            });
+
+            track.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                currentX = e.clientX;
+            });
+
+            track.addEventListener('mouseup', () => {
+                if (!isDragging) return;
+                isDragging = false;
+                const diff = startX - currentX;
+                if (Math.abs(diff) > 40) {
+                    if (diff > 0) currentIndex = 1; else currentIndex = 0;
+                }
+                updateCarouselPosition();
+                startAutoSwipe();
+            });
 
             dots.forEach(dot => {
                 dot.addEventListener('click', () => {
-                    const index = parseInt(dot.getAttribute('data-index'));
-                    changeSlide(index);
+                    stopAutoSwipe();
+                    currentIndex = parseInt(dot.getAttribute('data-index'));
+                    updateCarouselPosition();
+                    startAutoSwipe();
                 });
             });
 
-            function touchStart(e) {
-                startX = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
-                track.style.transition = 'none';
-            }
-
-            function touchMove(e) {
-                if (startX === 0) return;
-                const currentX = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
-                const diff = currentX - startX;
-                currentTranslate = prevTranslate + (diff / track.parentElement.offsetWidth) * 100;
-                track.style.transform = `translateX(${currentTranslate}%)`;
-            }
-
-            function touchEnd(e) {
-                if (startX === 0) return;
-                const endX = e.type.includes('mouse') ? e.pageX : e.changedTouches[0].clientX;
-                const movedBy = endX - startX;
-
-                if (movedBy < -50 && currentIndex < 1) currentIndex++;
-                if (movedBy > 50 && currentIndex > 0) currentIndex--;
-
-                changeSlide(currentIndex);
-                startX = 0;
-            }
-
-            function changeSlide(index) {
-                currentIndex = index;
-                currentTranslate = index * -50;
-                prevTranslate = currentTranslate;
-                if (track) {
-                    track.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
-                    track.style.transform = `translateX(${currentTranslate}%)`;
-                }
-                dots.forEach(d => d.classList.remove('active-dot'));
-                if (dots[index]) dots[index].classList.add('active-dot');
-            }
+            startAutoSwipe();
 
             // ==========================================
-            // DISPLAY MUTATION CONTROLS (EYE / CURRENCY)
+            // STREAMS NAVIGATION TAB PANEL MANAGER
             // ==========================================
-            document.querySelectorAll('.eye-toggle-icon').forEach(icon => {
-                icon.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    isBalanceHidden = !isBalanceHidden;
-                    renderBalances();
+            const tabs = document.querySelectorAll('.nav-tab-item');
+            const views = document.querySelectorAll('.viewport-section');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active-tab'));
+                    views.forEach(v => v.classList.remove('active-view'));
+                    tab.classList.add('active-tab');
+                    const targetId = tab.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('active-view');
                 });
             });
 
-            const currencyPill = document.getElementById('currency-toggle-pill');
-            if (currencyPill) {
-                currencyPill.addEventListener('click', () => {
-                    currencyMode = currencyMode === 'NGN' ? 'USD' : 'NGN';
-                    currencyPill.textContent = currencyMode + ' ⇄';
-                    renderBalances();
+            // ==========================================
+            // MODAL AND DRAWER CONTROL LOGIC
+            // ==========================================
+            const accessModal = document.getElementById('access-modal');
+            const notifyModal = document.getElementById('notify-modal');
+            const helpModal = document.getElementById('help-modal');
+            const sidebarDrawer = document.getElementById('sidebar-drawer');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            function openModal(modal) { modal.style.display = 'flex'; }
+            function closeModal(modal) { modal.style.display = 'none'; }
+
+            document.getElementById('close-access-modal').addEventListener('click', () => closeModal(accessModal));
+            document.getElementById('close-notify-modal').addEventListener('click', () => closeModal(notifyModal));
+            document.getElementById('close-help-modal').addEventListener('click', () => closeModal(helpModal));
+
+            // Dynamic evaluation of 'active' status on locks
+            document.querySelectorAll('.locked-trigger').forEach(trigger => {
+                trigger.addEventListener('click', (e) => {
+                    const currentStatus = localStorage.getItem('vireon_account_status') || 'inactive';
+                    if (currentStatus !== 'active') {
+                        e.preventDefault();
+                        sidebarDrawer.classList.remove('drawer-open');
+                        sidebarOverlay.style.display = 'none';
+                        openModal(accessModal);
+                    }
                 });
-            }
+            });
 
-            // ==========================================
-            // DYNAMIC TRANSACTIONS POPULATER
-            // ==========================================
-            function populateHistory(nodes) {
-                const container = document.getElementById('history-stack-node');
-                if (!container) return;
-                container.innerHTML = '';
-
-                if (nodes.length === 0) {
-                    container.innerHTML = '<p style="text-align:center;color:#a0aec0;font-size:0.85rem;padding:2rem 0;">No logs recorded yet.</p>';
-                    return;
+            document.getElementById('main-withdraw-trigger').addEventListener('click', () => {
+                const currentStatus = localStorage.getItem('vireon_account_status') || 'inactive';
+                if (currentStatus !== 'active') {
+                    openModal(accessModal);
+                } else {
+                    alert("Processing withdrawal gateway... Please wait.");
                 }
+            });
+            
+            document.getElementById('bell-btn').addEventListener('click', () => openModal(notifyModal));
+            document.getElementById('support-btn').addEventListener('click', () => openModal(helpModal));
 
-                nodes.forEach(node => {
-                    const nodeEl = document.createElement('div');
-                    nodeEl.className = 'activity-node';
-                    nodeEl.innerHTML = `
-                        <div class="node-details">
-                            <p class="node-title">${node.title || 'Reward Allocated'}</p>
-                            <p class="node-timestamp">${node.time || 'Just now'}</p>
-                        </div>
-                        <span class="node-value" style="color: ${node.type === 'negative' ? '#ff4d4d' : '#00e676'}">
-                            ${node.type === 'negative' ? '-' : '+'}${formatCurrency(node.amount || 0)}
-                        </span>
-                    `;
-                    container.appendChild(nodeEl);
+            document.getElementById('hamburger-btn').addEventListener('click', () => {
+                sidebarDrawer.classList.add('drawer-open');
+                sidebarOverlay.style.display = 'block';
+            });
+
+            const closeSidebar = () => {
+                sidebarDrawer.classList.remove('drawer-open');
+                sidebarOverlay.style.display = 'none';
+            };
+
+            document.getElementById('close-drawer').addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            document.getElementById('drawer-dash-opt').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeSidebar();
+                document.querySelector('[data-target="view-home"]').click();
+            });
+
+            document.getElementById('drawer-profile-opt').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeSidebar();
+                document.querySelector('[data-target="view-profile"]').click();
+            });
+
+            document.getElementById('drawer-support-opt').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeSidebar();
+                openModal(helpModal);
+            });
+
+            document.getElementById('drawer-logout-opt').addEventListener('click', (e) => {
+                e.preventDefault();
+                closeSidebar();
+                firebase.auth().signOut().then(() => {
+                    window.location.href = 'login.html';
+                }).catch((error) => {
+                    console.error("Sign-out process error: ", error);
                 });
-            }
+            });
 
             // ==========================================
-            // SYSTEM DESTRUCTION PANEL (LOGOUT)
+            // REDIRECTION AND LOADER SIMULATION
             // ==========================================
-            const logoutOpt = document.getElementById('drawer-logout-opt');
-            if (logoutOpt) {
-                logoutOpt.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    firebase.auth().signOut().then(() => {
-                        clearSessionAndRedirect();
-                    }).catch(err => console.error("Signout error", err));
-                });
-            }
+            const triggersToRedirect = [
+                document.getElementById('main-activate-trigger'),
+                document.getElementById('modal-activate-trigger'),
+                document.getElementById('profile-activate-trigger')
+            ];
 
-            // Fallback render initialization execution
-            renderBalances();
+            triggersToRedirect.forEach(trigger => {
+                if (trigger) {
+                    trigger.addEventListener('click', () => {
+                        trigger.style.pointerEvents = 'none';
+                        trigger.style.opacity = '0.85';
+                        trigger.innerHTML = `
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="animation: spin 1s linear infinite; margin-right: 0.5rem;"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg>
+                            Processing...
+                        `;
+
+                        const styleNode = document.createElement('style');
+                        styleNode.innerHTML = "@keyframes spin { 100% { transform: rotate(360deg); } }";
+                        document.head.appendChild(styleNode);
+
+                        setTimeout(() => {
+                            window.location.href = 'payment.html';
+                        }, 1200);
+                    });
+                }
+            });
+
         });
     </script>
 </body>
