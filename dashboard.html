@@ -1210,6 +1210,7 @@
                 updateUserDisplay('User');
             }
 
+            //
             function updateActivationUI(status) {
                 const statusBadge = document.getElementById('profile-status-badge');
                 const profileActivateBtn = document.getElementById('profile-activate-trigger');
@@ -1261,10 +1262,8 @@
             }
 
             // --- AUTHENTICATION LISTENER (SYNCED) ---
-            let redirectTimeout = null;
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
-                    if (redirectTimeout) clearTimeout(redirectTimeout);
                     console.log("User logged in: " + user.uid);
                     
                     // Sync display layout immediately with Auth instance fallback to kick "Loading..."
@@ -1339,26 +1338,8 @@
                     }
 
                 } else {
-                    console.log("No user logged in, validating layout source origins");
-                    
-                    // Check if redirect is coming from login or signup interfaces
-                    const ref = document.referrer.toLowerCase();
-                    const isFromAuth = !ref || ref.includes('login') || ref.includes('signup');
-                    
-                    if (isFromAuth) {
-                        console.log("Auth session initializing from login/signup. Suspending immediate redirect.");
-                        if (!redirectTimeout) {
-                            // Wait up to 2.5 seconds to establish state connection
-                            redirectTimeout = setTimeout(() => {
-                                if (!firebase.auth().currentUser) {
-                                    console.log("Establishment timeout reached. Redirecting back to login gate.");
-                                    clearSessionAndRedirect();
-                                }
-                            }, 2500);
-                        }
-                    } else {
-                        clearSessionAndRedirect();
-                    }
+                    console.log("No user logged in. Redirecting to login gate.");
+                    clearSessionAndRedirect();
                 }
             });
 
