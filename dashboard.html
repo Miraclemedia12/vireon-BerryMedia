@@ -1184,6 +1184,7 @@
             }
             updateGreeting();
 
+            // --- REALTIME DYNAMIC ACTIVATION UI MANAGER ---
             function updateUserDisplay(username) {
                 const userDisplays = [
                     document.getElementById('user-display-node'),
@@ -1209,7 +1210,6 @@
                 updateUserDisplay('User');
             }
 
-            // --- REALTIME DYNAMIC ACTIVATION UI MANAGER ---
             function updateActivationUI(status) {
                 const statusBadge = document.getElementById('profile-status-badge');
                 const profileActivateBtn = document.getElementById('profile-activate-trigger');
@@ -1343,7 +1343,7 @@
                     
                     // Check if redirect is coming from login or signup interfaces
                     const ref = document.referrer.toLowerCase();
-                    const isFromAuth = ref.includes('login.html') || ref.includes('signup.html') || ref.includes('signup.htm');
+                    const isFromAuth = !ref || ref.includes('login') || ref.includes('signup');
                     
                     if (isFromAuth) {
                         console.log("Auth session initializing from login/signup. Suspending immediate redirect.");
