@@ -1218,9 +1218,10 @@
                 updateUserDisplay(cachedName);
             }
 
-            // Enhanced Firebase Data Retrieval
+            // Enhanced Firebase Data Retrieval with AUTH GUARD
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
+                    // USER IS LOGGED IN
                     console.log("Firebase Auth detected user ID: " + user.uid);
                     
                     // Fetch user data once to stop infinite loading
@@ -1247,8 +1248,9 @@
                             console.error("Database Error:", error);
                         });
                 } else {
-                    console.log("No user logged in");
-                    clearUserDisplay();
+                    // USER IS NOT LOGGED IN - REDIRECT TO LOGIN
+                    console.log("No user logged in. Redirecting to login.html");
+                    window.location.href = 'login.html';
                 }
             });
 
