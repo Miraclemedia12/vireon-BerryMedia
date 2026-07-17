@@ -369,22 +369,24 @@ document.getElementById("loginForm").onsubmit = function(e) {
     const submitBtn = document.getElementById("submitBtn");
     const btnText = submitBtn.querySelector("span");
 
+    // Capture inputs
     const inputVal = document.getElementById("identifier").value.trim().toLowerCase();
     const passwordVal = document.getElementById("password").value.trim();
 
     submitBtn.disabled = true;
     btnText.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Authenticating...';
 
-    // Execution sequence function to validate user record
+    // Core validation function to run after database fetch
     function validateUserRecord(doc) {
         const userData = doc.data();
-        const uid = doc.id; // Capture the unique document ID as the UID
+        const uid = doc.id;
 
+        // Verify if the password field in database matches input
         if (userData.password === passwordVal) {
-            showToast("Credentials validated! Initializing user engine dashboard...", "success");
+            showToast("Login Successful! Initializing...", "success");
             
-            // Sync configurations locally across storage spaces
-            localStorage.setItem("userUid", uid); // Tracking Uid
+            // Set local storage data from the database record
+            localStorage.setItem("userUid", uid);
             localStorage.setItem("userFullName", userData.fullname || userData.name || "User");
             localStorage.setItem("username", userData.username);
             localStorage.setItem("phone", userData.phone || "");
@@ -395,38 +397,38 @@ document.getElementById("loginForm").onsubmit = function(e) {
                 window.location.href = "dashboard.html";
             }, 1500);
         } else {
-            showToast("Invalid password! Please verify security credentials and try again.", "error");
+            showToast("Invalid password! Please check your credentials.", "error");
             submitBtn.disabled = false;
             btnText.innerText = "Secure Log In";
         }
     }
 
-    // Step 1: Query database collection by username
+    // Step 1: Query by username in the "users" collection
     db.collection("users").where("username", "==", inputVal).get()
     .then((usernameSnapshot) => {
         if (!usernameSnapshot.empty) {
             validateUserRecord(usernameSnapshot.docs[0]);
         } else {
-            // Step 2: Fall back and query by email if username not found
+            // Step 2: Fall back and query by email in the "users" collection if username not found
             db.collection("users").where("email", "==", inputVal).get()
             .then((emailSnapshot) => {
                 if (!emailSnapshot.empty) {
                     validateUserRecord(emailSnapshot.docs[0]);
                 } else {
-                    showToast("No account associated with that username or email address.", "error");
+                    showToast("No account found with this username or email.", "error");
                     submitBtn.disabled = false;
                     btnText.innerText = "Secure Log In";
                 }
             })
             .catch((err) => {
-                showToast("Network lookup matrix distortion: " + err.message, "error");
+                showToast("Database lookup error: " + err.message, "error");
                 submitBtn.disabled = false;
                 btnText.innerText = "Secure Log In";
             });
         }
     })
     .catch((err) => {
-        showToast("Database security pipeline error: " + err.message, "error");
+        showToast("System connection error: " + err.message, "error");
         submitBtn.disabled = false;
         btnText.innerText = "Secure Log In";
     });
