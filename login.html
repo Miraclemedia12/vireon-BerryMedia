@@ -265,7 +265,6 @@
 
 <div class="container">
 
-    <!-- Branded Luxury Logo Asset Element -->
     <div class="logo-container">
         <img src="logo.png" alt="VIREON" class="logo-img">
     </div>
@@ -305,7 +304,6 @@
 
 </div>
 
-<!-- Luxury Custom App Toast Notification Framework -->
 <div id="custom-toast">
     <i id="toast-icon" class="fa-solid"></i>
     <span id="toast-message"></span>
@@ -374,18 +372,20 @@ document.getElementById("loginForm").onsubmit = function(e) {
     const inputVal = document.getElementById("identifier").value.trim().toLowerCase();
     const passwordVal = document.getElementById("password").value.trim();
 
-    // Trigger loading state across primary user interaction controls
     submitBtn.disabled = true;
     btnText.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Authenticating...';
 
-    // Execution sequence function to match structural parameters
-    function validateUserRecord(userData) {
+    // Execution sequence function to validate user record
+    function validateUserRecord(doc) {
+        const userData = doc.data();
+        const uid = doc.id; // Capture the unique document ID as the UID
+
         if (userData.password === passwordVal) {
             showToast("Credentials validated! Initializing user engine dashboard...", "success");
             
             // Sync configurations locally across storage spaces
+            localStorage.setItem("userUid", uid); // Tracking Uid
             localStorage.setItem("userFullName", userData.fullname || userData.name || "User");
-            localStorage.setItem("fullname", userData.fullname || userData.name || "User");
             localStorage.setItem("username", userData.username);
             localStorage.setItem("phone", userData.phone || "");
             localStorage.setItem("email", userData.email || "");
@@ -401,17 +401,17 @@ document.getElementById("loginForm").onsubmit = function(e) {
         }
     }
 
-    // Step 1: Query database collection utilizing structural username configurations
+    // Step 1: Query database collection by username
     db.collection("users").where("username", "==", inputVal).get()
     .then((usernameSnapshot) => {
         if (!usernameSnapshot.empty) {
-            validateUserRecord(usernameSnapshot.docs[0].data());
+            validateUserRecord(usernameSnapshot.docs[0]);
         } else {
-            // Step 2: Fall back and query utilizing electronic mail registration parameters if username is empty
+            // Step 2: Fall back and query by email if username not found
             db.collection("users").where("email", "==", inputVal).get()
             .then((emailSnapshot) => {
                 if (!emailSnapshot.empty) {
-                    validateUserRecord(emailSnapshot.docs[0].data());
+                    validateUserRecord(emailSnapshot.docs[0]);
                 } else {
                     showToast("No account associated with that username or email address.", "error");
                     submitBtn.disabled = false;
@@ -457,7 +457,6 @@ document.addEventListener("copy", function(e) { e.preventDefault(); });
 document.addEventListener("cut", function(e) { e.preventDefault(); });
 document.addEventListener("paste", function(e) { e.preventDefault(); });
 
-// Active dev-tools hardware element inspection loop monitoring tracking overlay blur
 setInterval(function() {
     if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
         document.body.style.filter = "blur(20px)";
