@@ -1135,15 +1135,15 @@
             // ==========================================
             // FIREBASE INITIALIZATION CONSOLE
             // ==========================================
-const firebaseConfig = {
-  apiKey: "AIzaSyCkBBUQn-vPofsoJQEpu1K5mtJDffpAdxA",
-  authDomain: "vireon-berrymedia.firebaseapp.com",
-  projectId: "vireon-berrymedia",
-  storageBucket: "vireon-berrymedia.firebasestorage.app",
-  messagingSenderId: "433591634561",
-  appId: "1:433591634561:web:40b32bc9aaa28b59a25b80",
-  measurementId: "G-TH2W27DZSV"
-};
+            const firebaseConfig = {
+              apiKey: "AIzaSyCkBBUQn-vPofsoJQEpu1K5mtJDffpAdxA",
+              authDomain: "vireon-berrymedia.firebaseapp.com",
+              projectId: "vireon-berrymedia",
+              storageBucket: "vireon-berrymedia.firebasestorage.app",
+              messagingSenderId: "433591634561",
+              appId: "1:433591634561:web:40b32bc9aaa28b59a25b80",
+              measurementId: "G-TH2W27DZSV"
+            };
 
             // Safely open communication bridge with your database architecture
             if (!firebase.apps.length) {
@@ -1172,7 +1172,6 @@ const firebaseConfig = {
             // ==========================================
             // ACCOUNT INFORMATION / USERNAME TRACKING
             // ==========================================
-            // 1. Dynamic Greeting Engine (Morning / Afternoon / Evening)
             function updateGreeting() {
                 const greetingEl = document.querySelector('.greeting-text');
                 if (greetingEl) {
@@ -1188,7 +1187,6 @@ const firebaseConfig = {
             }
             updateGreeting();
 
-            // 2. DOM Updates (Strictly Database Synchronized, Local Storage Removed)
             function updateUserDisplay(username) {
                 const userDisplays = [
                     document.getElementById('user-display-node'),
@@ -1204,38 +1202,43 @@ const firebaseConfig = {
                 });
 
                 avatarDisplays.forEach(el => {
-                    if (el && username.length > 0) {
+                    if (el && username && username.length > 0) {
                         el.textContent = username.charAt(0).toUpperCase();
                     }
                 });
             }
 
-            // 3. Clean Display Loading / Fallback Engine
             function clearUserDisplay() {
                 updateUserDisplay('User');
             }
 
-            // 4. Live Database Tracking System (Listens directly to active database UID payload node)
+            // Enhanced Firebase Data Retrieval
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
-                    const userRef = firebase.database().ref('users/' + user.uid);
-                    userRef.on('value', (snapshot) => {
-                        const data = snapshot.val();
-                        if (data && (data.username || data.name)) {
-                            updateUserDisplay(data.username || data.name);
-                        } else if (user.displayName) {
-                            updateUserDisplay(user.displayName);
-                        } else {
+                    console.log("Firebase Auth detected user ID: " + user.uid);
+                    
+                    // Fetch user data once to stop infinite loading
+                    firebase.database().ref('users/' + user.uid).once('value')
+                        .then((snapshot) => {
+                            const data = snapshot.val();
+                            if (data && (data.username || data.name)) {
+                                console.log("Data retrieved successfully");
+                                updateUserDisplay(data.username || data.name);
+                            } else {
+                                console.log("No custom username found, checking Auth Profile");
+                                if (user.displayName) {
+                                    updateUserDisplay(user.displayName);
+                                } else {
+                                    clearUserDisplay();
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Database Error:", error);
                             clearUserDisplay();
-                        }
-                    }, () => {
-                        if (user.displayName) {
-                            updateUserDisplay(user.displayName);
-                        } else {
-                            clearUserDisplay();
-                        }
-                    });
+                        });
                 } else {
+                    console.log("No user logged in");
                     clearUserDisplay();
                 }
             });
@@ -1244,10 +1247,10 @@ const firebaseConfig = {
             // ==========================================
             // DYNAMIC CALCULATION & ACCOUNT LEDGER SYSTEM
             // ==========================================
-            const NGN_TO_GBP_RATE = 2000; // £1 = ₦2,000
+            const NGN_TO_GBP_RATE = 2000; 
 
             function initAccountState() {
-                const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+                const today = new Date().toISOString().split('T')[0];
                 const lastLogin = localStorage.getItem('vireon_last_login_date');
                 
                 let activityBal = localStorage.getItem('vireon_activity_balance');
@@ -1261,7 +1264,6 @@ const firebaseConfig = {
                     history = [];
                 }
 
-                // Preserve original registration time accurately across system sessions
                 let regTime = localStorage.getItem('vireon_registration_time');
                 if (!regTime) {
                     const now = new Date();
@@ -1271,9 +1273,8 @@ const firebaseConfig = {
                     localStorage.setItem('vireon_registration_time', regTime);
                 }
 
-                // If completely new user register state:
                 if (activityBal === null) {
-                    activityBal = 25000; // Explicitly ₦25,000 baseline welcome balance setup
+                    activityBal = 25000; 
                     workBal = 0; 
                     
                     localStorage.setItem('vireon_activity_balance', activityBal);
@@ -1287,12 +1288,10 @@ const firebaseConfig = {
                     ];
                     localStorage.setItem('vireon_history', JSON.stringify(history));
                 } else {
-                    // Existing user checking daily login bonus logic
                     activityBal = parseFloat(activityBal);
                     workBal = parseFloat(workBal);
 
                     if (lastLogin !== today) {
-                        // Reward dynamic daily login bonus (+£1 = ₦2,000)
                         activityBal += 2000;
                         localStorage.setItem('vireon_activity_balance', activityBal);
                         localStorage.setItem('vireon_last_login_date', today);
@@ -1301,7 +1300,6 @@ const firebaseConfig = {
                         const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
                         const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
 
-                        // Ensure registration metrics persist without structural modification drops
                         let hasReg = history.some(item => item.title === "Welcome Reward Bonus");
                         if (!hasReg) {
                             history.push({ title: "Welcome Reward Bonus", timestamp: regTime, amountNaira: 25000, type: "credit" });
@@ -1315,14 +1313,6 @@ const firebaseConfig = {
                             type: "credit"
                         });
                         localStorage.setItem('vireon_history', JSON.stringify(history));
-                    } else {
-                        // Keep structures safe if cache anomalies occur
-                        let hasReg = history.some(item => item.title === "Welcome Reward Bonus");
-                        if (!hasReg) {
-                            history.push({ title: "Welcome Reward Bonus", timestamp: regTime, amountNaira: 25000, type: "credit" });
-                            history.push({ title: "Account Created Successfully", timestamp: regTime, amountNaira: 0, type: "status" });
-                            localStorage.setItem('vireon_history', JSON.stringify(history));
-                        }
                     }
                 }
             }
@@ -1344,7 +1334,6 @@ const firebaseConfig = {
                 
                 const balancesHidden = localStorage.getItem('vireon_balances_hidden') === 'true';
 
-                // Update Balances with complete eye toggle protection visibility
                 if (balancesHidden) {
                     document.getElementById('activity-balance-val').textContent = '••••••';
                     document.getElementById('work-balance-val').textContent = '••••••';
@@ -1355,13 +1344,11 @@ const firebaseConfig = {
                     document.getElementById('total-balance-val').textContent = formatCurrency(totalBal, currency);
                 }
 
-                // Update Currency Switcher Labels
                 const currencyPill = document.getElementById('currency-toggle-pill');
                 if (currencyPill) {
                     currencyPill.textContent = `${currency} ⇄`;
                 }
 
-                // Update Eye toggle icons layout states
                 document.querySelectorAll('.eye-toggle-icon').forEach(icon => {
                     if (balancesHidden) {
                         icon.innerHTML = `<svg class="eye-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
@@ -1370,7 +1357,6 @@ const firebaseConfig = {
                     }
                 });
 
-                // Populate and dynamic render Transactions List
                 const historyContainer = document.getElementById('history-stack-node');
                 if (historyContainer) {
                     let history = [];
@@ -1404,11 +1390,9 @@ const firebaseConfig = {
                 }
             }
 
-            // Run state engine and render updates on system load
             initAccountState();
             renderDynamicInterface();
 
-            // Handle currency switcher click interaction
             document.getElementById('currency-toggle-pill').addEventListener('click', () => {
                 let currentCur = localStorage.getItem('vireon_currency') || 'NGN';
                 let nextCur = currentCur === 'NGN' ? 'GBP' : 'NGN';
@@ -1416,10 +1400,9 @@ const firebaseConfig = {
                 renderDynamicInterface();
             });
 
-            // Handle working balance protection toggles via eye selectors clicks
             document.querySelectorAll('.eye-toggle-icon').forEach(eyeNode => {
                 eyeNode.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Stop swiper container tracking movements triggers
+                    e.stopPropagation(); 
                     const isCurrentlyHidden = localStorage.getItem('vireon_balances_hidden') === 'true';
                     localStorage.setItem('vireon_balances_hidden', !isCurrentlyHidden);
                     renderDynamicInterface();
@@ -1428,15 +1411,14 @@ const firebaseConfig = {
 
 
             // ==========================================
-            // SWIPE CAROUSEL ENGINE (TOUCH + GESTURES)
+            // SWIPE CAROUSEL ENGINE
             // ==========================================
             const track = document.getElementById('carousel-track');
             const dots = document.querySelectorAll('.carousel-dots .dot');
-            
             let startX = 0;
             let currentX = 0;
             let isDragging = false;
-            let currentIndex = 0; // 0 = Activity, 1 = Work
+            let currentIndex = 0; 
             let autoSwipeInterval;
 
             function updateCarouselPosition() {
@@ -1461,7 +1443,6 @@ const firebaseConfig = {
                 clearInterval(autoSwipeInterval);
             }
 
-            // Mobile Touch Events
             track.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
                 currentX = startX;
@@ -1479,17 +1460,12 @@ const firebaseConfig = {
                 isDragging = false;
                 const diff = startX - currentX;
                 if (Math.abs(diff) > 40) {
-                    if (diff > 0) {
-                        currentIndex = 1; // Swipe left -> Next card
-                    } else {
-                        currentIndex = 0; // Swipe right -> Prev card
-                    }
+                    if (diff > 0) currentIndex = 1; else currentIndex = 0;
                 }
                 updateCarouselPosition();
                 startAutoSwipe();
             });
 
-            // Desktop Testing Mouse Events
             track.addEventListener('mousedown', (e) => {
                 startX = e.clientX;
                 currentX = startX;
@@ -1507,17 +1483,12 @@ const firebaseConfig = {
                 isDragging = false;
                 const diff = startX - currentX;
                 if (Math.abs(diff) > 40) {
-                    if (diff > 0) {
-                        currentIndex = 1;
-                    } else {
-                        currentIndex = 0;
-                    }
+                    if (diff > 0) currentIndex = 1; else currentIndex = 0;
                 }
                 updateCarouselPosition();
                 startAutoSwipe();
             });
 
-            // Dot Indicator click support
             dots.forEach(dot => {
                 dot.addEventListener('click', () => {
                     stopAutoSwipe();
@@ -1527,9 +1498,7 @@ const firebaseConfig = {
                 });
             });
 
-            // Fire Carousel Swiper
             startAutoSwipe();
-
 
             // ==========================================
             // STREAMS NAVIGATION TAB PANEL MANAGER
@@ -1541,13 +1510,11 @@ const firebaseConfig = {
                 tab.addEventListener('click', () => {
                     tabs.forEach(t => t.classList.remove('active-tab'));
                     views.forEach(v => v.classList.remove('active-view'));
-
                     tab.classList.add('active-tab');
                     const targetId = tab.getAttribute('data-target');
                     document.getElementById(targetId).classList.add('active-view');
                 });
             });
-
 
             // ==========================================
             // MODAL AND DRAWER CONTROL LOGIC
@@ -1555,17 +1522,11 @@ const firebaseConfig = {
             const accessModal = document.getElementById('access-modal');
             const notifyModal = document.getElementById('notify-modal');
             const helpModal = document.getElementById('help-modal');
-
             const sidebarDrawer = document.getElementById('sidebar-drawer');
             const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-            function openModal(modal) {
-                modal.style.display = 'flex';
-            }
-
-            function closeModal(modal) {
-                modal.style.display = 'none';
-            }
+            function openModal(modal) { modal.style.display = 'flex'; }
+            function closeModal(modal) { modal.style.display = 'none'; }
 
             document.getElementById('close-access-modal').addEventListener('click', () => closeModal(accessModal));
             document.getElementById('close-notify-modal').addEventListener('click', () => closeModal(notifyModal));
@@ -1581,7 +1542,6 @@ const firebaseConfig = {
             });
 
             document.getElementById('main-withdraw-trigger').addEventListener('click', () => openModal(accessModal));
-
             document.getElementById('bell-btn').addEventListener('click', () => openModal(notifyModal));
             document.getElementById('support-btn').addEventListener('click', () => openModal(helpModal));
 
@@ -1616,7 +1576,6 @@ const firebaseConfig = {
                 openModal(helpModal);
             });
 
-            // Handle Logout Drawer Link Click Interaction Safely
             document.getElementById('drawer-logout-opt').addEventListener('click', (e) => {
                 e.preventDefault();
                 closeSidebar();
@@ -1626,7 +1585,6 @@ const firebaseConfig = {
                     console.error("Sign-out process error: ", error);
                 });
             });
-
 
             // ==========================================
             // REDIRECTION AND LOADER SIMULATION
