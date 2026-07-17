@@ -175,10 +175,6 @@
             transform: translateY(-2px);
             box-shadow: 0 12px 30px rgba(56, 189, 248, 0.4);
         }
-        
-        button.primary:all {
-            transform: translateY(0);
-        }
 
         button.primary:disabled {
             background: #1e293b;
@@ -209,12 +205,6 @@
             display: flex;
             align-items: baseline;
             gap: 8px;
-        }
-
-        .old-price {
-            text-decoration: line-through;
-            color: var(--muted);
-            font-size: 0.95rem;
         }
 
         .new-price {
@@ -284,20 +274,9 @@
         }
 
         @media(max-width: 576px) {
-            body {
-                padding: 16px;
-            }
-            .container {
-                padding: 1.8rem 1.4rem;
-            }
-            h2 {
-                font-size: 1.45rem;
-            }
-            #custom-toast {
-                left: 16px;
-                right: 16px;
-                bottom: 16px;
-            }
+            body { padding: 16px; }
+            .container { padding: 1.8rem 1.4rem; }
+            #custom-toast { left: 16px; right: 16px; bottom: 16px; }
         }
     </style>
 </head>
@@ -305,21 +284,17 @@
 <body>
 
 <div class="container">
-
-  <!-- Branded Premium Logo Asset -->
   <div class="logo-container">
       <img src="logo.png" alt="VIREON" class="logo-img">
   </div>
 
   <h2>Create Your Account</h2>
-
   <p class="subtitle">
     Activate your account and unlock access to Surveys, CallCash, Vireon IQ,
     Google Monetization, Converse, Pin-to-Profit and many more earning opportunities.
   </p>
 
   <form id="registrationForm">
-
     <label for="name">Full Name</label>
     <div class="input-group">
       <input type="text" id="name" placeholder="Enter your full name" required>
@@ -351,55 +326,43 @@
     <label for="plan">Activation Package</label>
     <div class="input-group">
       <select id="plan">
-        <option value="14500">
-          Vireon Onboarding Package — ₦14,500
-        </option>
+        <option value="14500">Vireon Onboarding Package — ₦14,500</option>
       </select>
     </div>
 
-    <!-- VERION ACCENTUATED PACKAGE INFO CARD -->
     <div class="plan-card">
       <h3>Vireon Onboarding Package</h3>
       <div class="plan-price">
         <span class="new-price">₦25,000 Cashback</span>
       </div>
       <p style="margin-top:12px; color:var(--muted); font-size:.88rem; line-height:1.6;">
-        One-time activation fee that unlocks access to all Vireon earning
-        opportunities including Surveys, CallCash, Vireon IQ, Google
-        Monization, Converse, Snap Pro, Pin-to-Profit, X Revenue and more.
+        One-time activation fee that unlocks access to all Vireon earning opportunities.
       </p>
     </div>
 
     <button type="submit" id="submitBtn" class="primary">
       <span>Register Account</span>
     </button>
-
   </form>
 
-  <div class="note">
-    Secure Registration • Secure Payment • Instant Activation
-  </div>
-
+  <div class="note">Secure Registration • Secure Payment • Instant Activation</div>
   <div class="note" style="margin-top: 1.2rem;">
-    Already have an account? 
-    <a href="login.html">Login</a>
+    Already have an account? <a href="login.html">Login</a>
   </div>
-
 </div>
 
-<!-- Luxury Custom App Toast Notification Framework -->
 <div id="custom-toast">
     <i id="toast-icon" class="fa-solid"></i>
     <span id="toast-message"></span>
 </div>
 
-<!-- Firebase Framework Compat SDKs -->
+<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
 <script>
-// --- Firebase Initialisation Credentials ---
+// --- Firebase Initialisation ---
 const firebaseConfig = {
     apiKey: "AIzaSyCkBBUQn-vPofsoJQEpu1K5mtJDffpAdxA",
     authDomain: "vireon-berrymedia.firebaseapp.com",
@@ -414,7 +377,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-// --- Luxury Toast Logic Engine ---
+// --- UI Helpers ---
 function showToast(message, type = "error") {
     const toast = document.getElementById("custom-toast");
     const icon = document.getElementById("toast-icon");
@@ -422,40 +385,27 @@ function showToast(message, type = "error") {
 
     msgElement.innerText = message;
     toast.className = `show ${type}`;
+    icon.className = (type === "success") ? "fa-solid fa-circle-check" : "fa-solid fa-circle-exclamation";
 
-    if (type === "success") {
-        icon.className = "fa-solid fa-circle-check";
-    } else {
-        icon.className = "fa-solid fa-circle-exclamation";
-    }
-
-    setTimeout(() => {
-        toast.classList.remove("show");
-    }, 4000);
+    setTimeout(() => { toast.classList.remove("show"); }, 4000);
 }
 
-// --- Input Password Masking Toggle ---
+// --- Toggle Password ---
 document.getElementById("togglePass").onclick = function() {
     const input = document.getElementById("password");
     const icon = this.querySelector("i");
-
-    if (input.type === "password") {
-        input.type = "text";
-        icon.classList.replace("fa-eye-slash", "fa-eye");
-    } else {
-        input.type = "password";
-        icon.classList.replace("fa-eye", "fa-eye-slash");
-    }
+    const isPassword = input.type === "password";
+    input.type = isPassword ? "text" : "password";
+    icon.className = isPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash";
 };
 
-// --- Form Cloud Interaction & Routing Engine ---
+// --- Form Logic ---
 document.getElementById("registrationForm").onsubmit = function(e) {
     e.preventDefault();
 
     const submitBtn = document.getElementById("submitBtn");
     const btnText = submitBtn.querySelector("span");
     
-    // Extract Form Parameters Cleanly
     const fullNameVal = document.getElementById("name").value.trim();
     const usernameVal = document.getElementById("username").value.trim().toLowerCase();
     const phoneVal = document.getElementById("phone").value.trim();
@@ -463,29 +413,29 @@ document.getElementById("registrationForm").onsubmit = function(e) {
     const passwordVal = document.getElementById("password").value.trim();
     const planVal = document.getElementById("plan").value;
 
-    // Trigger UI Loading States
+    if (passwordVal.length < 6) {
+        showToast("Password must be at least 6 characters.", "error");
+        return;
+    }
+
     submitBtn.disabled = true;
     btnText.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Processing...';
 
-    // Query Firestore database to verify username uniqueness
+    // Verify Unique Username
     db.collection("users").where("username", "==", usernameVal).get()
     .then((querySnapshot) => {
         if (!querySnapshot.empty) {
-            // Username conflict discovered
-            showToast("Username is already taken! Please choose another.", "error");
+            showToast("Username is already taken!", "error");
             submitBtn.disabled = false;
             btnText.innerText = "Register Account";
         } else {
-            // 1. Create the Auth User to get a UID
+            // Create User
             auth.createUserWithEmailAndPassword(emailVal, passwordVal)
             .then((userCredential) => {
                 const uid = userCredential.user.uid;
-
-                // 2. Compile payload for database
                 const userPayload = {
                     uid: uid,
                     fullname: fullNameVal,
-                    name: fullNameVal,
                     username: usernameVal,
                     phone: phoneVal,
                     email: emailVal,
@@ -493,66 +443,47 @@ document.getElementById("registrationForm").onsubmit = function(e) {
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 };
 
-                // 3. Commit record to cloud database using UID as the Document ID
+                // Save to Firestore
                 db.collection("users").doc(uid).set(userPayload)
                 .then(() => {
-                    // Save configurations locally
                     localStorage.setItem("userUid", uid);
                     localStorage.setItem("userFullName", fullNameVal);
                     localStorage.setItem("username", usernameVal);
-
-                    showToast("Account initialized! Redirecting to Dashboard...", "success");
-                    
-                    setTimeout(() => {
-                        window.location.href = "dashboard.html";
-                    }, 1500);
+                    showToast("Account created successfully!", "success");
+                    setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
                 })
                 .catch((error) => {
-                    showToast("Database alignment failure: " + error.message, "error");
+                    showToast("DB Error: " + error.message, "error");
                     submitBtn.disabled = false;
                     btnText.innerText = "Register Account";
                 });
             })
             .catch((error) => {
-                showToast("Auth failed: " + error.message, "error");
+                showToast("Auth Error: " + error.message, "error");
                 submitBtn.disabled = false;
                 btnText.innerText = "Register Account";
             });
         }
     })
     .catch((error) => {
-        showToast("Network security validation failed: " + error.message, "error");
+        showToast("Database error: " + error.message, "error");
         submitBtn.disabled = false;
         btnText.innerText = "Register Account";
     });
 };
 
-// --- Strict Shield Peripheral Controls ---
-document.addEventListener("contextmenu", function(e) {
-    e.preventDefault();
-});
-
-document.addEventListener("keydown", function(e) {
-    if (
-        e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && e.key === "I") ||
-        (e.ctrlKey && e.shiftKey && e.key === "J") ||
-        (e.ctrlKey && e.shiftKey && e.key === "C") ||
-        (e.ctrlKey && e.key === "u") ||
-        (e.ctrlKey && e.key === "U") ||
-        (e.ctrlKey && e.key === "s") ||
-        (e.ctrlKey && e.key === "S")
-    ) {
+// --- Security Shields ---
+document.addEventListener("contextmenu", (e) => e.preventDefault());
+document.addEventListener("keydown", (e) => {
+    if (e.key === "F12" || (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key)) || (e.ctrlKey && ["u","U","s","S"].includes(e.key))) {
         e.preventDefault();
         return false;
     }
 });
+document.addEventListener("copy", (e) => e.preventDefault());
+document.addEventListener("cut", (e) => e.preventDefault());
+document.addEventListener("paste", (e) => e.preventDefault());
 
-document.addEventListener("copy", function(e) { e.preventDefault(); });
-document.addEventListener("cut", function(e) { e.preventDefault(); });
-document.addEventListener("paste", function(e) { e.preventDefault(); });
-
-// Active dev-tools hardware tracking overlay blur loop
 setInterval(function() {
     if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
         document.body.style.filter = "blur(20px)";
