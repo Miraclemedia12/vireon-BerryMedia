@@ -978,7 +978,7 @@
             <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;">
                 <div class="profile-avatar" style="width: 80px; height: 80px; font-size: 2.2rem; margin: 0 auto 1rem auto;" id="avatar-container-large">...</div>
                 <h4 id="profile-user-display" style="margin: 0; font-size: 1.25rem;">Loading...</h4>
-                <p style="color: #a0aec0; font-size: 0.8rem; margin: 0.25rem 0 1rem 0;">Status: <span style="color: #ff4d4d; font-weight: 700;">Pending Activation</span></p>
+                <p style="color: #a0aec0; font-size: 0.8rem; margin: 0.25rem 0 1rem 0;">Status: <span id="profile-status-badge" style="color: #ff4d4d; font-weight: 700;">Pending Activation</span></p>
                 <button class="btn-core btn-activate" style="margin: 0 auto; padding: 0.75rem 1.5rem;" id="profile-activate-trigger">Activate Workspace</button>
             </div>
         </div>
@@ -1209,36 +1209,134 @@
                 updateUserDisplay('User');
             }
 
+            // --- REALTIME DYNAMIC ACTIVATION UI MANAGER ---
+            function updateActivationUI(status) {
+                const statusBadge = document.getElementById('profile-status-badge');
+                const profileActivateBtn = document.getElementById('profile-activate-trigger');
+                const mainActivateBtn = document.getElementById('main-activate-trigger');
+
+                if (status === 'active') {
+                    if (statusBadge) {
+                        statusBadge.textContent = "Active Workspace";
+                        statusBadge.style.color = "#00e676";
+                    }
+                    if (profileActivateBtn) {
+                        profileActivateBtn.textContent = "Workspace Active";
+                        profileActivateBtn.style.background = "#00e676";
+                        profileActivateBtn.style.pointerEvents = 'none';
+                    }
+                    if (mainActivateBtn) {
+                        mainActivateBtn.textContent = "Workspace Active";
+                        mainActivateBtn.style.background = "#00e676";
+                        mainActivateBtn.style.pointerEvents = 'none';
+                    }
+                    // Change locked stream badges to dynamic ACTIVE style
+                    document.querySelectorAll('.stream-card').forEach(card => {
+                        const badge = card.querySelector('.badge-status');
+                        if (badge && badge.classList.contains('locked')) {
+                            badge.classList.remove('locked');
+                            badge.classList.add('active');
+                            badge.textContent = 'ACTIVE';
+                            badge.style.background = 'rgba(0, 230, 118, 0.15)';
+                            badge.style.color = '#00e676';
+                            badge.style.border = '1px solid rgba(0, 230, 118, 0.25)';
+                        }
+                    });
+                } else {
+                    if (statusBadge) {
+                        statusBadge.textContent = "Pending Activation";
+                        statusBadge.style.color = "#ff4d4d";
+                    }
+                    if (profileActivateBtn) {
+                        profileActivateBtn.textContent = "Activate Workspace";
+                        profileActivateBtn.style.background = "#00f2fe";
+                        profileActivateBtn.style.pointerEvents = 'auto';
+                    }
+                    if (mainActivateBtn) {
+                        mainActivateBtn.textContent = "Activate Account";
+                        mainActivateBtn.style.background = "#00f2fe";
+                        mainActivateBtn.style.pointerEvents = 'auto';
+                    }
+                }
+            }
+
             // --- AUTHENTICATION LISTENER (SYNCED) ---
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     console.log("User logged in: " + user.uid);
                     
-                    // Fetch directly from database username field
-                    firebase.database().ref('users/' + user.uid).once('value')
-                        .then((snapshot) => {
-                            const data = snapshot.val();
-                            // Logic: Use database username, fallback to user display name, or 'User'
-                            const fetchedName = data && data.username ? data.username : (user.displayName || "User");
+                    const userRef = firebase.database().ref('users/' + user.uid);
+                    
+                    // Fetch all live secure database variables (username, balances, status)
+                    userRef.on('value', (snapshot) => {
+                        const data = snapshot.val();
+                        if (data) {
+                            const fetchedName = data.username || (user.displayName || "User");
+                            const dbActivityBal = data.activity_balance !== undefined ? parseFloat(data.activity_balance) : 25000;
+                            const dbWorkBal = data.work_balance !== undefined ? parseFloat(data.work_balance) : 0;
+                            const dbStatus = data.status || 'inactive';
                             
-                            // Save to LocalStorage immediately
+                            // Keep LocalStorage synchronized as clean cache
                             localStorage.setItem('vireon_cached_username', fetchedName);
+                            localStorage.setItem('vireon_activity_balance', dbActivityBal);
+                            localStorage.setItem('vireon_work_balance', dbWorkBal);
+                            localStorage.setItem('vireon_account_status', dbStatus);
                             
-                            // Update UI
+                            // Live update the layout views
                             updateUserDisplay(fetchedName);
-                        })
-                        .catch((error) => {
-                            console.error("Database Fetch Error:", error);
+                            updateActivationUI(dbStatus);
+                            renderDynamicInterface();
+                        }
+                    }, (error) => {
+                        console.error("Database Sync Error:", error);
+                    });
+
+                    // Secure daily login logic linked directly with Firebase DB updates
+                    const today = new Date().toISOString().split('T')[0];
+                    const lastLogin = localStorage.getItem('vireon_last_login_date');
+                    if (lastLogin !== today) {
+                        userRef.once('value').then((snapshot) => {
+                            const data = snapshot.val();
+                            if (data) {
+                                const currentActBal = parseFloat(data.activity_balance) || 25000;
+                                const newActBal = currentActBal + 2000;
+
+                                let history = [];
+                                try {
+                                    history = JSON.parse(localStorage.getItem('vireon_history')) || [];
+                                } catch (e) { history = []; }
+
+                                const now = new Date();
+                                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).toLowerCase();
+                                const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+
+                                history.unshift({
+                                    title: "Login Reward Bonus",
+                                    timestamp: `${dateStr}, ${timeStr}`,
+                                    amountNaira: 2000,
+                                    type: "credit"
+                                });
+                                localStorage.setItem('vireon_history', JSON.stringify(history));
+                                localStorage.setItem('vireon_last_login_date', today);
+
+                                userRef.update({
+                                    activity_balance: newActBal
+                                });
+                            }
                         });
+                    }
+
                 } else {
                     console.log("No user logged in, clearing session data");
                     
                     // Crucial: Wipe old data so next user doesn't see it
                     localStorage.removeItem('vireon_cached_username');
-                    // Optionally clear other session data if needed
-                    // localStorage.clear(); 
+                    localStorage.removeItem('vireon_activity_balance');
+                    localStorage.removeItem('vireon_work_balance');
+                    localStorage.removeItem('vireon_account_status');
                     
                     clearUserDisplay();
+                    window.location.href = 'login.html';
                 }
             });
 
@@ -1535,16 +1633,28 @@
             document.getElementById('close-notify-modal').addEventListener('click', () => closeModal(notifyModal));
             document.getElementById('close-help-modal').addEventListener('click', () => closeModal(helpModal));
 
+            // Dynamic evaluation of 'active' status on locks
             document.querySelectorAll('.locked-trigger').forEach(trigger => {
                 trigger.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    sidebarDrawer.classList.remove('drawer-open');
-                    sidebarOverlay.style.display = 'none';
-                    openModal(accessModal);
+                    const currentStatus = localStorage.getItem('vireon_account_status') || 'inactive';
+                    if (currentStatus !== 'active') {
+                        e.preventDefault();
+                        sidebarDrawer.classList.remove('drawer-open');
+                        sidebarOverlay.style.display = 'none';
+                        openModal(accessModal);
+                    }
                 });
             });
 
-            document.getElementById('main-withdraw-trigger').addEventListener('click', () => openModal(accessModal));
+            document.getElementById('main-withdraw-trigger').addEventListener('click', () => {
+                const currentStatus = localStorage.getItem('vireon_account_status') || 'inactive';
+                if (currentStatus !== 'active') {
+                    openModal(accessModal);
+                } else {
+                    alert("Processing withdrawal gateway... Please wait.");
+                }
+            });
+            
             document.getElementById('bell-btn').addEventListener('click', () => openModal(notifyModal));
             document.getElementById('support-btn').addEventListener('click', () => openModal(helpModal));
 
