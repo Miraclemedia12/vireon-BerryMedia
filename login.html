@@ -386,12 +386,15 @@ document.getElementById("loginForm").onsubmit = function(e) {
         if (userData.password === passwordVal) {
             showToast("Login Successful! Initializing...", "success");
             
-            // 1. Wipe out ALL cached localStorage to prevent data leakage from previous accounts!
+            // 1. Wipe out old storage to prevent leakages
             localStorage.clear();
             
-            // 2. Only store UID and Username. Everything else must come fresh from the DB on your dashboard
-            localStorage.setItem("userUid", uid);
-            localStorage.setItem("username", userData.username);
+            // 2. Set the pending login handshake flag so dashboard knows to wait
+            localStorage.setItem("vireon_pending_login", "true");
+            
+            // 3. Keep variables aligned with what your dashboard's listener looks for
+            localStorage.setItem("vireon_user_uid", uid);
+            localStorage.setItem("vireon_cached_username", userData.username);
 
             setTimeout(() => {
                 window.location.href = "dashboard.html";
@@ -490,4 +493,4 @@ setInterval(function() {
 </script>
 
 </body>
-</html> 
+</html>
