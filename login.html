@@ -370,11 +370,12 @@ document.getElementById("loginForm").onsubmit = function(e) {
     const btnText = submitBtn.querySelector("span");
 
     // Capture inputs
-    const inputVal = document.getElementById("identifier").value.trim().toLowerCase();
+    const rawInput = document.getElementById("identifier").value.trim();
+    const inputValLower = rawInput.toLowerCase();
     const passwordVal = document.getElementById("password").value.trim();
 
     submitBtn.disabled = true;
-    btnText.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Authenticating...';
+    btnText.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
 
     // Core validation function to run after database fetch
     function validateUserRecord(doc) {
@@ -402,28 +403,49 @@ document.getElementById("loginForm").onsubmit = function(e) {
         }
     }
 
-    // Step 1: Query by username in the "users" collection
-    db.collection("users").where("username", "==", inputVal).get()
-    .then((usernameSnapshot) => {
-        if (!usernameSnapshot.empty) {
-            validateUserRecord(usernameSnapshot.docs[0]);
+    // Dynamic error response handler
+    function handleLookupError(err) {
+        showToast("Database lookup error: " + err.message, "error");
+        submitBtn.disabled = false;
+        btnText.innerText = "Secure Log In";
+    }
+
+    // Step 1: Query by exact username case
+    db.collection("users").where("username", "==", rawInput).get()
+    .then((exactUsernameSnapshot) => {
+        if (!exactUsernameSnapshot.empty) {
+            validateUserRecord(exactUsernameSnapshot.docs[0]);
         } else {
-            // Step 2: Fall back and query by email in the "users" collection if username not found
-            db.collection("users").where("email", "==", inputVal).get()
-            .then((emailSnapshot) => {
-                if (!emailSnapshot.empty) {
-                    validateUserRecord(emailSnapshot.docs[0]);
+            // Step 2: Query by lowercase username (fallback)
+            db.collection("users").where("username", "==", inputValLower).get()
+            .then((lowerUsernameSnapshot) => {
+                if (!lowerUsernameSnapshot.empty) {
+                    validateUserRecord(lowerUsernameSnapshot.docs[0]);
                 } else {
-                    showToast("No account found with this username or email.", "error");
-                    submitBtn.disabled = false;
-                    btnText.innerText = "Secure Log In";
+                    // Step 3: Query by lowercase email
+                    db.collection("users").where("email", "==", inputValLower).get()
+                    .then((lowerEmailSnapshot) => {
+                        if (!lowerEmailSnapshot.empty) {
+                            validateUserRecord(lowerEmailSnapshot.docs[0]);
+                        } else {
+                            // Step 4: Query by raw email input (final fallback)
+                            db.collection("users").where("email", "==", rawInput).get()
+                            .then((exactEmailSnapshot) => {
+                                if (!exactEmailSnapshot.empty) {
+                                    validateUserRecord(exactEmailSnapshot.docs[0]);
+                                } else {
+                                    showToast("No account found with this username or email.", "error");
+                                    submitBtn.disabled = false;
+                                    btnText.innerText = "Secure Log In";
+                                }
+                            })
+                            .catch(handleLookupError);
+                        }
+                    })
+                    .catch(handleLookupError);
                 }
             })
-            .catch((err) => {
-                showToast("Database lookup error: " + err.message, "error");
-                submitBtn.disabled = false;
-                btnText.innerText = "Secure Log In";
-            });
+            .catch(handleLookupError);
         }
     })
     .catch((err) => {
@@ -468,4 +490,4 @@ setInterval(function() {
 </script>
 
 </body>
-</html>
+</html> 
