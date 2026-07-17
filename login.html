@@ -385,13 +385,12 @@ document.getElementById("loginForm").onsubmit = function(e) {
         if (userData.password === passwordVal) {
             showToast("Login Successful! Initializing...", "success");
             
-            // Set local storage data from the database record
+            // 1. Wipe out ALL cached localStorage to prevent data leakage from previous accounts!
+            localStorage.clear();
+            
+            // 2. Only store UID and Username. Everything else must come fresh from the DB on your dashboard
             localStorage.setItem("userUid", uid);
-            localStorage.setItem("userFullName", userData.fullname || userData.name || "User");
             localStorage.setItem("username", userData.username);
-            localStorage.setItem("phone", userData.phone || "");
-            localStorage.setItem("email", userData.email || "");
-            localStorage.setItem("plan", userData.plan || "14500");
 
             setTimeout(() => {
                 window.location.href = "dashboard.html";
