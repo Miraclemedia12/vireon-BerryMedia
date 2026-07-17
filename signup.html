@@ -448,7 +448,7 @@ document.getElementById("registrationForm").onsubmit = function(e) {
                 .then(() => {
                     localStorage.setItem("userUid", uid);
                     localStorage.setItem("userFullName", fullNameVal);
-                    localStorage.setItem("username", usernameVal);
+                    localStorage.setItem("vireon_cached_username", usernameVal);
                     showToast("Account created successfully!", "success");
                     setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
                 })
