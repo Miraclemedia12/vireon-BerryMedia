@@ -1206,11 +1206,7 @@
                 });
             }
 
-            function clearUserDisplay() {
-                updateUserDisplay('User');
-            }
-
-            //
+            // --- REALTIME DYNAMIC ACTIVATION UI MANAGER ---
             function updateActivationUI(status) {
                 const statusBadge = document.getElementById('profile-status-badge');
                 const profileActivateBtn = document.getElementById('profile-activate-trigger');
@@ -1338,19 +1334,9 @@
                     }
 
                 } else {
-                    console.log("No user logged in. Redirecting to login gate.");
-                    clearSessionAndRedirect();
+                    console.log("No user logged in.");
                 }
             });
-
-            function clearSessionAndRedirect() {
-                localStorage.removeItem('vireon_cached_username');
-                localStorage.removeItem('vireon_activity_balance');
-                localStorage.removeItem('vireon_work_balance');
-                localStorage.removeItem('vireon_account_status');
-                clearUserDisplay();
-                window.location.href = 'login.html';
-            }
 
             // Load cache only if page is refreshed but user is already logged in
             const cachedName = localStorage.getItem('vireon_cached_username');
